@@ -1,0 +1,9 @@
+filename,tool,timeout,init,inv,next,args
+Bakery-Boulangerie/Bakery.tla,apalache,1h,Init,Inv,,--length=0
+Bakery-Boulangerie/Bakery.tla,apalache,1h,Inv,Inv,,--length=1
+ewd840/EWD840.tla,apalache,3h,,InvAndTypeOK,,--length=0 --cinit=ConstInit10
+ewd840/EWD840.tla,apalache,3h,InvAndTypeOK,InvAndTypeOK,,--length=1 
+bcastByz/bcastByz.tla,apalache,3h,,IndInv_Unforg_NoBcast,,--length=0 --cinit=IndInv_Unforg_NoBcast4
+bcastByz/bcastByz.tla,apalache,3h,IndInv_Unforg_NoBcast,IndInv_Unforg_NoBcast,,--length=0 --cinit=ConstInit4
+two-phase/TwoPhase.tla,apalache,23h,,Inv,,--length=0 --cinit=ConstInit7
+two-phase/TwoPhase.tla,apalache,23h,InitInv,Inv,,--length=1 --cinit=ConstInit7

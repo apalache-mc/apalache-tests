@@ -1,0 +1,16 @@
+filename,tool,timeout,init,inv,next,args
+traffic/MC.tla,tlc,10m,,,,-config MC.cfg
+Prisoners/MC.tla,tlc,30m,,,,-config MC.cfg -deadlock
+Bakery-Boulangerie/MC.tla,tlc,1h,,,,-config MC.cfg -deadlock
+ewd840/MC4.tla,tlc,10m,,,,-config MC.cfg -deadlock
+ewd840/MC10.tla,tlc,20h,,,,-config MC.cfg -deadlock
+allocator/SAMC22.tla,tlc,30m,,ResourceMutex,,-config MC.cfg -deadlock
+allocator/SAMC53.tla,tlc,30m,,ResourceMutex,,-config MC.cfg -deadlock
+bcastFolklore/MC4.tla,tlc,2h,Init,,,-config MC.cfg
+bcastFolklore/MC20.tla,tlc,20h,Init,,,-config MC.cfg
+bcastByz/MC4.tla,tlc,20h,Init,,,-config MC.cfg
+bcastByz/MC6.tla,tlc,23h,Init,,,-config MC.cfg
+two-phase/MC3.tla,tlc,10h,,,,-config MC.cfg -deadlock
+two-phase/MC7.tla,tlc,23h,,,,-config MC.cfg -deadlock
+paxos/MC3.tla,tlc,23h,,,,-config MC.cfg -deadlock
+paxos/MC5.tla,tlc,23h,,,,-config MC.cfg -deadlock

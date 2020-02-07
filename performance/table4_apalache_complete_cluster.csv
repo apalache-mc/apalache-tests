@@ -1,0 +1,17 @@
+filename,tool,timeout,init,inv,next,args
+traffic/traffic.tla,apalache,1h,,,,--length=4
+Prisoners/Prisoners.tla,apalache,30m,,SafetyInv,,--length=15 --cinit=ConstInit
+Bakery-Boulangerie/Bakery.tla,apalache,10h,,MutualExclusion,,--length=8
+ewd840/EWD840.tla,apalache,1h,,Inv,,--length=12 --cinit=ConstInit4
+ewd840/EWD840.tla,apalache,5h,,Inv,,--length=30 --cinit=ConstInit10
+allocator/SimpleAllocator.tla,apalache,10h,,ResourceMutex,,--length=7 --cinit=ConstInit22
+allocator/SimpleAllocator.tla,apalache,23h,,ResourceMutex,,--length=7 --cinit=ConstInit53
+bcastFolklore/bcastFolklore.tla,apalache,30m,Init,,,--length=10 --cinit=ConstInit4
+bcastFolklore/bcastFolklore.tla,apalache,30m,Init,,,--length=10 --cinit=ConstInit20
+bcastByz/bcastByz.tla,apalache,30m,Init,,,--length=10 --cinit=ConstInit4
+bcastByz/bcastByz.tla,apalache,23h,Init,,,--length=11 --cinit=ConstInit6
+two-phase/TwoPhase.tla,apalache,23h,,TCConsistent,,--length=11 --cinit=ConstInit3
+two-phase/TwoPhase.tla,apalache,23h,,TCConsistent,,--length=10 --cinit=ConstInit7
+paxos/Apa3Paxos.tla,apalache,23h,,OneValuePerBallot,,--length=13
+paxos/Apa5Paxos.tla,apalache,23h,,OneValuePerBallot,,--length=14
+raft/raft.tla,apalache,23h,,OneLeader,,--length=8
