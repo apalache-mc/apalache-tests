@@ -1,4 +1,4 @@
------------------------------- MODULE bcastByz ------------------------------
+------------------------------ MODULE APAbcastByz ------------------------------
 
 (* TLA+ encoding of a parameterized model of the broadcast distributed  
    algorithm with Byzantine faults.

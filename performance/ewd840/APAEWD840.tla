@@ -1,4 +1,4 @@
-------------------------------- MODULE EWD840 -------------------------------
+------------------------------- MODULE APAEWD840 -------------------------------
 (***************************************************************************)
 (* TLA+ specification of an algorithm for distributed termination          *)
 (* detection on a ring, due to Dijkstra, published as EWD 840:             *)

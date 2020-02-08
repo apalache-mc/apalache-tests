@@ -1,4 +1,4 @@
------------------------- MODULE SimpleAllocator -------------------------
+------------------------ MODULE APASimpleAllocator -------------------------
 (***********************************************************************)
 (* Specification of an allocator managing a set of resources:          *)
 (* - Clients can request sets of resources whenever all their previous *)

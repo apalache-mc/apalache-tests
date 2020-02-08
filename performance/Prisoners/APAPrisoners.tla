@@ -1,4 +1,4 @@
------------------------------- MODULE Prisoners ----------------------------- 
+------------------------------ MODULE APAPrisoners ----------------------------- 
 (***************************************************************************)
 (* This module specifies the solution to the following puzzle, given on    *)
 (* the Car Guys NPR radio show:                                            *)

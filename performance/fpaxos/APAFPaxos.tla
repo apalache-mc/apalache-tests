@@ -1,4 +1,4 @@
--------------------------------- MODULE FPaxos -------------------------------
+-------------------------------- MODULE APAFPaxos -------------------------------
 
 EXTENDS Integers
 CONSTANT Value, Acceptor, Quorum1, Quorum2

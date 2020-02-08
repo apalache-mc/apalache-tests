@@ -1,5 +1,5 @@
 ---- MODULE MC ----
-EXTENDS Bakery, TLC
+EXTENDS APABakery, TLC
 
 MC_Init ==
 Init

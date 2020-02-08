@@ -1,5 +1,5 @@
 ---- MODULE MC20 ----
-EXTENDS bcastFolklore, TLC
+EXTENDS APAbcastFolklore, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0F
 const_1552862330166111000 == 

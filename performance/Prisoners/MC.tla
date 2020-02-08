@@ -1,5 +1,5 @@
 ---- MODULE MC ----
-EXTENDS Prisoners, TLC
+EXTENDS APAPrisoners, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0Counter
 const_155285753369073000 == 

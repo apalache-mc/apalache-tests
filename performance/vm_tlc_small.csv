@@ -1,4 +1,0 @@
-filename,tool,timeout,init,inv,next,args
-traffic/MC.tla,tlc,3m,,,,-config MC.cfg
-Prisoners/MC.tla,tlc,3m,,,,-config MC.cfg -deadlock
-ewd840/MC4.tla,tlc,3m,,,,-config MC.cfg -deadlock

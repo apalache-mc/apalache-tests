@@ -1,5 +1,5 @@
 ---- MODULE MC4Inv ----
-EXTENDS EWD840, TLC
+EXTENDS APAEWD840, TLC
 
 MC_N == 4
 MC_Init == InvAndTypeOK

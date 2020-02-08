@@ -1,4 +1,4 @@
-------------------------------- MODULE TwoPhase ----------------------------- 
+------------------------------- MODULE APATwoPhase ----------------------------- 
 (***************************************************************************)
 (* This specification describes the Two-Phase Commit protocol, in which a  *)
 (* transaction manager (TM) coordinates the resource managers (RMs) to     *)

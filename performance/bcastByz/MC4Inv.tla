@@ -1,5 +1,5 @@
 ---- MODULE MC4Inv ----
-EXTENDS bcastByz, TLC
+EXTENDS APAbcastByz, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0F
 const_1552924728004170000 == 

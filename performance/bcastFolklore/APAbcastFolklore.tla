@@ -1,4 +1,4 @@
------------------------------- MODULE bcastFolklore ------------------------------
+------------------------------ MODULE APAbcastFolklore ------------------------------
 
 (* An encoding of a parameterized model of the reliable broadcast by message diffusion [1] 
    with crashed failures in TLA+. This broadcast algorithm is described in Fig. 4 of [1].

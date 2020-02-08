@@ -1,5 +1,5 @@
 ---- MODULE SAMC53 ----
-EXTENDS SimpleAllocator, TLC
+EXTENDS APASimpleAllocator, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0Clients
 MC_Clients == 

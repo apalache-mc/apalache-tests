@@ -1,4 +1,4 @@
-------------------------------- MODULE Voting ------------------------------- 
+------------------------------- MODULE APAVoting ------------------------------- 
 (***************************************************************************)
 (* This module specifies a consensus algorithm that at first glance looks  *)
 (* perfectly useless.  It's a multiprocess algorithm in which evaluating   *)

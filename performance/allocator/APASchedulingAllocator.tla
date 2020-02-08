@@ -1,4 +1,4 @@
------------------------- MODULE SchedulingAllocator ---------------------
+------------------------ MODULE APASchedulingAllocator ---------------------
 (***********************************************************************)
 (* Specification of an allocator managing a set of resources:          *)
 (* - Clients can request sets of resources whenever all their previous *)

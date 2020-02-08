@@ -1,4 +1,4 @@
--------------------------------- MODULE Paxos -------------------------------
+-------------------------------- MODULE APAPaxos -------------------------------
 (***************************************************************************)
 (* This is a specification of the Paxos algorithm without explicit leaders *)
 (* or learners.  It refines the spec in Voting                             *)

@@ -1,5 +1,5 @@
 ---- MODULE MC4 ----
-EXTENDS EWD840, TLC
+EXTENDS APAEWD840, TLC
 
 MC_N == 4
 MC_Init == Init

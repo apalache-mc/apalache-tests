@@ -1,10 +1,10 @@
------------------------------ MODULE ApaFPaxos -------------------------------
+----------------------------- MODULE Apa4FPaxos -------------------------------
 EXTENDS TLC
 -----------------------------------------------------------------------------
 VARIABLE maxBal, maxVBal, maxVal, msgs
 
 
-INSTANCE FPaxos WITH Value <- {0, 1},
+INSTANCE APAFPaxos WITH Value <- {0, 1},
                      Acceptor <- {"a1", "a2", "a3", "a4"},
                      Quorum1 <- {{"a1", "a2"},{"a3", "a4"}},
                      Quorum2 <- {{"a1", "a3"},{"a2", "a4"}},

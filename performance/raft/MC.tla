@@ -1,5 +1,5 @@
 ---- MODULE MC ----
-EXTENDS raft, TLC
+EXTENDS APAraft, TLC
 
 \* SPECIFICATION definition @modelBehaviorSpec:0
 spec_1552934745592222000 ==

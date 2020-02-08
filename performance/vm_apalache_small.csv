@@ -1,9 +1,0 @@
-filename,tool,timeout,init,inv,next,args
-traffic/traffic.tla,apalache,3m,,,,--length=5
-Prisoners/Prisoners.tla,apalache,4m,,SafetyInv,,--length=5 --cinit=ConstInit
-Bakery-Boulangerie/Bakery.tla,apalache,5m,,MutualExclusion,,--length=5
-ewd840/EWD840.tla,apalache,6m,,Inv,,--length=5 --cinit=ConstInit4
-ewd840/EWD840.tla,apalache,7m,,Inv,,--length=5 --cinit=ConstInit10
-bcastFolklore/bcastFolklore.tla,apalache,8m,Init,,,--length=5 --cinit=ConstInit4
-bcastFolklore/bcastFolklore.tla,apalache,9m,Init,,,--length=5 --cinit=ConstInit20
-bcastByz/bcastByz.tla,apalache,10m,Init,,,--length=5 --cinit=ConstInit4

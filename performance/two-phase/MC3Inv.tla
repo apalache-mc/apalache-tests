@@ -1,5 +1,5 @@
 ---- MODULE MC3Inv ----
-EXTENDS TwoPhase, TLC
+EXTENDS APATwoPhase, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0RM
 const_1553089336183298000 == 

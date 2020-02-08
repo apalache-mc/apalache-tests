@@ -1,5 +1,5 @@
 ---- MODULE MC5 ----
-EXTENDS Paxos, TLC
+EXTENDS APAPaxos, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0Ballot
 const_1552928839273213000 == 

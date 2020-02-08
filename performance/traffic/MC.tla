@@ -1,5 +1,5 @@
 ---- MODULE MC ----
-EXTENDS traffic, TLC
+EXTENDS APAtraffic, TLC
 
 \* SPECIFICATION definition @modelBehaviorSpec:0
 spec_155285528903934000 ==

@@ -18,7 +18,7 @@ Quorum == {
         {"a3", "a4", "a5"}
        }
 
-INSTANCE Paxos WITH Value <- Value,
+INSTANCE APAPaxos WITH Value <- Value,
                     Ballot <- Ballot,
                     Acceptor <- Acceptor,
                     Quorum <- Quorum

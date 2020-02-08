@@ -1,5 +1,5 @@
 filename,tool,timeout,init,inv,next,args
-Bakery-Boulangerie/Bakery.tla,tlc,1h,Inv,Inv,,
+Bakery-Boulangerie/APABakery.tla,tlc,1h,Inv,Inv,,
 ewd840/MC4Inv.tla,tlc,23h,,,,-config MC.cfg -deadlock
 bcastByz/MC4Inv.tla,tlc,23h,,,,-config MCInv.cfg -deadlock
 two-phase/MC7Inv.tla,tlc,23h,,,,-config MC.cfg -deadlock
