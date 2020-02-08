@@ -4,6 +4,6 @@ Bakery-Boulangerie/APABakery.tla,apalache,1h,Inv,Inv,,--length=1
 ewd840/APAEWD840.tla,apalache,3h,,InvAndTypeOK,,--length=0 --cinit=ConstInit10
 ewd840/APAEWD840.tla,apalache,3h,InvAndTypeOK,InvAndTypeOK,,--length=1 --cinit=ConstInit10
 bcastByz/APAbcastByz.tla,apalache,3h,InitNoBcast,IndInv_Unforg_NoBcast,,--length=0 --cinit=ConstInit4
-bcastByz/APAbcastByz.tla,apalache,3h,IndInv_Unforg_NoBcast,IndInv_Unforg_NoBcast,,--length=0 --cinit=ConstInit4
+bcastByz/APAbcastByz.tla,apalache,3h,IndInv_Unforg_NoBcast,IndInv_Unforg_NoBcast,,--length=1 --cinit=ConstInit4
 two-phase/APATwoPhase.tla,apalache,23h,,Inv,,--length=0 --cinit=ConstInit7
 two-phase/APATwoPhase.tla,apalache,23h,InitInv,Inv,,--length=1 --cinit=ConstInit7
