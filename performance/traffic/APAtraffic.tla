@@ -4,6 +4,7 @@ Color == {"red", "green"}
 
 NextColor(c) == CASE c = "red" -> "green"
                   [] c = "green" -> "red"
+                  [] OTHER -> "red" \* APALACHE requires OTHER
                   
 (*--algorithm traffic
 variables
@@ -38,7 +39,9 @@ Init == (* Global variables *)
         /\ at_light = TRUE
         /\ light = "red"
         /\ pc = [self \in ProcSet |-> CASE self = "light" -> "Cycle"
-                                        [] self = "car" -> "Drive"]
+                                        [] self = "car" -> "Drive"
+                                        [] OTHER -> "Drive"
+                                        ]
 
 Cycle == /\ pc["light"] = "Cycle"
          /\ IF at_light

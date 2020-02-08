@@ -174,8 +174,8 @@ e4(self) == /\ pc[self] = "e4"
 w1(self) == /\ pc[self] = "w1"
             /\ IF unchecked[self] # ({} <: {Int})
                   THEN /\ \E i \in unchecked[self]:
-                            nxt' = [nxt EXCEPT ![self] = i]
-                       /\ ~ flag[nxt'[self]]
+                            /\ nxt' = [nxt EXCEPT ![self] = i]
+                            /\ ~ flag[nxt'[self]]
                        /\ pc' = [pc EXCEPT ![self] = "w2"]
                   ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
                        /\ nxt' = nxt
