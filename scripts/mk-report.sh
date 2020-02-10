@@ -33,10 +33,10 @@ EOF
 "$DIR"/plot.py 01no "benchmark" 05mem_kb "memory, KB" \
     mem.svg $RESULTS
 
-"$DIR"/plot.py 01no "benchmark" 12ncells "nr. arena cells" \
+"$DIR"/plot.py 01no "benchmark" 12ncells "number of arena cells" \
     ncells.svg $RESULTS
 
-"$DIR"/plot.py 01no "benchmark" 13nclauses "nr. SMT clauses" \
+"$DIR"/plot.py 01no "benchmark" 13nclauses "number of SMT clauses" \
     nclauses.svg $RESULTS
 
 # output the plots
