@@ -24,10 +24,10 @@ def humanise_row(fields, row):
         if idx < 0:
             raise Exception("Field %s not found" % field)
         else:
-            row[idx] = fun(row[idx])
+            row[idx] = fun(int(row[idx]))
 
     update_index("04:time_sec", human_sec)
-    update_index("05:mem_kb", human_bytes)
+    update_index("05:mem_kb", human_kbytes)
     update_index("12:ncells", human_num)
     update_index("13:nclauses", human_num)
     update_index("14:navg_clause_len", human_num)
@@ -53,7 +53,7 @@ def human_power(num, divider, units):
     max_power = len(units)
     fraction = 0
     while num >= divider and power < max_power:
-        num = int(round(num / divider))
+        num = int(num / divider)
         fraction = num % divider
         power += 1
 
@@ -65,6 +65,9 @@ def human_bytes(num):
         return "%d.%d%sB" % (val, int(frac / 100), unit)
     else:
         return "%d%sB" % (val, unit)
+
+def human_kbytes(num):
+    return human_bytes(num * 1024)
 
 def human_num(num):
     val, frac, unit = human_power(int(num), 1000, NUM_UNITS)
