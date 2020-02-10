@@ -41,13 +41,15 @@ def plot(opts, x_field, x_title, y_field, y_title, out_name, csvs):
 
     plt.grid(True, alpha=.2)
     plt.legend(loc=0) # best
-    pp = PdfPages(out_name)
-    pp.savefig()
-    pp.close()
+    #pp = PdfPages(out_name)
+    #pp.savefig
+    #pp.close()
+    plt.savefig(out_name, format="svg")
+
 
 def usage():
     print "Use: %s [--logscale] <x-field> <x-title> <y-field> " + \
-        "<y-title> <out>.pdf <in_1>.csv ... <in_n>.csv" % sys.argv[0]
+        "<y-title> <out>.svg <in_1>.csv ... <in_n>.csv" % sys.argv[0]
     sys.exit(1)
 
 def parse_opts(argv):
