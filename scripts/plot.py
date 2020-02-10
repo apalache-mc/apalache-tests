@@ -29,7 +29,7 @@ def plot(opts, x_field, x_title, y_field, y_title, out_name, csvs):
         data = np.genfromtxt(csv, dtype=None, delimiter=',', names=True)
         (name, _) = os.path.splitext(os.path.basename(csv))
         # print data.dtype.names # to see the column names
-        plt.plot(data[x_field], data[y_field], marker, label=name)
+        plt.plot(data[x_field], data[y_field], marker, label=name, alpha=0.7)
 
     plt.xlabel(x_title)
 
