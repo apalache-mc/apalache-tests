@@ -22,9 +22,9 @@ $(RES_DIR)/002bmc-report.md: $(RES_DIR)/002bmc-apalache-0.6.0.csv \
 	./scripts/mk-report.sh ./performance/002bmc-apalache.csv $^ >$@
 
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
-	FULLNAME=001indinv-apalache-$*  # e.g., 001indinv-apalache-0.5.2
-	RD=$(RUN_DIR)/$(FULLNAME)
+$(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-% \
+									 FULLNAME = 001indinv-apalache-$* \
+									 RD=$(RUN_DIR)/$(FULLNAME)
 	./scripts/mk-run.sh ./performance/001indinv-apalache.csv \
 		$(BUILDS_DIR)/apalache-$* ./performance $(RD)
 	(cd $(RD) && ./run-parallel.sh && \
@@ -32,9 +32,9 @@ $(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
 		cp results.csv $(RES_DIR)/$(FULLNAME).csv)
 
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
-	FULLNAME=002bmc-apalache-$*  # e.g., 002bmc-apalache-0.5.2
-	RD=$(RUN_DIR)/$(FULLNAME)
+$(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-% \
+								  FULLNAME=002bmc-apalache-$* \
+								  RD=$(RUN_DIR)/$(FULLNAME)
 	./scripts/mk-run.sh ./performance/002bmc-apalache.csv \
 		$(BUILDS_DIR)/apalache-$* ./performance $(RD)
 	(cd $(RD) && ./run-parallel.sh && \
