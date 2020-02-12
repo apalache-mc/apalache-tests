@@ -8,6 +8,10 @@ import getopt
 import os.path
 import sys
 
+import matplotlib
+# we are running a server, do not use x11
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 import matplotlib.cbook as cbook
 import numpy as np
