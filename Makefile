@@ -15,31 +15,31 @@ report: $(REPORTS)
 
 $(RES_DIR)/001indinv-report.md: $(RES_DIR)/001indinv-apalache-0.6.0.csv \
 				  $(RES_DIR)/001indinv-apalache-0.5.2.csv
-	./scripts/mk-report.sh ./performance/001indinv-apalache.csv $^ >$@
+	cd ./results && \
+		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/001indinv-apalache.csv $^ >$@
 
 $(RES_DIR)/002bmc-report.md: $(RES_DIR)/002bmc-apalache-0.6.0.csv \
 				  $(RES_DIR)/002bmc-apalache-0.5.2.csv
-	./scripts/mk-report.sh ./performance/002bmc-apalache.csv $^ >$@
+	cd ./results && \
+		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
 
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-% \
-									 FULLNAME = 001indinv-apalache-$* \
-									 RD=$(RUN_DIR)/$(FULLNAME)
+$(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
+	$(eval $@_NAME=001indinv-apalache-$*) # set the temporary variable
 	./scripts/mk-run.sh ./performance/001indinv-apalache.csv \
-		$(BUILDS_DIR)/apalache-$* ./performance $(RD)
-	(cd $(RD) && ./run-parallel.sh && \
+		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
+	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
-		cp results.csv $(RES_DIR)/$(FULLNAME).csv)
+		cp results.csv $(RES_DIR)/$($@_NAME).csv)
 
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-% \
-								  FULLNAME=002bmc-apalache-$* \
-								  RD=$(RUN_DIR)/$(FULLNAME)
+$(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
+	$(eval $@_NAME=002bmc-apalache-$*) # set the temporary variable
 	./scripts/mk-run.sh ./performance/002bmc-apalache.csv \
-		$(BUILDS_DIR)/apalache-$* ./performance $(RD)
-	(cd $(RD) && ./run-parallel.sh && \
+		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
+	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
-		cp results.csv $(RES_DIR)/$(FULLNAME).csv)
+		cp results.csv $(RES_DIR)/$($@_NAME).csv)
 
 build: apalache-0.5.2 apalache-0.6.0
 
