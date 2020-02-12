@@ -8,7 +8,7 @@ TASK=$1
 shift 1
 RESULTS=$@
 
-which -s csvtomd || (echo "No csvtomd! Run: pip3 install csvtomd"; exit 1)
+which csvtomd >/dev/null || (echo "No csvtomd! Run: pip3 install csvtomd"; exit 1)
 
 DIR=`dirname $0`
 DIR=`cd "$DIR"; pwd`
