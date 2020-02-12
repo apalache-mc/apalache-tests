@@ -7,6 +7,7 @@
 TASK=$1
 shift 1
 RESULTS=$@
+PREFIX=$(basename ${TASK})
 
 which csvtomd >/dev/null || (echo "No csvtomd! Run: pip3 install csvtomd"; exit 1)
 
@@ -16,28 +17,28 @@ DIR=`cd "$DIR"; pwd`
 seqno=1
 
 cat <<EOF
-# Results of `basename ${TASK}`
+# Results of $PREFIX
 
 EOF
 
 # produce the plots
 "$DIR"/plot.py --logscale 01no "benchmark" 04time_sec "time, sec" \
-    time-log.svg $RESULTS
+    $PREFIX-time-log.svg $RESULTS
 
 "$DIR"/plot.py 01no "benchmark" 04time_sec "time, sec" \
-    time.svg $RESULTS
+    $PREFIX-time.svg $RESULTS
 
 "$DIR"/plot.py --logscale 01no "benchmark" 05mem_kb "memory, KB" \
-    mem-log.svg $RESULTS
+    $PREFIX-mem-log.svg $RESULTS
 
 "$DIR"/plot.py 01no "benchmark" 05mem_kb "memory, KB" \
-    mem.svg $RESULTS
+    $PREFIX-mem.svg $RESULTS
 
 "$DIR"/plot.py 01no "benchmark" 12ncells "number of arena cells" \
-    ncells.svg $RESULTS
+    $PREFIX-ncells.svg $RESULTS
 
 "$DIR"/plot.py 01no "benchmark" 13nclauses "number of SMT clauses" \
-    nclauses.svg $RESULTS
+    $PREFIX-nclauses.svg $RESULTS
 
 # output the plots
 cat <<EOF
@@ -46,27 +47,27 @@ cat <<EOF
 
 ### $seqno.1. Time (logarithmic scale)
 
-![time-log](time-log.svg "Time Log")
+![time-log]($PREFIX-time-log.svg "Time Log")
 
 ### $seqno.2. Time (linear)
 
-![time-log](time.svg "Time Log")
+![time-log]($PREFIX-time.svg "Time Log")
 
 ### $seqno.3. Memory (logarithmic scale)
 
-![mem-log](mem-log.svg "Memory Log")
+![mem-log]($PREFIX-mem-log.svg "Memory Log")
 
 ### $seqno.4. Memory (linear)
 
-![mem](mem.svg "Memory Log")
+![mem]($PREFIX-mem.svg "Memory Log")
 
 ### $seqno.5. Number of arena cells (linear)
 
-![ncells](ncells.svg "Number of arena cells")
+![ncells]($PREFIX-ncells.svg "Number of arena cells")
 
 ### $seqno.6. Number of SMT clauses (linear)
 
-![nclauses](nclauses.svg "Number of SMT clauses")
+![nclauses]($PREFIX-nclauses.svg "Number of SMT clauses")
 EOF
 
 seqno=$((1+seqno))
