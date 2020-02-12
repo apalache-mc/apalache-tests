@@ -11,7 +11,7 @@ RES_DIR=$(BASEDIR)/results
 
 REPORTS=$(RES_DIR)/001indinv-report.md $(RES_DIR)/002bmc-report.md
 
-all: report
+report: $(REPORTS)
 
 $(RES_DIR)/001indinv-report.md: $(RES_DIR)/001indinv-apalache-0.6.0.csv \
 				  $(RES_DIR)/001indinv-apalache-0.5.2.csv
