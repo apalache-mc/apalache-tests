@@ -7,7 +7,7 @@
 TASK=$1
 shift 1
 RESULTS=$@
-PREFIX=$(basename ${TASK})
+PREFIX=$(basename -s '.csv' ${TASK})
 
 which csvtomd >/dev/null || (echo "No csvtomd! Run: pip3 install csvtomd"; exit 1)
 
