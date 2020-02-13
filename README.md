@@ -10,7 +10,7 @@ Some benchmarks have their own licenses, which we kindly ask you to respect.
 ## Performance benchmarks
 
 See the results for [inductive invariants](results/001indinv-report.md)
-and bounded model checking(results/002bmc-report.md)
+and [bounded model checking](results/002bmc-report.md).
 
 ## Warning
 
