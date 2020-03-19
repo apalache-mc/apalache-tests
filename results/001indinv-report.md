@@ -1,31 +1,31 @@
-# Results of 001indinv-apalache.csv
+# Results of 001indinv-apalache
 
 
 ## 1. Awesome plots
 
 ### 1.1. Time (logarithmic scale)
 
-![time-log](time-log.svg "Time Log")
+![time-log](001indinv-apalache-time-log.svg "Time Log")
 
 ### 1.2. Time (linear)
 
-![time-log](time.svg "Time Log")
+![time-log](001indinv-apalache-time.svg "Time Log")
 
 ### 1.3. Memory (logarithmic scale)
 
-![mem-log](mem-log.svg "Memory Log")
+![mem-log](001indinv-apalache-mem-log.svg "Memory Log")
 
 ### 1.4. Memory (linear)
 
-![mem](mem.svg "Memory Log")
+![mem](001indinv-apalache-mem.svg "Memory Log")
 
 ### 1.5. Number of arena cells (linear)
 
-![ncells](ncells.svg "Number of arena cells")
+![ncells](001indinv-apalache-ncells.svg "Number of arena cells")
 
 ### 1.6. Number of SMT clauses (linear)
 
-![nclauses](nclauses.svg "Number of SMT clauses")
+![nclauses](001indinv-apalache-nclauses.svg "Number of SMT clauses")
 
 ## 2. Input parameters
 
