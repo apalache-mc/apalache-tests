@@ -1,0 +1,56 @@
+# The common makefile to run one set of experiments in different configurations.
+#
+# Igor Konnov, 2020
+
+# OVERRIDE the following variables, if needed
+BENCHMARK=001indinv-apalache
+# APALACHE builds to run
+BUILDS=unstable multicore
+
+# The directory where the builds of apalache are stored.
+# The builds should be checked out before make is started.
+BUILDS_DIR=$(HOME)/devl
+
+# the base directory of the experiments
+BASEDIR=$(shell pwd)
+
+# override this, unless you are running the benchmarks in apalache-tests
+SCRIPTS_DIR=$(BASEDIR)/scripts
+# the directories where the run scripts and the results are written
+RUN_DIR=$(BASEDIR)/_runs
+RES_DIR=$(BASEDIR)/_results
+# the result files
+RESULTS=$(patsubst %,$(RES_DIR)/$(BENCHMARK)-%.csv,$(BUILDS))
+
+report: prepare $(RES_DIR)/$(BENCHMARK)-report.md
+
+# and prepare a nice report
+$(RES_DIR)/$(BENCHMARK)-report.md: $(RESULTS)
+	echo $(RESULTS)
+	cd $(RES_DIR) && \
+		$(SCRIPTS_DIR)/mk-report.sh $(BASEDIR)/$(BENCHMARK).csv $^ >$@
+
+# prepare the run script, run the benchmarks and parse the log files
+$(RES_DIR)/$(BENCHMARK)-%.csv: apalache-%
+	$(eval $@_NAME=$(BENCHMARK)-$*) # set the temporary variable
+	$(SCRIPTS_DIR)/mk-run.py  --ini=$(BENCHMARK).ini \
+		$(BASEDIR)/$(BENCHMARK).csv \
+		$(BUILDS_DIR)/apalache-$* \
+		$(BASEDIR) $(RUN_DIR)/$($@_NAME)
+	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
+		$(SCRIPTS_DIR)/parse-logs.py . && \
+		cp results.csv $(RES_DIR)/$($@_NAME).csv)
+
+build: $(pathsubst %,apalache-%,$(BUILDS))
+
+apalache-%:
+	make -C $(BUILDS_DIR)/$@
+
+prepare:
+	mkdir -p $(RUN_DIR)
+	mkdir -p $(RES_DIR)
+
+clean:
+	(test -d $(RUN_DIR) && rm -rf $(RUN_DIR)/*) || echo "no $(RUN_DIR)"
+	(test -d $(RES_DIR) && rm -rf $(RES_DIR)/*) || echo "no $(RES_DIR)"
+

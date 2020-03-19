@@ -26,7 +26,7 @@ $(RES_DIR)/002bmc-report.md: $(RES_DIR)/002bmc-apalache-0.6.0.csv \
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
 $(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
 	$(eval $@_NAME=001indinv-apalache-$*) # set the temporary variable
-	./scripts/mk-run.sh ./performance/001indinv-apalache.csv \
+	./scripts/mk-run.py ./performance/001indinv-apalache.csv \
 		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \

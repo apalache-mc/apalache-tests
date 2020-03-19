@@ -7,6 +7,7 @@
 # Jure Kukovec, Igor Konnov, 2019
 
 import argparse
+import configparser
 import os
 import shutil
 import stat
@@ -42,14 +43,18 @@ def parse_options():
     parser.add_argument('--memlimit', dest='memlimit',
                     default=0, type=int,
                     help='Set memory limits in GB (default: 0)')
+    parser.add_argument('--iniFile', dest='iniFile',
+                    type=str,
+                    help='The name of an .ini file that contains configuration parameters')
     args = parser.parse_args()
     args.apalacheDir = os.path.realpath(args.apalacheDir)
     args.specDir = os.path.realpath(args.specDir)
     args.outDir = os.path.realpath(args.outDir)
+    args.iniFile = os.path.realpath(args.iniFile) if args.iniFile else None
     return args
 
 
-def tool_cmd(args, exp_dir, tla_filename, csv_row):
+def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
     def kv(key):
         return "--%s=%s" % (key, csv_row[key]) if csv_row[key].strip() != "" else ""
 
@@ -58,24 +63,30 @@ def tool_cmd(args, exp_dir, tla_filename, csv_row):
     ctime = "%s -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out" % os_cmds['time']
     ctimeout = "%s --foreground %s" % (os_cmds['timeout'], csv_row['timeout'])
     if tool == 'apalache':
-        return "%s %s %s/bin/apalache-mc check %s %s %s %s %s | tee apalache.out" \
+        return "%s %s %s/bin/apalache-mc check %s %s %s %s %s %s | tee apalache.out" \
                 % (ctime, ctimeout,
                         args.apalacheDir, kv("init"),
-                        kv("next"), kv("inv"), csv_row["args"], tla_filename)
+                        kv("next"), kv("inv"), csv_row["args"],
+                        ini_params.get("more_args", ''),
+                        tla_filename)
     elif tool == 'tlc':
         # TLC needs a configuration file, it should be created by the user
         # figure out how to run tlc
-        init, next, inv, more_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
+        init, next, inv, user_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
         mem = "-Xmx%dm" % (1024 * args.memlimit) if args.memlimit > 0 else ""
         return ('%s %s java %s -cp %s/3rdparty/tla2tools.jar ' \
-                + ' tlc2.TLC %s %s | tee tlc.out') \
-                % (ctime, ctimeout, mem, apalache_dir, more_args, tla_filename)
+                + ' tlc2.TLC %s %s %s | tee tlc.out') \
+                % (ctime, ctimeout, mem,
+                        apalache_dir,
+                        user_args,
+                        ini_params.get("more_args", ''),
+                        tla_filename)
     else:
         print("Unknown tool: %s" % tool)
         sys.exit(1)
 
 
-def setup_experiment(args, row_num, csv_row):
+def setup_experiment(args, ini_params, row_num, csv_row):
     exp_dir = os.path.join(args.outDir, "exp", "%03d" % row_num)
     os.makedirs(exp_dir)
     print("Populating the directory for the experiment %d:" % row_num)
@@ -98,7 +109,7 @@ def setup_experiment(args, row_num, csv_row):
         lines = [
             '#!/bin/bash',
             'D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"',
-            tool_cmd(args, exp_dir, tla_basename, csv_row),
+            tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row),
             'exitcode="$?"',
             'echo "EXITCODE=$exitcode"',
             'exit "$exitcode"'
@@ -147,6 +158,18 @@ if __name__ == "__main__":
         print("Error: File %s does not exist." % args.config)
         sys.exit(1)
 
+    ini_params = {}
+    if args.iniFile:
+        if not os.path.exists(args.iniFile): 
+            print("Error: File %s does not exist." % args.iniFile)
+            sys.exit(1)
+        else:
+            ini = configparser.ConfigParser()
+            ini.read(args.iniFile)
+            section_name = os.path.basename(args.apalacheDir)
+            if section_name in ini:
+                ini_params = ini[section_name]
+
     with open(args.config, "r") as csvfile:
         sample = csvfile.read(1024)
         sniffer = csv.Sniffer()
@@ -159,7 +182,7 @@ if __name__ == "__main__":
         reader = csv.DictReader(csvfile, dialect=dialect)
         scripts = []
         for (row_num, row) in enumerate(reader):
-            single_script = setup_experiment(args, row_num + 1, row)
+            single_script = setup_experiment(args, ini_params, row_num + 1, row)
             scripts.append(single_script)
 
         print('\nAll experiment directories are populated\n')

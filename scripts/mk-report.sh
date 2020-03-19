@@ -4,6 +4,11 @@
 #
 # Igor Konnov, 2020
 
+if [ "$#" -lt 2 ]; then
+    echo "Use: $0 benchmarks.csv result_1.csv ... result_n.csv"
+    exit 1
+fi
+
 TASK=$1
 shift 1
 RESULTS=$@
