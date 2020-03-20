@@ -39,7 +39,7 @@ $(RES_DIR)/$(BENCHMARK)-%.csv: apalache-%
 		$(BASEDIR)/$(BENCHMARK).csv \
 		$(BUILDS_DIR)/apalache-$* \
 		$(BASEDIR) $(RUN_DIR)/$($@_NAME)
-	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
+	(cd $(RUN_DIR)/$($@_NAME) && $(RUN_SCRIPT) && \
 		$(SCRIPTS_DIR)/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
 
