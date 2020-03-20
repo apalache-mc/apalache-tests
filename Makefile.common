@@ -6,6 +6,8 @@
 BENCHMARK=001indinv-apalache
 # APALACHE builds to run
 BUILDS=unstable multicore
+# use either ./run-all.sh, or ./run-parallel.sh
+RUN_SCRIPT=./run-all.sh
 
 # The directory where the builds of apalache are stored.
 # The builds should be checked out before make is started.
