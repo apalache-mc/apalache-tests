@@ -1,4 +1,4 @@
----- MODULE SetAdd_MC_11 ----
+---- MODULE SetAdd_11 ----
 EXTENDS SetAdd, TLC
 
 MC_values == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
@@ -12,4 +12,4 @@ MC_Inv == Inv
 
 =============================================================================
 \* Modification History
-\* Created Tue Apr 21 18:53:42 CEST 2020 by andrey
+\* Created Mon Apr 27 16:44:30 CEST 2020 by andrey

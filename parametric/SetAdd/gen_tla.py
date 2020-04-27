@@ -15,7 +15,7 @@ g.init("SetAdd","TLA+/TLC")
 def print_tla():
     values = "{" + ", ".join("\"v"+str(x)+"\"" for x in range(g.N)) + "}"
     with open(f"{g.FILE}.tla", "w") as file:
-        file.write(f"""---- MODULE {g.NAME}_MC_{g.N} ----
+        file.write(f"""---- MODULE {g.FILE} ----
 EXTENDS {g.NAME}, TLC
 
 MC_values == {values}

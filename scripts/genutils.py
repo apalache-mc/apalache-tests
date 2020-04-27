@@ -19,6 +19,7 @@ KIND = None
 N = None
 VARIANT = None
 FILE = None
+PATH = None
 
 def usage(msg):
     print(f"""
@@ -31,7 +32,7 @@ USAGE: {CMD} N
 # initialize this script by providing the general example name, 
 # as well as the kind and the variant of generated parametric examples
 def init(name, kind, variant = ""):
-    global NAME, KIND, N, VARIANT, FILE
+    global NAME, KIND, N, VARIANT, FILE, PATH
     NAME = name
     KIND = kind
     VARIANT = variant
@@ -41,11 +42,10 @@ def init(name, kind, variant = ""):
         N = int(sys.argv[1])
     except ValueError:
         usage("can't parse the input as integer parameter") 
-    FILE = os.path.dirname(sys.argv[0]) + "/"     
-    if not VARIANT:    
-        FILE += f"{NAME}_{N}"
-    else:
-        FILE += f"{NAME}_{VARIANT}_{N}"
+    FILE = f"{NAME}_{N}"
+    if VARIANT:
+        FILE += f"_{VARIANT}"
+    PATH = os.path.dirname(sys.argv[0]) + "/" + FILE
 
 
 
