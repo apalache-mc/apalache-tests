@@ -9,7 +9,7 @@
 
 EXTENDS FiniteSets
 
-(* APALACHE *)
+(* APALACHE type annotation *)
 a <: b == a
 
 CONSTANT
