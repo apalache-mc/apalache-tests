@@ -41,8 +41,10 @@ def init(name, kind, variant = ""):
         usage("wrong number of arguments")
     try:
         N = int(sys.argv[1])
+        if N<=0:
+            raise ValueError()
     except ValueError:
-        usage("can't parse the input as integer parameter") 
+        usage("can't parse the input as positive integer") 
     if VARIANT:
         FILE = f"{NAME}_{VARIANT}_{N}"
         NAMEVARIANT = f"{NAME}_{VARIANT}"
