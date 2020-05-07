@@ -1,8 +1,6 @@
 # Results of 008IntClocks
 
 
-## 1. Awesome plots
-
 ### 1. Time (logarithmic scale)
 
 ![time-log](008IntClocks-time-log.svg "Time Log")

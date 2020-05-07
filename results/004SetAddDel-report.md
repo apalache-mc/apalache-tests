@@ -17,9 +17,3 @@
 
 ![mem](004SetAddDel-mem.svg "Memory Log")
 
-
-
-## 5. Detailed results: 004SetAddDel-z3-0.7.0.csv
-
-01:no  |  02:tool  |  03:status  |  04:time_sec  |  05:mem_kb
--------|-----------|-------------|---------------|-----------

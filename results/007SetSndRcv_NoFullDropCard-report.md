@@ -1,8 +1,6 @@
 # Results of 007SetSndRcv_NoFullDropCard
 
 
-## 1. Awesome plots
-
 ### 1. Time (logarithmic scale)
 
 ![time-log](007SetSndRcv_NoFullDropCard-time-log.svg "Time Log")

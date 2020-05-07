@@ -1,8 +1,6 @@
 # Results of 006SetSndRcv_NoFullDrop
 
 
-## 1. Awesome plots
-
 ### 1. Time (logarithmic scale)
 
 ![time-log](006SetSndRcv_NoFullDrop-time-log.svg "Time Log")

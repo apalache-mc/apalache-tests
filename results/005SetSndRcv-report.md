@@ -1,8 +1,6 @@
 # Results of 005SetSndRcv
 
 
-## 1. Awesome plots
-
 ### 1. Time (logarithmic scale)
 
 ![time-log](005SetSndRcv-time-log.svg "Time Log")
