@@ -1,0 +1,11 @@
+01:no,02:tool,03:status,04:time_sec,05:mem_kb
+1,z3,Fail,1,21132
+2,z3,Fail,180,41568
+3,z3,Timeout,3600,69220
+4,z3,Timeout,3600,76856
+5,z3,Timeout,3600,73636
+6,z3,Timeout,3600,72092
+7,z3,Timeout,3600,74564
+8,z3,Timeout,3600,77136
+9,z3,Timeout,3600,75240
+10,z3,Timeout,3600,69676

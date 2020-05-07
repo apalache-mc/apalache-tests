@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetAdd/SetAdd_5.tla,apalache,1h,,,,--length=5
+6,SetAdd/SetAdd_6.tla,apalache,1h,,,,--length=6
+7,SetAdd/SetAdd_7.tla,apalache,1h,,,,--length=7
+8,SetAdd/SetAdd_8.tla,apalache,1h,,,,--length=8
+9,SetAdd/SetAdd_9.tla,apalache,1h,,,,--length=9
+10,SetAdd/SetAdd_10.tla,apalache,1h,,,,--length=10
+11,SetAdd/SetAdd_11.tla,apalache,1h,,,,--length=11
+12,SetAdd/SetAdd_12.tla,apalache,1h,,,,--length=12
+13,SetAdd/SetAdd_13.tla,apalache,1h,,,,--length=13
+14,SetAdd/SetAdd_14.tla,apalache,1h,,,,--length=14
+15,SetAdd/SetAdd_15.tla,apalache,1h,,,,--length=15
+
+

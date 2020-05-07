@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetAdd/SetAdd_5.tla,tlc,1h,,,,
+6,SetAdd/SetAdd_6.tla,tlc,1h,,,,
+7,SetAdd/SetAdd_7.tla,tlc,1h,,,,
+8,SetAdd/SetAdd_8.tla,tlc,1h,,,,
+9,SetAdd/SetAdd_9.tla,tlc,1h,,,,
+10,SetAdd/SetAdd_10.tla,tlc,1h,,,,
+11,SetAdd/SetAdd_11.tla,tlc,1h,,,,
+12,SetAdd/SetAdd_12.tla,tlc,1h,,,,
+13,SetAdd/SetAdd_13.tla,tlc,1h,,,,
+14,SetAdd/SetAdd_14.tla,tlc,1h,,,,
+15,SetAdd/SetAdd_15.tla,tlc,1h,,,,
+
+

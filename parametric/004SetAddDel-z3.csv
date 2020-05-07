@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetAddDel/SetAddDel_5.smt,z3,1h,,,,
+6,SetAddDel/SetAddDel_6.smt,z3,1h,,,,
+7,SetAddDel/SetAddDel_7.smt,z3,1h,,,,
+8,SetAddDel/SetAddDel_8.smt,z3,1h,,,,
+9,SetAddDel/SetAddDel_9.smt,z3,1h,,,,
+10,SetAddDel/SetAddDel_10.smt,z3,1h,,,,
+11,SetAddDel/SetAddDel_11.smt,z3,1h,,,,
+12,SetAddDel/SetAddDel_12.smt,z3,1h,,,,
+13,SetAddDel/SetAddDel_13.smt,z3,1h,,,,
+14,SetAddDel/SetAddDel_14.smt,z3,1h,,,,
+15,SetAddDel/SetAddDel_15.smt,z3,1h,,,,
+
+

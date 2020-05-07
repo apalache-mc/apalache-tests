@@ -1,0 +1,12 @@
+no,filename,tool,timeout,init,inv,next,args
+1,IntClocks/IntClocks_1.tla,tlc,1h,,,,
+2,IntClocks/IntClocks_2.tla,tlc,1h,,,,
+3,IntClocks/IntClocks_3.tla,tlc,1h,,,,
+4,IntClocks/IntClocks_4.tla,tlc,1h,,,,
+5,IntClocks/IntClocks_5.tla,tlc,1h,,,,
+6,IntClocks/IntClocks_6.tla,tlc,1h,,,,
+7,IntClocks/IntClocks_7.tla,tlc,1h,,,,
+8,IntClocks/IntClocks_8.tla,tlc,1h,,,,
+9,IntClocks/IntClocks_9.tla,tlc,1h,,,,
+10,IntClocks/IntClocks_10.tla,tlc,1h,,,,
+

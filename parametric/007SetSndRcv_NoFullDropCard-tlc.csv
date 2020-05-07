@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetSndRcv/SetSndRcv_NoFullDropCard_5.tla,tlc,1h,,,,
+6,SetSndRcv/SetSndRcv_NoFullDropCard_6.tla,tlc,1h,,,,
+7,SetSndRcv/SetSndRcv_NoFullDropCard_7.tla,tlc,1h,,,,
+8,SetSndRcv/SetSndRcv_NoFullDropCard_8.tla,tlc,1h,,,,
+9,SetSndRcv/SetSndRcv_NoFullDropCard_9.tla,tlc,1h,,,,
+10,SetSndRcv/SetSndRcv_NoFullDropCard_10.tla,tlc,1h,,,,
+11,SetSndRcv/SetSndRcv_NoFullDropCard_11.tla,tlc,1h,,,,
+12,SetSndRcv/SetSndRcv_NoFullDropCard_12.tla,tlc,1h,,,,
+13,SetSndRcv/SetSndRcv_NoFullDropCard_13.tla,tlc,1h,,,,
+14,SetSndRcv/SetSndRcv_NoFullDropCard_14.tla,tlc,1h,,,,
+15,SetSndRcv/SetSndRcv_NoFullDropCard_15.tla,tlc,1h,,,,
+
+

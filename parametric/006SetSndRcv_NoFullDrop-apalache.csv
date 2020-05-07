@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetSndRcv/SetSndRcv_NoFullDrop_5.tla,apalache,1h,,,,--length=10
+6,SetSndRcv/SetSndRcv_NoFullDrop_6.tla,apalache,1h,,,,--length=12
+7,SetSndRcv/SetSndRcv_NoFullDrop_7.tla,apalache,1h,,,,--length=14
+8,SetSndRcv/SetSndRcv_NoFullDrop_8.tla,apalache,1h,,,,--length=16
+9,SetSndRcv/SetSndRcv_NoFullDrop_9.tla,apalache,1h,,,,--length=18
+10,SetSndRcv/SetSndRcv_NoFullDrop_10.tla,apalache,1h,,,,--length=20
+11,SetSndRcv/SetSndRcv_NoFullDrop_11.tla,apalache,1h,,,,--length=22
+12,SetSndRcv/SetSndRcv_NoFullDrop_12.tla,apalache,1h,,,,--length=24
+13,SetSndRcv/SetSndRcv_NoFullDrop_13.tla,apalache,1h,,,,--length=26
+14,SetSndRcv/SetSndRcv_NoFullDrop_14.tla,apalache,1h,,,,--length=28
+15,SetSndRcv/SetSndRcv_NoFullDrop_15.tla,apalache,1h,,,,--length=30
+
+

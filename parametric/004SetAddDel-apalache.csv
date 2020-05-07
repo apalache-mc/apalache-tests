@@ -1,0 +1,14 @@
+no,filename,tool,timeout,init,inv,next,args
+5,SetAddDel/SetAddDel_5.tla,apalache,1h,,,,--length=5
+6,SetAddDel/SetAddDel_6.tla,apalache,1h,,,,--length=6
+7,SetAddDel/SetAddDel_7.tla,apalache,1h,,,,--length=7
+8,SetAddDel/SetAddDel_8.tla,apalache,1h,,,,--length=8
+9,SetAddDel/SetAddDel_9.tla,apalache,1h,,,,--length=9
+10,SetAddDel/SetAddDel_10.tla,apalache,1h,,,,--length=10
+11,SetAddDel/SetAddDel_11.tla,apalache,1h,,,,--length=11
+12,SetAddDel/SetAddDel_12.tla,apalache,1h,,,,--length=12
+13,SetAddDel/SetAddDel_13.tla,apalache,1h,,,,--length=13
+14,SetAddDel/SetAddDel_14.tla,apalache,1h,,,,--length=14
+15,SetAddDel/SetAddDel_15.tla,apalache,1h,,,,--length=15
+
+

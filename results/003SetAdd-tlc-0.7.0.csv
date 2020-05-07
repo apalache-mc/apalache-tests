@@ -1,0 +1,12 @@
+01:no,02:tool,03:status,04:time_sec,05:depth,05:mem_kb,20:nstates
+1,tlc,Error,1,6,97192,32
+2,tlc,Error,1,7,107680,64
+3,tlc,Error,1,8,108468,128
+4,tlc,Error,1,9,108372,256
+5,tlc,Error,1,10,112480,512
+6,tlc,Error,1,11,116792,1024
+7,tlc,Error,1,12,119704,2048
+8,tlc,Error,2,13,126060,4096
+9,tlc,Error,2,14,148784,8192
+10,tlc,Error,2,15,172188,16384
+11,tlc,Error,2,16,263616,32768

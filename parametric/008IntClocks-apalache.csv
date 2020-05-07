@@ -1,0 +1,13 @@
+no,filename,tool,timeout,init,inv,next,args
+1,IntClocks/IntClocks_1.tla,apalache,1h,,,,--length=10
+2,IntClocks/IntClocks_2.tla,apalache,1h,,,,--length=20
+3,IntClocks/IntClocks_3.tla,apalache,1h,,,,--length=30
+4,IntClocks/IntClocks_4.tla,apalache,1h,,,,--length=40
+5,IntClocks/IntClocks_5.tla,apalache,1h,,,,--length=50
+6,IntClocks/IntClocks_6.tla,apalache,1h,,,,--length=60
+7,IntClocks/IntClocks_7.tla,apalache,1h,,,,--length=70
+8,IntClocks/IntClocks_8.tla,apalache,1h,,,,--length=80
+9,IntClocks/IntClocks_9.tla,apalache,1h,,,,--length=90
+10,IntClocks/IntClocks_10.tla,apalache,1h,,,,--length=100
+
+
