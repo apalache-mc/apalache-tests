@@ -74,7 +74,7 @@ def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
         # figure out how to run tlc
         init, next, inv, user_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
         mem = "-Xmx%dm" % (1024 * args.memlimit) if args.memlimit > 0 else ""
-        return ('%s %s java %s -cp %s/3rdparty/tla2tools.jar ' \
+        return ('%s %s java ${JAVA_OPTS} %s -cp %s/3rdparty/tla2tools.jar ' \
                 + ' tlc2.TLC %s %s %s | tee tlc.out') \
                 % (ctime, ctimeout, mem,
                         apalache_dir,
