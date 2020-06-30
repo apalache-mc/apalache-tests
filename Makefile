@@ -13,13 +13,17 @@ REPORTS=$(RES_DIR)/001indinv-report.md $(RES_DIR)/002bmc-report.md
 
 report: $(REPORTS)
 
-$(RES_DIR)/001indinv-report.md: $(RES_DIR)/001indinv-apalache-0.6.0.csv \
-				  $(RES_DIR)/001indinv-apalache-0.5.2.csv
+$(RES_DIR)/001indinv-report.md: \
+		$(RES_DIR)/001indinv-apalache-0.7.0.csv \
+		$(RES_DIR)/001indinv-apalache-0.6.0.csv \
+		$(RES_DIR)/001indinv-apalache-0.5.2.csv
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/001indinv-apalache.csv $^ >$@
 
-$(RES_DIR)/002bmc-report.md: $(RES_DIR)/002bmc-apalache-0.6.0.csv \
-				  $(RES_DIR)/002bmc-apalache-0.5.2.csv
+$(RES_DIR)/002bmc-report.md: \
+		$(RES_DIR)/002bmc-apalache-0.7.0.csv \
+		$(RES_DIR)/002bmc-apalache-0.6.0.csv \
+		$(RES_DIR)/002bmc-apalache-0.5.2.csv
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
 
@@ -41,13 +45,16 @@ $(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
 		$(BASEDIR)/scripts/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
 
-build: apalache-0.5.2 apalache-0.6.0
+build: apalache-0.5.2 apalache-0.6.0 apalache-0.7.0
 
 apalache-0.5.2:
 	make -C $(BUILDS_DIR)/apalache-0.5.2
 
 apalache-0.6.0:
 	make -C $(BUILDS_DIR)/apalache-0.6.0
+
+apalache-0.7.0:
+	make -C $(BUILDS_DIR)/apalache-0.7.0
 
 prepare:
 	mkdir -p $(RUN_DIR)
