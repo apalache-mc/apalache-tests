@@ -36,6 +36,15 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 - Python3
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
 
+#### On Mac OS
+
+- [gnu-time](https://formulae.brew.sh/formula/gnu-time)
+- `gtimeout` via `brew install coreutils`
+
+#### On Linux
+
+- [time](https://www.gnu.org/software/time/)
+
 ### Setup
 
 Set up the source code for all versions that will be tested by running
