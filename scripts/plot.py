@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 #
 # Produce a for the experimental data. Shall we produce cactus plots instead?
 #
