@@ -33,8 +33,9 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 ### Dependencies
 
-- Python3
-  - with `matplotlib` via `pip install matplotlib`
+- Python3, including
+  - `matplotlib` via `pip install matplotlib`
+  - `csvtomd` via `pip install csvtomd`
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
 
 #### On Mac OS
