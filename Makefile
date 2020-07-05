@@ -9,7 +9,7 @@ BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
 
-REPORTS=$(RES_DIR)/001indinv-report.md $(RES_DIR)/002bmc-report.md
+REPORTS=$(RES_DIR)/002bmc-report.md $(RES_DIR)/001indinv-report.md
 
 report: $(REPORTS)
 
@@ -30,7 +30,7 @@ $(RES_DIR)/002bmc-report.md: \
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
 $(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
 	$(eval $@_NAME=001indinv-apalache-$*) # set the temporary variable
-	./scripts/mk-run.py ./performance/001indinv-apalache.csv \
+	$(BASEDIR)/scripts/mk-run.py ./performance/001indinv-apalache.csv \
 		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
@@ -39,7 +39,7 @@ $(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
 # can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
 $(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
 	$(eval $@_NAME=002bmc-apalache-$*) # set the temporary variable
-	./scripts/mk-run.sh ./performance/002bmc-apalache.csv \
+	$(BASEDIR)/scripts/mk-run.py ./performance/002bmc-apalache.csv \
 		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
