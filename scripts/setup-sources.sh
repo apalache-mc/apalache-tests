@@ -5,20 +5,20 @@
 
 set -euf -o pipefail
 
-latest="0.7.0"
+unreleased="0.7.0"
 devl_dir="${HOME}/devl"
 
 mkdir -p "$devl_dir"
 git clone git@github.com:informalsystems/apalache.git "$devl_dir/apalache" > /dev/null
 
-for v in "0.5.1" "0.6.0" "0.7.0"
+for v in "0.5.2" "0.6.0" "0.7.0"
 do
     echo "preparing source code for apalache version ${v}"
     version_dir="${HOME}/devl/apalache-${v}"
     cp -r "${devl_dir}/apalache" "$version_dir"
     pushd "$version_dir"
     git fetch
-    if [[ "$v" == "$latest" ]]
+    if [[ "$v" == "$unreleased" ]]
     then
         branch="origin/unstable"
     else
