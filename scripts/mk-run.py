@@ -88,7 +88,7 @@ def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
 
 def setup_experiment(args, ini_params, row_num, csv_row):
     exp_dir = os.path.join(args.outDir, "exp", "%03d" % row_num)
-    os.makedirs(exp_dir)
+    os.makedirs(exp_dir, exist_ok=True)
     print("Populating the directory for the experiment %d:" % row_num)
     # As SANY is only looking for file in the current directory,
     # we have to copy all tla files in the experiment directory.

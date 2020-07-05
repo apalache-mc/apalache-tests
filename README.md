@@ -29,6 +29,44 @@ See the results for:
 
 In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behaves compared to explicit state model checking of TLC, and to the quantified SMT encoding of bounded model checking, solved with Z3. As we compare Apalache v. 0.7.0, against TLC and Z3, bundled with the current build of Apalache, we show v. 0.7.0 for those tools as well -- their actual versions are different!
 
+## Usage
+
+### Dependencies
+
+- Python3, including
+  - `matplotlib` via `pip install matplotlib`
+  - `csvtomd` via `pip install csvtomd`
+- [GNU Parallel](https://www.gnu.org/software/parallel/)
+
+#### On Mac OS
+
+- [gnu-time](https://formulae.brew.sh/formula/gnu-time)
+- `gtimeout` via `brew install coreutils`
+
+#### On Linux
+
+- [time](https://www.gnu.org/software/time/)
+
+### Setup
+
+Set up the source code for all versions that will be tested by running
+
+```sh
+./scripts/setup-sources.sh
+```
+
+NOTE: This will create a directory `$HOME/devl` if it doesn't already exit.
+
+### Running the benchmarks
+
+To build all the sources and generate the reports, run
+
+```sh
+make
+```
+
+New reports are saved into [./results](./results).
+
 ## Warning
 
 **These specifications should not be used for learning TLA+**.

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # Produce a for the experimental data. Shall we produce cactus plots instead?
 #
@@ -52,8 +52,10 @@ def plot(opts, x_field, x_title, y_field, y_title, out_name, csvs):
 
 
 def usage():
-    print "Use: %s [--logscale] <x-field> <x-title> <y-field> " + \
-        "<y-title> <out>.svg <in_1>.csv ... <in_n>.csv" % sys.argv[0]
+    print(
+        "Use: %s [--logscale] <x-field> <x-title> <y-field> "
+        + "<y-title> <out>.svg <in_1>.csv ... <in_n>.csv" % sys.argv[0]
+    )
     sys.exit(1)
 
 def parse_opts(argv):
