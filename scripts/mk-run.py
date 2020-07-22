@@ -42,7 +42,9 @@ def parse_options():
     )
     # TODO Make this take a docker tag
     parser.add_argument(
-        "apalacheDir", type=realpath, help="The APALACHE source code directory."
+        "apalacheDir",
+        type=realpath,
+        help="The docker tag indicating the version of Apalache to run",
     )
     parser.add_argument(
         "specDir", type=realpath, help="The directory that contains the benchmarks."
@@ -72,41 +74,22 @@ def parse_options():
 
 def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
     def kv(key):
-        return "--%s=%s" % (key, csv_row[key]) if csv_row[key].strip() != "" else ""
+        return f"--{key}={csv_row[key]}" if csv_row[key].strip() != "" else ""
 
     tool = csv_row["tool"]
     apalache_dir = args.apalacheDir
-    ctime = "%s -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out" % os_cmds["time"]
-    ctimeout = "%s --foreground %s" % (os_cmds["timeout"], csv_row["timeout"])
+    ctime = f"{os_cmds['time']} -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out"
+    ctimeout = f"{os_cmds['timeout']} --foreground {csv_row['timeout']}"
+    ini_params_args = ini_params.get("more_args", "")
     if tool == "apalache":
-        return "%s %s %s/bin/apalache-mc check %s %s %s %s %s %s | tee apalache.out" % (
-            ctime,
-            ctimeout,
-            args.apalacheDir,
-            kv("init"),
-            kv("next"),
-            kv("inv"),
-            csv_row["args"],
-            ini_params.get("more_args", ""),
-            tla_filename,
-        )
+        return f"{ctime} {ctimeout} {args.apalacheDir}/bin/apalache-mc check {kv('init')} {kv('next')} {kv('inv')} {csv_row['args']} {ini_params_args} {tla_filename} | tee apalache.out"
     elif tool == "tlc":
-        # TLC needs a configuration file, it should be created by the user
+        # TODO TLC needs a configuration file, it should be created by the user
         # figure out how to run tlc
-        init, next, inv, user_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
+        # init, next, inv, user_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
         mem = "-Xmx%dm" % (1024 * args.memlimit) if args.memlimit > 0 else ""
-        return (
-            "%s %s java ${JAVA_OPTS} %s -cp %s/3rdparty/tla2tools.jar "
-            + " tlc2.TLC %s %s %s | tee tlc.out"
-        ) % (
-            ctime,
-            ctimeout,
-            mem,
-            apalache_dir,
-            user_args,
-            ini_params.get("more_args", ""),
-            tla_filename,
-        )
+        # TODO Obtain tla2tools.jar by another means than building apalache
+        return f"{ctime} {ctimeout} java ${{JAVA_OPTS}} {mem} -cp {apalache_dir}/3rdparty/tla2tools.jar tlc2.TLC {user_args} {ini_params_args} {tla_filename} | tee tlc.out"
     else:
         print("Unknown tool: %s" % tool)
         sys.exit(1)
