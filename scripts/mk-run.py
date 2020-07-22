@@ -13,6 +13,7 @@ import shutil
 import stat
 import sys
 import csv
+from os.path import realpath
 
 
 def os_specific_commands():
@@ -39,15 +40,16 @@ def parse_options():
         type=str,
         help="An input CSV that contains the parameters of the experiments",
     )
+    # TODO Make this take a docker tag
     parser.add_argument(
-        "apalacheDir", type=str, help="The APALACHE source code directory."
+        "apalacheDir", type=realpath, help="The APALACHE source code directory."
     )
     parser.add_argument(
-        "specDir", type=str, help="The directory that contains the benchmarks."
+        "specDir", type=realpath, help="The directory that contains the benchmarks."
     )
     parser.add_argument(
         "outDir",
-        type=str,
+        type=realpath,
         help="The directory to write the scripts and outcome of the experiments.",
     )
     parser.add_argument(
@@ -60,14 +62,11 @@ def parse_options():
     parser.add_argument(
         "--iniFile",
         dest="iniFile",
-        type=str,
+        default=None,
+        type=realpath,
         help="The name of an .ini file that contains configuration parameters",
     )
     args = parser.parse_args()
-    args.apalacheDir = os.path.realpath(args.apalacheDir)
-    args.specDir = os.path.realpath(args.specDir)
-    args.outDir = os.path.realpath(args.outDir)
-    args.iniFile = os.path.realpath(args.iniFile) if args.iniFile else None
     return args
 
 
