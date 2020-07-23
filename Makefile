@@ -13,9 +13,6 @@ VERSIONS := \
 0.6.0
 # TODO 0.5.2
 
-# The directory where the builds of apalache are stored.
-# The builds should be checked out before make is started.
-BUILDS_DIR=$(HOME)/devl
 BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
