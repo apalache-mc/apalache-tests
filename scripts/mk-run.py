@@ -86,7 +86,7 @@ def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
         return f"--{key}={csv_row[key]}" if csv_row[key].strip() != "" else ""
 
     tool = csv_row["tool"]
-    ctime = f"{os_cmds['time']} -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out"
+    ctime = f"{os_cmds['time']} -f 'elapsed_sec: %e maxresident_kb: %M' -o time.out"
     ctimeout = f"{os_cmds['timeout']} --foreground {csv_row['timeout']}"
     ini_params_args = ini_params.get("more_args", "")
     if tool == "apalache":
