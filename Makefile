@@ -10,8 +10,8 @@
 # Put the latest version first
 VERSIONS := \
 0.7.0 \
-0.6.0
-# TODO 0.5.2
+0.6.0  \
+0.5.2
 
 BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
@@ -35,13 +35,24 @@ $(RES_DIR)/002bmc-report.md: $(BMC_RESULTS)
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
 
+experiments: $(INDINV_RESULTS) $(BMC_RESULTS)
+
 # Rules for generating each csv of result data
-$(RES_DIR)/%.csv: prepare docker-pull
-	$(BASEDIR)/scripts/mk-run.py ./performance/001indinv-apalache.csv \
-		latest ./performance $(RUN_DIR)/$*
-	(cd $(RUN_DIR)/$* && ./run-parallel.sh && \
-		$(BASEDIR)/scripts/parse-logs.py . && \
-		cp results.csv $(RES_DIR)/$*.csv)
+# The automatic variable $* will look like
+# (001indinv|002bmc)-apalache-<version>
+$(RES_DIR)/%.csv: prepare # docker-pull
+# PARAMS is the base name for the params file, obtained by stripping the
+# version segent from the end of the filename.
+# NOTE: The double $ in the sed command escapes the $ for make
+	$(eval PARAMS := $(shell echo $* | sed "s/-[^-]*$$//"))
+	$(BASEDIR)/scripts/mk-run.py \
+		./performance/$(PARAMS).csv \
+		latest \
+		./performance $(RUN_DIR)/$*
+	(cd $(RUN_DIR)/$* \
+		&& ./run-parallel.sh\
+		&& $(BASEDIR)/scripts/parse-logs.py . \
+		&& cp results.csv $(RES_DIR)/$*.csv)
 
 .PHONY: docker-pull prepare clean
 
