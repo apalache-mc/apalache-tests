@@ -122,18 +122,17 @@ def setup_experiment(args, ini_params, row_num, csv_row):
 
     # create the script to run an individual experiment
     script = os.path.join(exp_dir, "run-one.sh")
+    cmd = tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row)
+    contents = f"""
+#!/bin/bash
+D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"
+{cmd}
+exitcode="$?"
+echo "EXITCODE=$exitcode"
+exit "$exitcode"
+"""
     with open(script, "w+") as sf:
-        lines = [
-            "#!/bin/bash",
-            'D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"',
-            tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row),
-            'exitcode="$?"',
-            'echo "EXITCODE=$exitcode"',
-            'exit "$exitcode"',
-        ]
-        for l in lines:
-            sf.write(l)
-            sf.write("\n")
+        sf.write(contents)
 
     os.chmod(script, stat.S_IWRITE | stat.S_IREAD | stat.S_IEXEC)
     print("  created the script " + script)
