@@ -48,7 +48,8 @@ $(RES_DIR)/%.csv: prepare # docker-pull
 	$(BASEDIR)/scripts/mk-run.py \
 		./performance/$(PARAMS).csv \
 		latest \
-		./performance $(RUN_DIR)/$*
+		./performance \
+		$(RUN_DIR)/$*
 	(cd $(RUN_DIR)/$* \
 		&& ./run-parallel.sh\
 		&& $(BASEDIR)/scripts/parse-logs.py . \
