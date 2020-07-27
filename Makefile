@@ -111,13 +111,13 @@ experiments: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experiment-$(
 # for the given STRATEGY and VERSION
 $(RES_DIR)/%.csv: prepare docker-pull
 	@echo
-	@echo "======> Running experiment " $*
+	@echo "======> Running experiments " $*
 	@echo
 # PARAMS is the base name for the params file, obtained by stripping the
 # version segment from the end of the filename.
 # NOTE: The double $ in the sed command escapes the $ for make
 	$(eval PARAMS := $(shell echo $* | sed "s/-[^-]*$$//"))
-	$(eval VERSION := $(shell echo $* | sed 's/.*-\(.*\)$/\1/'))
+	$(eval VERSION := $(shell echo $* | sed 's/.*-\(.*\)$$/\1/'))
 	$(BASEDIR)/scripts/mk-run.py \
 		./performance/$(PARAMS).csv \
 		$(VERSION) \
