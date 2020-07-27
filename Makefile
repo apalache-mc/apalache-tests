@@ -114,12 +114,13 @@ $(RES_DIR)/%.csv: prepare docker-pull
 	@echo "======> Running experiment " $*
 	@echo
 # PARAMS is the base name for the params file, obtained by stripping the
-# version segent from the end of the filename.
+# version segment from the end of the filename.
 # NOTE: The double $ in the sed command escapes the $ for make
 	$(eval PARAMS := $(shell echo $* | sed "s/-[^-]*$$//"))
+	$(eval VERSION := $(shell echo $* | sed 's/.*-\(.*\)$/\1/'))
 	$(BASEDIR)/scripts/mk-run.py \
 		./performance/$(PARAMS).csv \
-		latest \
+		$(VERSION) \
 		./performance \
 		$(RUN_DIR)/$*
 	(cd $(RUN_DIR)/$* \
