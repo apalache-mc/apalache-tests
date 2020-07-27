@@ -90,13 +90,14 @@ $(RES_DIR)/%-report.md: $(call strategy_results,%)
 # EXPERIMENTS #
 ###############
 
-# exp-<version>:
+# experiment-<strategy>-<version>:
 #
-# For each specified version, this loop generates a target to
-# exp-<version> to run experiments .
+# For each specified strategy and version, this loop generates a target
+# experiment-<strategy>-<version> to run the designated experiments.
 #
-# E.g. to run all experiments for version 0.7.7 execute
-# 	make exp-0.7.0
+# E.g. to run inductive invariant experiments for version 0.7.7 execute
+#
+# 	make experiment-001indinv-0.7.0
 $(foreach s, $(STRATEGIES), \
 $(foreach v, $(VERSIONS), \
 $(eval $(call experiment-strat-version,$(s),$(v)))))
