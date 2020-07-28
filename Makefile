@@ -17,7 +17,7 @@
 # Put the latest version first
 VERSIONS := \
 0.7.0 \
-0.6.0
+0.6.1
 
 # The strategies to run experiments for
 #
