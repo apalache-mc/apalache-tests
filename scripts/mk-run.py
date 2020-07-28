@@ -4,7 +4,7 @@
 # and sets up a directory to run the experiments in. It also generates
 # the necessary scripts to run the experiments.
 #
-# Jure Kukovec, Igor Konnov, Shon Feder, 2019
+# Jure Kukovec, Igor Konnov, Shon Feder, 2019-2020
 
 import argparse
 import configparser

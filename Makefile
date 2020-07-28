@@ -22,7 +22,7 @@ VERSIONS := \
 # The strategies to run experiments for
 #
 # A strategy should correspond to a parameter file
-# like ./performance/<stragety>-apalache.csv, e.g.,
+# like ./performance/<strategy>-apalache.csv, e.g.,
 #
 # 	- ./performance/001indinv-apalache.csv
 # 	- ./performance/002bmc-apalache.csv
@@ -95,7 +95,7 @@ $(RES_DIR)/%-report.md: $(call strategy_results,%)
 # For each specified strategy and version, this loop generates a target
 # experiment-<strategy>-<version> to run the designated experiments.
 #
-# E.g. to run inductive invariant experiments for version 0.7.7 execute
+# E.g. to run inductive invariant experiments for version 0.7.0 execute
 #
 # 	make experiment-001indinv-0.7.0
 $(foreach s, $(STRATEGIES), \
@@ -106,7 +106,7 @@ $(eval $(call experiment-strat-version,$(s),$(v)))))
 experiments: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experiment-$(s)-$(v)))
 
 # Rules for generating the csv of result data for a particular set of
-# experimen
+# experiments
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
