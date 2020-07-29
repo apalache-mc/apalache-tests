@@ -1,66 +1,186 @@
 # The main makefile to run all experiments in different configurations.
 #
-# Igor Konnov, 2020
+# Igor Konnov, Shon Feder, 2020
 
-# The directory where the builds of apalache are stored.
-# The builds should be checked out before make is started.
-BUILDS_DIR=$(HOME)/devl
+
+##################
+# BASIC ELEMENTS #
+##################
+
+# These are the fundamental elements determining what benchmarks are run
+
+# The versions of apalache to benchmark
+#
+# A version should correspond to a docker tag for an image available on
+# https://hub.docker.com/r/apalache/mc/tags
+#
+# Put the latest version first
+VERSIONS := \
+0.7.0 \
+0.6.1
+
+# The strategies to run experiments for
+#
+# A strategy should correspond to a parameter file
+# like ./performance/<strategy>-apalache.csv, e.g.,
+#
+# 	- ./performance/001indinv-apalache.csv
+# 	- ./performance/002bmc-apalache.csv
+#
+# NOTE: Currently, only param files from the ./performance directory are
+# supported.
+STRATEGIES := \
+001indinv \
+002bmc
+
+
+#####################
+# DIRECTORY ALIASES #
+#####################
+
 BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
 
-REPORTS=$(RES_DIR)/002bmc-report.md $(RES_DIR)/001indinv-report.md
 
-report: $(REPORTS)
+##########
+# MACROS #
+##########
 
-$(RES_DIR)/001indinv-report.md: \
-		$(RES_DIR)/001indinv-apalache-0.7.0.csv \
-		$(RES_DIR)/001indinv-apalache-0.6.0.csv \
-		$(RES_DIR)/001indinv-apalache-0.5.2.csv
+# $(call strategy_results,strat) is a sequence of csv targets to collect
+# data for each version. E.g.,
+# if
+# 	$(VERSIONS) == 0.0.1 0.0.2
+# then
+# 	$(call strategy_results,002bmc) == ./results/02bmc-apalache-0.0.1.csv ./results/02bmc-apalache-0.0.2.csv
+define strategy_results
+$(foreach v, $(VERSIONS), $(RES_DIR)/$(1)-apalache-$(v).csv)
+endef
+
+# $(call experiment-strat-version,s,v) is a rule to build the experiment for
+# version v and strategy s. E.g.,
+#
+# 	$(call exp-version,001indinv,0.7.0) == $(RES_DIR)/001indinv-apalache-0.7.0.csv $(RES_DIR)/002bmc-apalache-0.7.0.csv
+define experiment-strat-version
+.PHONY: experiment-$(1)-$(2)
+experiment-$(1)-$(2): $(RES_DIR)/$(1)-apalache-$(2).csv
+endef
+
+define experiment-strat-version-serial
+.PHONY: experiment-$(1)-$(2)-serial
+experiment-$(1)-$(2)-serial: docker-pull $(RES_DIR) $(RUN_DIR)/$(1)-apalache-$(2)
+	@echo
+	@echo "======> Running experiments for" experiment-$(1)-$(2)-serial
+	@echo
+	(cd $(RUN_DIR)/$(1)-apalache-$(2) \
+		&& ./run-all.sh\
+		&& $(BASEDIR)/scripts/parse-logs.py . \
+		&& cp results.csv $(RES_DIR)/$(1)-apalache-$(2).csv)
+endef
+
+#################
+# PHONY TARGETS #
+#################
+
+.PHONY: reports experiments docker-pull clean
+
+###########
+# REPORTS #
+###########
+
+# Reports aggregate data from all the benchmark data into human readible
+# summaries
+
+reports: $(foreach s, $(STRATEGIES), $(RES_DIR)/$(s)-report.md)
+
+$(RES_DIR)/%-report.md: $(call strategy_results,%)
 	cd ./results && \
-		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/001indinv-apalache.csv $^ >$@
+		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$*-apalache.csv $^ >$@
 
-$(RES_DIR)/002bmc-report.md: \
-		$(RES_DIR)/002bmc-apalache-0.7.0.csv \
-		$(RES_DIR)/002bmc-apalache-0.6.0.csv \
-		$(RES_DIR)/002bmc-apalache-0.5.2.csv
-	cd ./results && \
-		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
+###############
+# EXPERIMENTS #
+###############
 
-# can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/001indinv-apalache-%.csv: prepare apalache-%
-	$(eval $@_NAME=001indinv-apalache-$*) # set the temporary variable
-	$(BASEDIR)/scripts/mk-run.py ./performance/001indinv-apalache.csv \
-		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
-	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
-		$(BASEDIR)/scripts/parse-logs.py . && \
-		cp results.csv $(RES_DIR)/$($@_NAME).csv)
+# experiment-<strategy>-<version>:
+#
+# For each specified strategy and version, this loop generates a target
+# experiment-<strategy>-<version> to run the designated experiments.
+#
+# E.g., to run inductive invariant experiments for version 0.7.0 execute
+#
+# 	make experiment-001indinv-0.7.0
+$(foreach s, $(STRATEGIES), \
+$(foreach v, $(VERSIONS), \
+$(eval $(call experiment-strat-version,$(s),$(v)))))
 
-# can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
-	$(eval $@_NAME=002bmc-apalache-$*) # set the temporary variable
-	$(BASEDIR)/scripts/mk-run.py ./performance/002bmc-apalache.csv \
-		$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
-	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
-		$(BASEDIR)/scripts/parse-logs.py . && \
-		cp results.csv $(RES_DIR)/$($@_NAME).csv)
+# experiment-<strategy>-<version>-serial:
+#
+# Like the above, but executes the experiments serially instead of in parallel
+#
+# E.g., to run inductive invariant experiments for version 0.7.0 in sequence, execute
+#
+#	make experiment-001indinv-0.7.0-serial
+$(foreach s, $(STRATEGIES), \
+$(foreach v, $(VERSIONS), \
+$(eval $(call experiment-strat-version-serial,$(s),$(v)))))
 
-build: apalache-0.5.2 apalache-0.6.0 apalache-0.7.0
+# Run all experiments for all versions
+experiments: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experiment-$(s)-$(v)))
 
-apalache-0.5.2:
-	make -C $(BUILDS_DIR)/apalache-0.5.2
+# Run all experiments for all versions, but serially
+experiments-serial: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experiment-$(s)-$(v)-serial))
 
-apalache-0.6.0:
-	make -C $(BUILDS_DIR)/apalache-0.6.0
+# Rules for generating the csv of result data by running the experiments
+#
+# The pattern % will look like <strategy>-apalache-<version>
+# for the given STRATEGY and VERSION
+$(RES_DIR)/%.csv: docker-pull $(RES_DIR) $(RUN_DIR)/%
+	@echo
+	@echo "======> Running experiments for" $*
+	@echo
+	(cd $(RUN_DIR)/$* \
+		&& ./run-parallel.sh\
+		&& $(BASEDIR)/scripts/parse-logs.py . \
+		&& cp results.csv $(RES_DIR)/$*.csv)
 
-apalache-0.7.0:
-	make -C $(BUILDS_DIR)/apalache-0.7.0
+# Rules for generating the runner scripts for a particular set of experiments
+#
+# The pattern % will look like <strategy>-apalache-<version>
+# for the given STRATEGY and VERSION
+$(RUN_DIR)/%: $(RUN_DIR)
+	@echo
+	@echo "======> Generating runner scripts for" $*
+	@echo
+# PARAMS is the base name for the params file, obtained by stripping the
+# version segment from the end of the filename.
+# NOTE: The double $ in the sed command escapes the $ for make
+	$(eval PARAMS := $(shell echo $* | sed "s/-[^-]*$$//"))
+	$(eval VERSION := $(shell echo $* | sed 's/.*-\(.*\)$$/\1/'))
+	$(BASEDIR)/scripts/mk-run.py \
+		./performance/$(PARAMS).csv \
+		$(VERSION) \
+		./performance \
+		$(RUN_DIR)/$*
 
-prepare:
-	mkdir -p $(RUN_DIR)
-	mkdir -p $(RES_DIR)
+
+#########
+# SETUP #
+#########
+
+docker-pull:
+	$(BASEDIR)/scripts/pull-docker-images.sh $(VERSIONS)
+
+$(RUN_DIR):
+	make -p $(RUN_DIR)
+
+$(RES_DIR):
+	make -p $(RES_DIR)
+
+
+###########
+# CLEANUP #
+###########
 
 clean:
 	(test -d $(RUN_DIR) && rm -rf $(RUN_DIR)/*) || echo "no $(RUN_DIR)"
 	(test -d $(RES_DIR) && rm -rf $(RES_DIR)/*) || echo "no $(RES_DIR)"
-

@@ -4,7 +4,7 @@
 # and sets up a directory to run the experiments in. It also generates
 # the necessary scripts to run the experiments.
 #
-# Jure Kukovec, Igor Konnov, 2019
+# Jure Kukovec, Igor Konnov, Shon Feder, 2019-2020
 
 import argparse
 import configparser
@@ -13,6 +13,7 @@ import shutil
 import stat
 import sys
 import csv
+from typing import Optional, List
 from os.path import realpath
 
 
@@ -40,9 +41,10 @@ def parse_options():
         type=str,
         help="An input CSV that contains the parameters of the experiments",
     )
-    # TODO Make this take a docker tag
     parser.add_argument(
-        "apalacheDir", type=realpath, help="The APALACHE source code directory."
+        "dockerTag",
+        type=str,
+        help="The docker tag indicating the version of Apalache to run",
     )
     parser.add_argument(
         "specDir", type=realpath, help="The directory that contains the benchmarks."
@@ -70,45 +72,34 @@ def parse_options():
     return args
 
 
+def make_docker_cmd(
+    tag: str, entrypoint: Optional[str] = None, args: Optional[List[str]] = None
+) -> str:
+    base_cmd = "docker run --rm -v $(pwd):/var/apalache"
+    entrypoint_override = "" if entrypoint is None else f"--entrypoint {entrypoint}"
+    cmd_args = "" if args is None else " ".join(args)
+    return f"{base_cmd} {entrypoint_override} apalache/mc:{tag} {cmd_args}"
+
+
 def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
     def kv(key):
-        return "--%s=%s" % (key, csv_row[key]) if csv_row[key].strip() != "" else ""
+        return f"--{key}={csv_row[key]}" if csv_row[key].strip() != "" else ""
 
     tool = csv_row["tool"]
-    apalache_dir = args.apalacheDir
-    ctime = "%s -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out" % os_cmds["time"]
-    ctimeout = "%s --foreground %s" % (os_cmds["timeout"], csv_row["timeout"])
+    ctime = f"{os_cmds['time']} -f 'elapsed_sec: %e maxresident_kb: %M' -o time.out"
+    ctimeout = f"{os_cmds['timeout']} --foreground {csv_row['timeout']}"
+    ini_params_args = ini_params.get("more_args", "")
     if tool == "apalache":
-        return "%s %s %s/bin/apalache-mc check %s %s %s %s %s %s | tee apalache.out" % (
-            ctime,
-            ctimeout,
-            args.apalacheDir,
-            kv("init"),
-            kv("next"),
-            kv("inv"),
-            csv_row["args"],
-            ini_params.get("more_args", ""),
-            tla_filename,
-        )
+        docker_cmd = make_docker_cmd(args.dockerTag)
+        return f"{ctime} {ctimeout} {docker_cmd} check {kv('init')} {kv('next')} {kv('inv')} {csv_row['args']} {ini_params_args} {tla_filename} | tee apalache.out"
     elif tool == "tlc":
-        # TLC needs a configuration file, it should be created by the user
-        # figure out how to run tlc
-        init, next, inv, user_args = kv("init"), kv("next"), kv("inv"), csv_row["args"]
-        mem = "-Xmx%dm" % (1024 * args.memlimit) if args.memlimit > 0 else ""
-        return (
-            "%s %s java ${JAVA_OPTS} %s -cp %s/3rdparty/tla2tools.jar "
-            + " tlc2.TLC %s %s %s | tee tlc.out"
-        ) % (
-            ctime,
-            ctimeout,
-            mem,
-            apalache_dir,
-            user_args,
-            ini_params.get("more_args", ""),
-            tla_filename,
+        print(
+            "TODO implement support for TLC. See https://github.com/informalsystems/apalache-tests/issues/8",
+            file=sys.stderr,
         )
+        sys.exit(1)
     else:
-        print("Unknown tool: %s" % tool)
+        print("Unknown tool: %s" % tool, file=sys.stderr)
         sys.exit(1)
 
 
@@ -131,18 +122,17 @@ def setup_experiment(args, ini_params, row_num, csv_row):
 
     # create the script to run an individual experiment
     script = os.path.join(exp_dir, "run-one.sh")
+    cmd = tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row)
+    contents = f"""
+#!/bin/bash
+D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"
+{cmd}
+exitcode="$?"
+echo "EXITCODE=$exitcode"
+exit "$exitcode"
+"""
     with open(script, "w+") as sf:
-        lines = [
-            "#!/bin/bash",
-            'D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"',
-            tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row),
-            'exitcode="$?"',
-            'echo "EXITCODE=$exitcode"',
-            'exit "$exitcode"',
-        ]
-        for l in lines:
-            sf.write(l)
-            sf.write("\n")
+        sf.write(contents)
 
     os.chmod(script, stat.S_IWRITE | stat.S_IREAD | stat.S_IEXEC)
     print("  created the script " + script)

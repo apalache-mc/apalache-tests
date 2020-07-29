@@ -47,16 +47,6 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 - [time](https://www.gnu.org/software/time/)
 
-### Setup
-
-Set up the source code for all versions that will be tested by running
-
-```sh
-./scripts/setup-sources.sh
-```
-
-NOTE: This will create a directory `$HOME/devl` if it doesn't already exit.
-
 ### Running the benchmarks
 
 To build all the sources and generate the reports, run
