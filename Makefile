@@ -42,12 +42,6 @@ BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
 
-.PHONY: debug
-debug:
-	echo $(BASEDIR)
-	echo $(shell ls $(BASEDIR))
-	echo $(RUN_DIR)
-	echo $(RES_DIR)
 ##########
 # MACROS #
 ##########
