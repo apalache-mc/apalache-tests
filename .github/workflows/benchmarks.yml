@@ -5,13 +5,14 @@ on: push
 jobs:
   test-benchmark:
     strategy:
-      version:
-        - 0.7.0
-        - 0.6.1
-      strat:
-        - 001indinv
-        - 002bmc
-    runs-on: ubuntu-20.04
+      matrix:
+        version:
+          - 0.7.0
+          - 0.6.1
+        strat:
+          - 001indinv
+          - 002bmc
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
