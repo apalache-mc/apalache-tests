@@ -170,10 +170,10 @@ docker-pull:
 	$(BASEDIR)/scripts/pull-docker-images.sh $(VERSIONS)
 
 runs:
-	make -p $(RUN_DIR)
+	mkdir -p $(RUN_DIR)
 
 results:
-	make -p $(RES_DIR)
+	mkdir -p $(RES_DIR)
 
 
 ###########
