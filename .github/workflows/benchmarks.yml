@@ -3,8 +3,15 @@ name: Benchmarks
 on: push
 
 jobs:
+  strategy:
+    version:
+      - 0.7.0
+      - 0.6.1
+    strat:
+      - 001indinv
+      - 002bmc
   test-benchmark:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: make experiment-001indinv-0.7.0-serial
+      - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
