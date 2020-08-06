@@ -7,5 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: make --version
-      - run: make -d experiment-001indinv-0.7.0-serial
+      - run: make experiment-001indinv-0.7.0-serial
