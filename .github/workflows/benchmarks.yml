@@ -7,5 +7,4 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: make debug
       - run: make experiment-001indinv-0.7.0-serial
