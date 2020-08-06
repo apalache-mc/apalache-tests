@@ -68,7 +68,7 @@ endef
 
 define experiment-strat-version-serial
 .PHONY: experiment-$(1)-$(2)-serial
-experiment-$(1)-$(2)-serial: docker-pull res-dir $(RUN_DIR)/$(1)-apalache-$(2)
+experiment-$(1)-$(2)-serial: docker-pull results $(RUN_DIR)/$(1)-apalache-$(2)
 	@echo
 	@echo "======> Running experiments for" experiment-$(1)-$(2)-serial
 	@echo
@@ -82,7 +82,7 @@ endef
 # PHONY TARGETS #
 #################
 
-.PHONY: reports experiments docker-pull clean run-dir res-dir
+.PHONY: reports experiments docker-pull clean
 
 ###########
 # REPORTS #
@@ -134,7 +134,7 @@ experiments-serial: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experi
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RES_DIR)/%.csv: docker-pull res-dir $(RUN_DIR)/%
+$(RES_DIR)/%.csv: docker-pull results $(RUN_DIR)/%
 	@echo
 	@echo "======> Running experiments for" $*
 	@echo
@@ -147,7 +147,7 @@ $(RES_DIR)/%.csv: docker-pull res-dir $(RUN_DIR)/%
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RUN_DIR)/%: run-dir
+$(RUN_DIR)/%: runs
 	@echo
 	@echo "======> Generating runner scripts for" $*
 	@echo
@@ -170,10 +170,10 @@ $(RUN_DIR)/%: run-dir
 docker-pull:
 	$(BASEDIR)/scripts/pull-docker-images.sh $(VERSIONS)
 
-run-dir:
+runs:
 	make -p $(RUN_DIR)
 
-res-dir:
+results:
 	make -p $(RES_DIR)
 
 
