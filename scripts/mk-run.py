@@ -123,8 +123,7 @@ def setup_experiment(args, ini_params, row_num, csv_row):
     # create the script to run an individual experiment
     script = os.path.join(exp_dir, "run-one.sh")
     cmd = tool_cmd(args, ini_params, exp_dir, tla_basename, csv_row)
-    contents = f"""
-#!/bin/bash
+    contents = f"""#!/bin/bash
 D=`dirname $0` && D=`cd "$D"; pwd` && cd "$D"
 {cmd}
 exitcode="$?"
