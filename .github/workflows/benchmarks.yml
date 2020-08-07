@@ -33,6 +33,7 @@ jobs:
       - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
       - run: git config user.name github-ci
       - run: git config user.email todo@example.com
+      - run: git add .
       - run: git commit . -m "Adding experiment results"
       - run: git push -u origin $REPORT_BRANCH
 
@@ -46,5 +47,6 @@ jobs:
       - run: make reports-only
       - run: git config user.name github-ci
       - run: git config user.email todo@example.com
+      - run: git add .
       - run: git commit . -m "Adding report"
       - run: git push -u origin $REPORT_BRANCH
