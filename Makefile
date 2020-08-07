@@ -67,7 +67,7 @@ endef
 
 define experiment-strat-version-serial
 .PHONY: experiment-$(1)-$(2)-serial
-experiment-$(1)-$(2)-serial: docker-pull results $(RUN_DIR)/$(1)-apalache-$(2)
+experiment-$(1)-$(2)-serial: $(RUN_DIR)/$(1)-apalache-$(2) | docker-pull results
 	@echo
 	@echo "======> Running experiments for" experiment-$(1)-$(2)-serial
 	@echo
@@ -146,7 +146,7 @@ experiments-serial: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experi
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RES_DIR)/%.csv: docker-pull results $(RUN_DIR)/%
+$(RES_DIR)/%.csv: $(RUN_DIR)/% | docker-pull results
 	@echo
 	@echo "======> Running experiments for" $*
 	@echo
@@ -159,7 +159,7 @@ $(RES_DIR)/%.csv: docker-pull results $(RUN_DIR)/%
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RUN_DIR)/%: runs
+$(RUN_DIR)/%: | runs
 	@echo
 	@echo "======> Generating runner scripts for" $*
 	@echo
