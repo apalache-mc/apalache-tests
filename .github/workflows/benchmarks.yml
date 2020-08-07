@@ -30,6 +30,7 @@ jobs:
         with:
           ref: report-${{ github.run_id }}
       - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
+      - run: git commit . -m "Adding experiment results"
       - run: git push -u origin $REPORT_BRANCH
 
   make-report:
@@ -40,5 +41,6 @@ jobs:
         with:
           ref: report-${{ github.run_id }}
       # TODO only genereate the report but don't rerun the tests
-      - run: make reports
+      - run: make reports-only
+      - run: git commit . -m "Adding report"
       - run: git push -u origin $REPORT_BRANCH
