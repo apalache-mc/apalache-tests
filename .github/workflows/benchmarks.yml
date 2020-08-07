@@ -2,8 +2,19 @@ name: Benchmarks
 
 on: push
 
+env:
+  REPORT_BRANCH: report-${{ github.run_id }}
+
 jobs:
-  test-benchmark:
+  create-report-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: git checkout -b $REPORT_BRANCH
+      - run: git push -u origin $REPORT_BRANCH
+
+  run-benchmarks:
+    needs: create-report-branch
     strategy:
       matrix:
         version:
@@ -11,8 +22,23 @@ jobs:
           - 0.6.1
         strat:
           - 001indinv
-          - 002bmc
+          # FIXME
+          # - 002bmc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: report-${{ github.run_id }}
       - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
+      - run: git push -u origin $REPORT_BRANCH
+
+  make-report:
+    needs: run-benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: report-${{ github.run_id }}
+      # TODO only genereate the report but don't rerun the tests
+      - run: make reports
+      - run: git push -u origin $REPORT_BRANCH
