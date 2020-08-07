@@ -81,7 +81,7 @@ endef
 # PHONY TARGETS #
 #################
 
-.PHONY: reports experiments docker-pull clean
+.PHONY: reports reports-only experiments docker-pull clean
 
 ###########
 # REPORTS #
@@ -95,6 +95,19 @@ reports: $(foreach s, $(STRATEGIES), $(RES_DIR)/$(s)-report.md)
 $(RES_DIR)/%-report.md: $(call strategy_results,%)
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$*-apalache.csv $^ >$@
+
+# Generate the reports but don't run any of the tests
+# Used in the CI pipeline
+reports-only:
+	cd ./results \
+	$(foreach s, $(STRATEGIES), \
+		&& \
+		$(BASEDIR)/scripts/mk-report.sh \
+			$(BASEDIR)/performance/$(s)-apalache.csv \
+			$(call strategy_results,$(s)) \
+			> $(RES_DIR)/$(s)-report.md \
+	)
+
 
 ###############
 # EXPERIMENTS #
