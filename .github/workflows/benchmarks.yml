@@ -1,7 +1,7 @@
 name: Benchmarks
 
-# TODO Make this only run on certain branches/commits?
-on: push
+# TODO Add inputs
+on: workflow_dispatch
 
 env:
   REPORT_BRANCH: report-${{ github.run_id }}
