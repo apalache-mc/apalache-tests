@@ -51,6 +51,8 @@ jobs:
           do
             git merge $branch
           done
+      - name: Generate reports
+        run: make reports-only
       - name: Push report branch
         run: |
           git add .
