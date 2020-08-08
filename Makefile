@@ -30,8 +30,8 @@ VERSIONS := \
 # NOTE: Currently, only param files from the ./performance directory are
 # supported.
 STRATEGIES := \
-001indinv # \ FIXME
-# 002bmc
+001indinv \
+002bmc
 
 
 #####################
