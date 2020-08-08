@@ -1,7 +1,16 @@
-name: Benchmarks
+name: Run Benchmarks
 
-# TODO Add inputs
-on: workflow_dispatch
+on:
+  push
+  # TODO: Enable manual dispatch once
+  # https://github.community/t/cant-trigger-workflow-manually/121740/41?u=shonfeder
+  # is addressed
+  # workflow_dispatch:
+  #   inputs:
+  #     foo:
+  #       description: "Foo bar"
+  #       required: false
+  #       default: "baz"
 
 env:
   REPORT_BRANCH: report-${{ github.run_id }}
