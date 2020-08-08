@@ -50,7 +50,7 @@ jobs:
         run: git fetch origin
       - name: Merge in report branches
         run: |
-          git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
+          git for-each-ref --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
           while read branch
           do
             git merge $branch
@@ -64,7 +64,7 @@ jobs:
           git push -u origin $REPORT_BRANCH
       - name: Cleanup intermediate branches
         run: |
-          git for-each-ref --shell --format='%(refname:lstrip=-3)' refs/remotes/origin/${REPORT_BRANCH}-*-* |
+          git for-each-ref --format='%(refname:lstrip=-3)' refs/remotes/origin/${REPORT_BRANCH}-*-* |
           while read branch
           do
             echo git push origin --delete $branch
