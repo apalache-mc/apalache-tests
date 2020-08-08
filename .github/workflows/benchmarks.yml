@@ -7,13 +7,6 @@ env:
   REPORT_BRANCH: report-${{ github.run_id }}
 
 jobs:
-  create-report-branch:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: git checkout -b $REPORT_BRANCH
-      - run: git push -u origin $REPORT_BRANCH
-
   run-benchmarks:
     needs: create-report-branch
     strategy:
@@ -28,8 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: report-${{ github.run_id }}
       - name: Configure git user
         run: |
           git config user.name github-ci
@@ -48,8 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: report-${{ github.run_id }}
+      - name: Create report branch
+        run: git checkout -b $REPORT_BRANCH
       - name: Configure git user
         run: |
           git config user.name github-ci
@@ -61,7 +52,7 @@ jobs:
           do
             git merge $branch
           done
-      - name: Make report branch
+      - name: Push report branch
         run: |
           git add .
           git commit . -m "Adding report"
