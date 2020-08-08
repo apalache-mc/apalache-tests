@@ -38,9 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # TODO Replace with proper python dependency management
+      - uses: actions/setup-python@v2
       - name: Install python dependencies
         run: |
+          # TODO Replace with proper python dependency management
           pip3 install csvtomd matplotlib
       - name: Create report branch
         run: git checkout -b $REPORT_BRANCH
