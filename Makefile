@@ -30,8 +30,8 @@ VERSIONS := \
 # NOTE: Currently, only param files from the ./performance directory are
 # supported.
 STRATEGIES := \
-001indinv \
-002bmc
+001indinv # \ FIXME
+# 002bmc
 
 
 #####################
@@ -96,7 +96,9 @@ $(RES_DIR)/%-report.md: $(call strategy_results,%)
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$*-apalache.csv $^ >$@
 
-# Generate the reports but don't run any of the tests
+# Generate the reports based on existin test data
+# but don't run any of the tests.
+#
 # Used in the CI pipeline
 reports-only:
 	cd ./results \
