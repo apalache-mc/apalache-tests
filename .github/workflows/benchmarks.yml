@@ -1,9 +1,13 @@
 name: Run Benchmarks
 
 on:
-  push
-  # TODO: Enable manual dispatch once
-  # https://github.community/t/cant-trigger-workflow-manually/121740/41?u=shonfeder
+  # TODO: Change to only run on master branch
+  push:
+    branches:
+      - master
+      - shon/ci # TODO: Remove before merging into master
+      - shon/github-actions # TODO: Remove before merging into shon/ci
+  # TODO: Enable manual dispatch once merged into master
   # is addressed
   # workflow_dispatch:
   #   inputs:
@@ -24,22 +28,26 @@ jobs:
           - 0.6.1
         strat:
           - 001indinv
-          # FIXME
-          # - 002bmc
+          - 002bmc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Configure git user
         run: |
           git config user.name ${{ github.actor }}
           git config user.email ${{ github.actor }}@users.noreply.github.com
-      - run: git checkout -b $REPORT_BRANCH-${{ matrix.strat }}-${{ matrix.version }}
+
+      - name: Create intermediate branch
+        run: git checkout -b $REPORT_BRANCH-${{ matrix.strat }}-${{ matrix.version }}
+
       - name: Run experiment ${{ matrix.strat }} for version ${{ matrix.version }}
         run: make experiment-${{ matrix.strat }}-${{ matrix.version }}-serial
+
       - name: Push results to intermediate branch
         run: |
           git add .
-          git commit . -m "Adding experiment results"
+          git commit . -m "Add results for ${{ matrix.strat }} on version ${{ matrix.version }}"
           git push -u origin $REPORT_BRANCH-${{ matrix.strat }}-${{ matrix.version }}
 
   make-report:
@@ -48,22 +56,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+
       - name: Install python dependencies
         run: |
           # TODO Replace with proper python dependency management in script
           pip3 install csvtomd matplotlib
-      # - name: Create report branch
-      #   run: git checkout -b $REPORT_BRANCH
-      # - name: Configure git user
-      #   run: |
-      #     git config user.name ${{ github.actor }}
-      #     git config user.email ${{ github.actor }}@users.noreply.github.com
+
       - name: Configure git user
         run: |
           git config user.name ${{ github.actor }}
           git config user.email ${{ github.actor }}@users.noreply.github.com
+
       - name: Fetch remote branches
         run: git fetch origin
+
       - name: Merge in report branches
         run: |
           git for-each-ref --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
@@ -71,6 +77,7 @@ jobs:
           do
             git merge $branch
           done
+
       - name: Generate reports
         run: make reports-only
 
@@ -81,11 +88,7 @@ jobs:
           branch: report-${{ github.run_id }}
           title: Update benchmarks report
           commit-message: Update report from run ${{ github.run_id }}
-      # - name: Push report branch
-      #   run: |
-      #     git add .
-      #     git commit . -m "Adding report"
-      #     git push -u origin $REPORT_BRANCH
+
       - name: Cleanup intermediate branches
         run: |
           git for-each-ref --format='%(refname:lstrip=-1)' refs/remotes/origin/${REPORT_BRANCH}-*-* |
