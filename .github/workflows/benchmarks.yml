@@ -38,6 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install csvtomd dependency
+        run: pip3 install csvtomd
       - name: Create report branch
         run: git checkout -b $REPORT_BRANCH
       - name: Configure git user
@@ -46,10 +48,11 @@ jobs:
           git config user.email todo@example.com
       - name: Merge in report branches
         run: |
-          git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
+          # git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
+          git for-each-ref --shell --format='%(refname:lstrip=-2)' |
           while read branch
           do
-            git merge $branch
+            echo $branch
           done
       - name: Generate reports
         run: make reports-only
