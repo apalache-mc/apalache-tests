@@ -7,6 +7,10 @@
 # BASIC ELEMENTS #
 ##################
 
+# NOTE: Any updates to the VERSIONS and STRATEGIS must be complemented by
+# updates to the `version` and `strat` in the build matrix in
+# .github/workflow/benchmarks.yml
+
 # These are the fundamental elements determining what benchmarks are run
 
 # The versions of apalache to benchmark
