@@ -9,12 +9,7 @@ on:
       - shon/github-actions # TODO: Remove before merging into shon/ci
   # TODO: Enable manual dispatch once merged into master
   # is addressed
-  # workflow_dispatch:
-  #   inputs:
-  #     foo:
-  #       description: "Foo bar"
-  #       required: false
-  #       default: "baz"
+  # workflow_dispatch
 
 env:
   REPORT_BRANCH: report-${{ github.run_id }}
