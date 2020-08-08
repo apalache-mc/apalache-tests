@@ -30,12 +30,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: report-${{ github.run_id }}
-      - run: make experiment-${{ matrix.strat }}-${{ matrix.version}}-serial
-      - run: git config user.name github-ci
-      - run: git config user.email todo@example.com
-      - run: git add .
-      - run: git commit . -m "Adding experiment results"
-      - run: git push -u origin $REPORT_BRANCH
+      - name: Configure git user
+        run: |
+          git config user.name github-ci
+          git config user.email todo@example.com
+      - run: git checkout -b $REPORT_BRANCH-${{ matrix.strat }}-${{ matrix.version }}
+      - name: Run experiment ${{ matrix.strat }} for version ${{ matrix.version }}
+        run: make experiment-${{ matrix.strat }}-${{ matrix.version }}-serial
+      - name: Push results to intermediate branch
+        run: |
+          git add .
+          git commit . -m "Adding experiment results"
+          git push -u origin $REPORT_BRANCH-${{ matrix.strat }}-${{ matrix.version }}
 
   make-report:
     needs: run-benchmarks
@@ -44,9 +50,28 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: report-${{ github.run_id }}
-      - run: make reports-only
-      - run: git config user.name github-ci
-      - run: git config user.email todo@example.com
-      - run: git add .
-      - run: git commit . -m "Adding report"
-      - run: git push -u origin $REPORT_BRANCH
+      - name: Configure git user
+        run: |
+          git config user.name github-ci
+          git config user.email todo@example.com
+      - name: Merge in report branches
+        run: |
+          git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
+          while read branch
+          do
+            git merge $branch
+          done
+      - name: Make report branch
+        run: |
+          git add .
+          git commit . -m "Adding report"
+          git push -u origin $REPORT_BRANCH
+      - name: Cleanup intermediate branches
+        run: |
+          git for-each-ref --shell --format='%(refname:lstrip=-3)' refs/remotes/origin/${REPORT_BRANCH}-*-* |
+          while read branch
+          do
+            echo git push origin --delete $branch
+          done
+      - name: Open PR
+        run: echo "TODO"
