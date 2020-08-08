@@ -1,5 +1,18 @@
 name: Run Benchmarks
 
+# For each combination of version and experiment suite (called "strat")
+# this workflow does the following in a dedicated build agent:
+#
+# - Creates a temporary branch for storing the results of the experiment run
+# - Runs the experiments
+# - Commits the results to the temprary branch
+#
+# Once all experiments have been run, a new agent is created which
+#
+# - merges in all the results from the temporary branches
+# - updates the report that summarizes the results for each experiment suite
+# - opens a PR into master with the updates results and reports
+
 on:
   # TODO: Change to only run on master branch
   push:

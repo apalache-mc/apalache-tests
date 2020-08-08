@@ -47,7 +47,7 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 - [time](https://www.gnu.org/software/time/)
 
-### Running the benchmarks
+### Running the benchmarks Locally
 
 To build all the sources and generate the reports, run
 
@@ -56,6 +56,16 @@ make
 ```
 
 New reports are saved into [./results](./results).
+
+### Running the benchmarkd through CI
+
+The configuration for github actions to run the benchmarks via CI is defined in
+[.github/workflows/benchmarks.yml][benchmarks.yml].
+
+When the `master` branch is updated, the workflow runs all experiments,
+generates the summary report, and opens a PR into `master` with the results.
+
+[benchmarks.yml]: ./.github/workflows/benchmarks.yml
 
 ## Warning
 
