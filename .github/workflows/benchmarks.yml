@@ -8,7 +8,6 @@ env:
 
 jobs:
   run-benchmarks:
-    needs: create-report-branch
     strategy:
       matrix:
         version:
