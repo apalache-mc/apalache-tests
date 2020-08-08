@@ -46,13 +46,14 @@ jobs:
         run: |
           git config user.name github-ci
           git config user.email todo@example.com
+      - name: Fetch remote branches
+        run: git fetch origin
       - name: Merge in report branches
         run: |
-          # git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
-          git for-each-ref --shell --format='%(refname:lstrip=-2)' |
+          git for-each-ref --shell --format='%(refname:lstrip=-2)' refs/remotes/origin/${REPORT_BRANCH}* |
           while read branch
           do
-            echo $branch
+            git merge $branch
           done
       - name: Generate reports
         run: make reports-only
