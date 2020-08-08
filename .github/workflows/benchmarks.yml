@@ -73,9 +73,10 @@ jobs:
         # See https://github.com/peter-evans/create-pull-request
       - name: Create pull request with report
         uses: peter-evans/create-pull-request@v3
-        branch: report-${{ github.run_id }}
-        title: Update benchmarks report
-        commit-message: Update report from run ${{ github.run_id }}
+        with:
+          branch: report-${{ github.run_id }}
+          title: Update benchmarks report
+          commit-message: Update report from run ${{ github.run_id }}
       # - name: Push report branch
       #   run: |
       #     git add .
