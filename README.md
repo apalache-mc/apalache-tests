@@ -14,18 +14,18 @@ and [bounded model checking](results/002bmc-report.md).
 
 ## Parametric benchmarks
 
-Here we collect benchmarks that can be scaled according to some parameter. 
+Here we collect benchmarks that can be scaled according to some parameter.
 They are helpful to assess how various model checking methods scale wrt. the parameter.
 
 See the results for:
-  * [set addition](results/003SetAdd-report.md)
-  * [set addition and deletion](results/004SetAddDel-report.md)
-  * [set send and receive](results/005SetSndRcv-report.md)
-  * [set send and receive with unreachable error state](results/006SetSndRcv_NoFullDrop-report.md)
-  * [set send and receive with unreachable error state, encoded with cardinalities](results/007SetSndRcv_NoFullDropCard-report.md)
-  * [integer clocks](results/008IntClocks-report.md)
-  * [integer clocks with unreachable error state](results/009IntClocks_Bounded-report.md)
 
+- [set addition](results/003SetAdd-report.md)
+- [set addition and deletion](results/004SetAddDel-report.md)
+- [set send and receive](results/005SetSndRcv-report.md)
+- [set send and receive with unreachable error state](results/006SetSndRcv_NoFullDrop-report.md)
+- [set send and receive with unreachable error state, encoded with cardinalities](results/007SetSndRcv_NoFullDropCard-report.md)
+- [integer clocks](results/008IntClocks-report.md)
+- [integer clocks with unreachable error state](results/009IntClocks_Bounded-report.md)
 
 In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behaves compared to explicit state model checking of TLC, and to the quantified SMT encoding of bounded model checking, solved with Z3. As we compare Apalache v. 0.7.0, against TLC and Z3, bundled with the current build of Apalache, we show v. 0.7.0 for those tools as well -- their actual versions are different!
 
@@ -47,7 +47,7 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 - [time](https://www.gnu.org/software/time/)
 
-### Running the benchmarks
+### Running the benchmarks Locally
 
 To build all the sources and generate the reports, run
 
@@ -56,6 +56,16 @@ make
 ```
 
 New reports are saved into [./results](./results).
+
+### Running the benchmarkd through CI
+
+The configuration for github actions to run the benchmarks via CI is defined in
+[.github/workflows/benchmarks.yml][benchmarks.yml].
+
+When the `master` branch is updated, the workflow runs all experiments,
+generates the summary report, and opens a PR into `master` with the results.
+
+[benchmarks.yml]: ./.github/workflows/benchmarks.yml
 
 ## Warning
 

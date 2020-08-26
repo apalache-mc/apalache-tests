@@ -7,6 +7,10 @@
 # BASIC ELEMENTS #
 ##################
 
+# NOTE: Any updates to the VERSIONS and STRATEGIS must be complemented by
+# updates to the `version` and `strat` in the build matrix in
+# .github/workflow/benchmarks.yml
+
 # These are the fundamental elements determining what benchmarks are run
 
 # The versions of apalache to benchmark
@@ -42,7 +46,6 @@ BASEDIR=$(shell pwd)
 RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
 
-
 ##########
 # MACROS #
 ##########
@@ -68,7 +71,7 @@ endef
 
 define experiment-strat-version-serial
 .PHONY: experiment-$(1)-$(2)-serial
-experiment-$(1)-$(2)-serial: docker-pull $(RES_DIR) $(RUN_DIR)/$(1)-apalache-$(2)
+experiment-$(1)-$(2)-serial: $(RUN_DIR)/$(1)-apalache-$(2) | docker-pull results
 	@echo
 	@echo "======> Running experiments for" experiment-$(1)-$(2)-serial
 	@echo
@@ -82,7 +85,7 @@ endef
 # PHONY TARGETS #
 #################
 
-.PHONY: reports experiments docker-pull clean
+.PHONY: reports reports-only experiments docker-pull clean
 
 ###########
 # REPORTS #
@@ -96,6 +99,21 @@ reports: $(foreach s, $(STRATEGIES), $(RES_DIR)/$(s)-report.md)
 $(RES_DIR)/%-report.md: $(call strategy_results,%)
 	cd ./results && \
 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$*-apalache.csv $^ >$@
+
+# Generate the reports based on existin test data
+# but don't run any of the tests.
+#
+# Used in the CI pipeline
+reports-only:
+	cd ./results \
+	$(foreach s, $(STRATEGIES), \
+		&& \
+		$(BASEDIR)/scripts/mk-report.sh \
+			$(BASEDIR)/performance/$(s)-apalache.csv \
+			$(call strategy_results,$(s)) \
+			> $(RES_DIR)/$(s)-report.md \
+	)
+
 
 ###############
 # EXPERIMENTS #
@@ -134,7 +152,7 @@ experiments-serial: $(foreach s, $(STRATEGIES), $(foreach v, $(VERSIONS), experi
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RES_DIR)/%.csv: docker-pull $(RES_DIR) $(RUN_DIR)/%
+$(RES_DIR)/%.csv: $(RUN_DIR)/% | docker-pull results
 	@echo
 	@echo "======> Running experiments for" $*
 	@echo
@@ -147,7 +165,7 @@ $(RES_DIR)/%.csv: docker-pull $(RES_DIR) $(RUN_DIR)/%
 #
 # The pattern % will look like <strategy>-apalache-<version>
 # for the given STRATEGY and VERSION
-$(RUN_DIR)/%: $(RUN_DIR)
+$(RUN_DIR)/%: | runs
 	@echo
 	@echo "======> Generating runner scripts for" $*
 	@echo
@@ -170,11 +188,11 @@ $(RUN_DIR)/%: $(RUN_DIR)
 docker-pull:
 	$(BASEDIR)/scripts/pull-docker-images.sh $(VERSIONS)
 
-$(RUN_DIR):
-	make -p $(RUN_DIR)
+runs:
+	mkdir -p $(RUN_DIR)
 
-$(RES_DIR):
-	make -p $(RES_DIR)
+results:
+	mkdir -p $(RES_DIR)
 
 
 ###########
