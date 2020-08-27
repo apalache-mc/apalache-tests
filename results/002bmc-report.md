@@ -52,61 +52,40 @@ no  |  filename                            |  tool      |  timeout  |  init  |  
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
-1      |  apalache  |  NoError    |  3s           |  4         |  224MB      |  0               |  0               |  514        |  1.0K         |  8.0
-2      |  apalache  |  NoError    |  4m04s        |  15        |  316MB      |  0               |  0               |  3.0K       |  7.0K         |  10
-3      |  apalache  |  NoError    |  15m          |  8         |  388MB      |  0               |  0               |  13K        |  37K          |  11
-4      |  apalache  |  NoError    |  1m01s        |  12        |  718MB      |  0               |  0               |  35K        |  243K         |  12
-5      |  apalache  |  NoError    |  44m          |  30        |  1.0GB      |  0               |  0               |  86K        |  597K         |  12
-6      |  apalache  |  NoError    |  8s           |  7         |  310MB      |  0               |  0               |  2.0K       |  5.0K         |  11
-7      |  apalache  |  NoError    |  2m02s        |  7         |  314MB      |  0               |  0               |  3.0K       |  18K          |  14
-8      |  apalache  |  NoError    |  20s          |  10        |  320MB      |  0               |  0               |  7.0K       |  22K          |  12
-9      |  apalache  |  NoError    |  47s          |  10        |  596MB      |  0               |  0               |  27K        |  105K         |  14
-10     |  apalache  |  NoError    |  3m03s        |  10        |  692MB      |  0               |  0               |  39K        |  161K         |  14
-11     |  apalache  |  NoError    |  10m          |  11        |  1008MB     |  0               |  0               |  75K        |  391K         |  15
-12     |  apalache  |  NoError    |  1m01s        |  11        |  340MB      |  0               |  0               |  3.0K       |  10K          |  11
-13     |  apalache  |  NoError    |  52m          |  10        |  366MB      |  0               |  0               |  4.0K       |  16K          |  11
-14     |  apalache  |  NoError    |  20m          |  13        |  476MB      |  0               |  0               |  18K        |  44K          |  11
-15     |  apalache  |  NoError    |  1h01m        |  14        |  460MB      |  0               |  0               |  28K        |  71K          |  11
-16     |  apalache  |  NoError    |  1h01m        |  8         |  1.0GB      |  0               |  0               |  68K        |  253K         |  25
+1      |  apalache  |  NoError    |  9s           |  4         |  63MB       |  0               |  0               |  514        |  1.0K         |  8.0
+2      |  apalache  |  NoError    |  2m02s        |  15        |  61MB       |  0               |  0               |  3.0K       |  7.0K         |  10
+3      |  apalache  |  NoError    |  7m07s        |  8         |  65MB       |  0               |  0               |  13K        |  37K          |  11
+4      |  apalache  |  NoError    |  47s          |  12        |  63MB       |  0               |  0               |  35K        |  243K         |  12
+5      |  apalache  |  NoError    |  23m          |  30        |  63MB       |  0               |  0               |  86K        |  597K         |  12
+6      |  apalache  |  NoError    |  4s           |  7         |  63MB       |  0               |  0               |  2.0K       |  5.0K         |  11
+7      |  apalache  |  NoError    |  59s          |  7         |  65MB       |  0               |  0               |  3.0K       |  18K          |  14
+8      |  apalache  |  NoError    |  7s           |  10        |  63MB       |  0               |  0               |  7.0K       |  22K          |  12
+9      |  apalache  |  NoError    |  17s          |  10        |  61MB       |  0               |  0               |  27K        |  105K         |  14
+10     |  apalache  |  NoError    |  1m01s        |  10        |  63MB       |  0               |  0               |  39K        |  161K         |  14
+11     |  apalache  |  NoError    |  14m          |  11        |  61MB       |  0               |  0               |  75K        |  391K         |  15
+12     |  apalache  |  NoError    |  27s          |  11        |  63MB       |  0               |  0               |  3.0K       |  10K          |  11
+13     |  apalache  |  NoError    |  41m          |  10        |  64MB       |  0               |  0               |  4.0K       |  16K          |  11
+14     |  apalache  |  NoError    |  12m          |  13        |  61MB       |  0               |  0               |  18K        |  44K          |  11
+15     |  apalache  |  NoError    |  1h01m        |  14        |  63MB       |  0               |  0               |  28K        |  71K          |  11
+16     |  apalache  |  NoError    |  46m          |  8         |  63MB       |  0               |  0               |  68K        |  253K         |  25
 
-## 4. Detailed results: 002bmc-apalache-0.6.0.csv
-
-01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
--------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
-1      |  apalache  |  NoError    |  3s           |  4         |  219MB      |  0               |  0               |  514        |  1.0K         |  8.0
-2      |  apalache  |  NoError    |  3m03s        |  15        |  313MB      |  0               |  0               |  3.0K       |  7.0K         |  10
-3      |  apalache  |  NoError    |  14m          |  8         |  393MB      |  0               |  0               |  13K        |  37K          |  11
-4      |  apalache  |  NoError    |  1m01s        |  12        |  556MB      |  0               |  0               |  27K        |  152K         |  12
-5      |  apalache  |  NoError    |  44m          |  30        |  949MB      |  0               |  0               |  67K        |  372K         |  12
-6      |  apalache  |  NoError    |  8s           |  7         |  313MB      |  0               |  0               |  2.0K       |  5.0K         |  11
-7      |  apalache  |  NoError    |  2m02s        |  7         |  317MB      |  0               |  0               |  3.0K       |  18K          |  14
-8      |  apalache  |  NoError    |  18s          |  10        |  325MB      |  0               |  0               |  7.0K       |  22K          |  12
-9      |  apalache  |  NoError    |  49s          |  10        |  589MB      |  0               |  0               |  27K        |  105K         |  14
-10     |  apalache  |  NoError    |  4m04s        |  10        |  730MB      |  0               |  0               |  39K        |  161K         |  14
-11     |  apalache  |  NoError    |  23m          |  11        |  1.0GB      |  0               |  0               |  75K        |  391K         |  15
-12     |  apalache  |  NoError    |  1m01s        |  11        |  355MB      |  0               |  0               |  3.0K       |  10K          |  11
-13     |  apalache  |  NoError    |  57m          |  10        |  338MB      |  0               |  0               |  4.0K       |  16K          |  11
-14     |  apalache  |  NoError    |  41m          |  13        |  490MB      |  0               |  0               |  18K        |  44K          |  11
-15     |  apalache  |  NoError    |  1h01m        |  14        |  499MB      |  0               |  0               |  28K        |  71K          |  11
-16     |  apalache  |  NoError    |  1h01m        |  8         |  1.0GB      |  0               |  0               |  68K        |  253K         |  25
-
-## 5. Detailed results: 002bmc-apalache-0.5.2.csv
+## 4. Detailed results: 002bmc-apalache-0.6.1.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
-1      |  apalache  |  NoError    |  3s           |  4         |  208MB      |  1               |  4               |  501        |  999          |  8.0
-2      |  apalache  |  NoError    |  5m05s        |  15        |  301MB      |  1               |  4               |  2.0K       |  6.0K         |  11
-3      |  apalache  |  NoError    |  37m          |  8         |  354MB      |  1               |  16              |  14K        |  48K          |  11
-4      |  apalache  |  NoError    |  1m01s        |  12        |  791MB      |  1               |  4               |  36K        |  257K         |  12
-5      |  apalache  |  NoError    |  33m          |  30        |  878MB      |  1               |  4               |  89K        |  635K         |  12
-6      |  apalache  |  NoError    |  48s          |  7         |  292MB      |  1               |  3               |  2.0K       |  9.0K         |  13
-7      |  apalache  |  NoError    |  4h04m        |  7         |  327MB      |  1               |  3               |  5.0K       |  30K          |  16
-8      |  apalache  |  NoError    |  32s          |  10        |  382MB      |  1               |  4               |  11K        |  33K          |  13
-9      |  apalache  |  NoError    |  1m01s        |  10        |  651MB      |  1               |  4               |  37K        |  141K         |  13
-10     |  apalache  |  NoError    |  9m09s        |  10        |  862MB      |  1               |  5               |  54K        |  216K         |  14
-11     |  apalache  |  NoError    |  2h02m        |  11        |  1.0GB      |  1               |  5               |  106K       |  543K         |  15
-12     |  apalache  |  NoError    |  1m01s        |  11        |  318MB      |  1               |  7               |  3.0K       |  10K          |  10
-13     |  apalache  |  NoError    |  1h01m        |  10        |  337MB      |  1               |  7               |  4.0K       |  15K          |  10
-14     |  apalache  |  NoError    |  2h02m        |  13        |  452MB      |  1               |  4               |  22K        |  50K          |  10
-15     |  apalache  |  NoError    |  9h09m        |  14        |  575MB      |  1               |  4               |  34K        |  79K          |  10
-16     |  apalache  |  NoError    |  3h03m        |  8         |  1.0GB      |  1               |  23              |  116K       |  445K         |  19
+1      |  apalache  |  NoError    |  10s          |  4         |  61MB       |  0               |  0               |  514        |  1.0K         |  8.0
+2      |  apalache  |  NoError    |  2m02s        |  15        |  63MB       |  0               |  0               |  3.0K       |  7.0K         |  10
+3      |  apalache  |  NoError    |  10m          |  8         |  62MB       |  0               |  0               |  13K        |  37K          |  11
+4      |  apalache  |  NoError    |  49s          |  12        |  61MB       |  0               |  0               |  27K        |  152K         |  12
+5      |  apalache  |  NoError    |  29m          |  30        |  63MB       |  0               |  0               |  67K        |  372K         |  12
+6      |  apalache  |  NoError    |  5s           |  7         |  65MB       |  0               |  0               |  2.0K       |  5.0K         |  11
+7      |  apalache  |  NoError    |  1m01s        |  7         |  63MB       |  0               |  0               |  3.0K       |  18K          |  14
+8      |  apalache  |  NoError    |  9s           |  10        |  63MB       |  0               |  0               |  7.0K       |  22K          |  12
+9      |  apalache  |  NoError    |  23s          |  10        |  63MB       |  0               |  0               |  27K        |  105K         |  14
+10     |  apalache  |  NoError    |  1m01s        |  10        |  63MB       |  0               |  0               |  39K        |  161K         |  14
+11     |  apalache  |  NoError    |  15m          |  11        |  63MB       |  0               |  0               |  75K        |  391K         |  15
+12     |  apalache  |  NoError    |  36s          |  11        |  63MB       |  0               |  0               |  3.0K       |  10K          |  11
+13     |  apalache  |  NoError    |  43m          |  10        |  63MB       |  0               |  0               |  4.0K       |  16K          |  11
+14     |  apalache  |  NoError    |  29m          |  13        |  65MB       |  0               |  0               |  18K        |  44K          |  11
+15     |  apalache  |  NoError    |  58m          |  14        |  61MB       |  0               |  0               |  28K        |  71K          |  11
+16     |  apalache  |  NoError    |  50m          |  8         |  63MB       |  0               |  0               |  68K        |  253K         |  25
