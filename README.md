@@ -14,18 +14,18 @@ and [bounded model checking](results/002bmc-report.md).
 
 ## Parametric benchmarks
 
-Here we collect benchmarks that can be scaled according to some parameter. 
+Here we collect benchmarks that can be scaled according to some parameter.
 They are helpful to assess how various model checking methods scale wrt. the parameter.
 
 See the results for:
-  * [set addition](results/003SetAdd-report.md)
-  * [set addition and deletion](results/004SetAddDel-report.md)
-  * [set send and receive](results/005SetSndRcv-report.md)
-  * [set send and receive with unreachable error state](results/006SetSndRcv_NoFullDrop-report.md)
-  * [set send and receive with unreachable error state, encoded with cardinalities](results/007SetSndRcv_NoFullDropCard-report.md)
-  * [integer clocks](results/008IntClocks-report.md)
-  * [integer clocks with unreachable error state](results/009IntClocks_Bounded-report.md)
 
+- [set addition](results/003SetAdd-report.md)
+- [set addition and deletion](results/004SetAddDel-report.md)
+- [set send and receive](results/005SetSndRcv-report.md)
+- [set send and receive with unreachable error state](results/006SetSndRcv_NoFullDrop-report.md)
+- [set send and receive with unreachable error state, encoded with cardinalities](results/007SetSndRcv_NoFullDropCard-report.md)
+- [integer clocks](results/008IntClocks-report.md)
+- [integer clocks with unreachable error state](results/009IntClocks_Bounded-report.md)
 
 In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behaves compared to explicit state model checking of TLC, and to the quantified SMT encoding of bounded model checking, solved with Z3. As we compare Apalache v. 0.7.0, against TLC and Z3, bundled with the current build of Apalache, we show v. 0.7.0 for those tools as well -- their actual versions are different!
 
@@ -36,6 +36,7 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 - Python3, including
   - `matplotlib` via `pip install matplotlib`
   - `csvtomd` via `pip install csvtomd`
+  - (if you use pipenv, then just `pipenv shell`)
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
 
 #### On Mac OS
@@ -47,22 +48,12 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 - [time](https://www.gnu.org/software/time/)
 
-### Setup
-
-Set up the source code for all versions that will be tested by running
-
-```sh
-./scripts/setup-sources.sh
-```
-
-NOTE: This will create a directory `$HOME/devl` if it doesn't already exit.
-
 ### Running the benchmarks
 
-To build all the sources and generate the reports, run
+For instructions on how to run benchmarks and generate the reports, run
 
 ```sh
-make
+make help
 ```
 
 New reports are saved into [./results](./results).

@@ -21,23 +21,39 @@ results := $(wildcard $(RES_DIR)/*.*.*.csv)
 
 strategies := 001indinv 002bmd
 
-help:
-	@echo "To run benchmarks for version 'l.m.n' using strategy 's' run"
-	@echo
-	@echo "    make report version=l.m.n strat=s"
-	@echo
-	@echo "where"
-	@echo
-	@echo "  - 's' is one of $(strategies)"
-	@echo "  - 'l.m.n' is >= 0.7.3"
+define helpmsg
+Usage:
 
-report: $(RES_DIR)/$(strat)-report.md verify-vars
+make help ..........................: print this message
+make apalache version=v ............: download and install apalache version v
+make benchmark strat=s version=v ...: run the benchmarks for strategy 's' using apalache version 'v'
+make report strat=s ................: generate the report from all results of running strategy 's'S
+
+where
+
+	s is one of $(strategies)
+	v is >= 0.7.3
+endef
+export helpmsg
+
+.PHONY: help
+help:
+	@echo "$$helpmsg"
+
+.PHONY: report
+report: strat-is-defined $(RES_DIR)/$(strat)-report.md
+
+.PHONY: run
+run: verify-vars benchmark report
 
 # Our deps are just those results that include start as a substring
 $(RES_DIR)/$(strat)-report.md: $(foreach r,$(results),$(if $(findstring $(strat),$(r)),$(r),))
+	@ [ "$(^)" ] || \
+		( echo "error: no results found for strategy $(strat), cannot generate report." ;\
+			echo "run 'make benchmark strat=$(strat) version=l.m.n' first";  exit 1)
 	@echo ">> Building $(@F) from: $^"
 	cd ./results && \
-	 	$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$(strat)-apalache.csv $^ >$@
+	 	$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$(strat)-apalache.csv $^ > $@
 
 # $(RES_DIR)/001indinv-report.md: $(indinv_reports)
 # 	cd ./results && \
@@ -50,11 +66,16 @@ $(RES_DIR)/$(strat)-report.md: $(foreach r,$(results),$(if $(findstring $(strat)
 # 	cd ./results && \
 # 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
 
-# can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-$(RES_DIR)/$(strat)-apalache-$(version).csv: prepare apalache-v$(version) strat-is-defined
+.PHONY: benchmark
+benchmark: verify-vars $(RES_DIR)/$(strat)-apalache-$(version).csv
+
+result-deps := $(APALACHE_DIR)/apalache-$(version)
+dir-deps := $(APALACHE_DIR) $(RUN_DIR) $(RES_DIR)
+
+$(RES_DIR)/$(strat)-apalache-$(version).csv: verify-vars $(result-deps) | $(dir-deps)
 	$(eval $@_NAME=$(strat)-apalache-$(version)) # set the temporary variable
-	$(BASEDIR)/scripts/mk-run.py ./performance/$(strat)-apalache.csv \
-		$(APALACHE_DIR)/apalache-$(version) ./performance $(RUN_DIR)/$($@_NAME)
+	$(BASEDIR)/scripts/mk-run.py $(BASEDIR)/performance/$(strat)-apalache.csv \
+		$(APALACHE_DIR)/apalache-$(version) $(BASEDIR)/performance $(RUN_DIR)/$($@_NAME)
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
@@ -86,26 +107,37 @@ $(APALACHE_DIR)/apalache-$(version):
 	@echo ">> Fetching $(@F)"
 	VERSION=$(version) $(BASEDIR)/scripts/get-apalache.sh
 
-apalache-$(version):
-prepare:
+.PHONY: prepare-dirs
+# See for the | see  https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types
+prepare-dirs: | $(dir-deps)
+
+$(APALACHE_DIR):
 	mkdir -p $(APALACHE_DIR)
+
+$(RUN_DIR):
 	mkdir -p $(RUN_DIR)
+
+$(RES_DIR):
 	mkdir -p $(RES_DIR)
 
+.PHONY: version-is-defined
 version-is-defined:
 	@test $(version) || \
 		( echo "error: variable 'version' is undefined" ;\
 			echo "run 'make help' for usage." ;\
 			exit 1)
 
+.PHONY: strat-is-defined
 strat-is-defined:
 	@test $(strat) || \
 		( echo "error: variable 'strat' is undefined" ;\
 			echo "run 'make help' for usage." ;\
 			exit 1)
 
+.PHONY: verify-vars
 verify-vars: version-is-defined strat-is-defined
 
+.PHONY: clean
 clean:
 	(test -d $(RUN_DIR) && rm -rf $(RUN_DIR)/*) || echo "no $(RUN_DIR)"
 	(test -d $(RES_DIR) && rm -rf $(RES_DIR)/*) || echo "no $(RES_DIR)"
