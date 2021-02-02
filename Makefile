@@ -1,6 +1,6 @@
 # The main makefile to run all experiments in different configurations.
 #
-# Igor Konnov, 2020
+# Igor Konnov, Shon Feder 2020-2021
 
 BASEDIR=$(shell pwd)
 
@@ -11,23 +11,17 @@ RUN_DIR=$(BASEDIR)/runs
 # Where we save results
 RES_DIR=$(BASEDIR)/results
 
-# REPORTS=$(RES_DIR)/002bmc-report.md $(RES_DIR)/001indinv-report.md
-
-# report: $(REPORTS)
-
-# TODO record machine architecture and specs in reports
-
-results := $(wildcard $(RES_DIR)/*.*.*.csv)
-
+# Supported strategies (used in the help)
 strategies := 001indinv 002bmd
 
 define helpmsg
 Usage:
 
 make help ..........................: print this message
-make apalache version=v ............: download and install apalache version v
+make run strat=s version=v .........: run benchmarks for strategy 's' and apalache version 'v' and generate reports
+make apalache version=v ............: download and install apalache version 'v'
 make benchmark strat=s version=v ...: run the benchmarks for strategy 's' using apalache version 'v'
-make report strat=s ................: generate the report from all results of running strategy 's'S
+make report strat=s ................: generate the report from all results of running strategy 's'
 
 where
 
@@ -40,39 +34,32 @@ export helpmsg
 help:
 	@echo "$$helpmsg"
 
-.PHONY: report
-report: strat-is-defined $(RES_DIR)/$(strat)-report.md
-
 .PHONY: run
-run: verify-vars benchmark report
+run: | verify-vars benchmark report
 
-# Our deps are just those results that include start as a substring
-$(RES_DIR)/$(strat)-report.md: $(foreach r,$(results),$(if $(findstring $(strat),$(r)),$(r),))
-	@ [ "$(^)" ] || \
+.PHONY: report
+report: $(RES_DIR)/$(strat)-report.md | strat-is-defined
+
+# Generate a report summarizing all results
+# It depends on the result from a specified strat and version, but will include
+# all results in the result directory.
+$(RES_DIR)/$(strat)-report.md: $(RES_DIR)/$(strat)-apalache-$(version).csv | verify-vars 
+	$(eval results=$(wildcard $(RES_DIR)/$(strat)-apalache-*.*.*.csv))
+	@ [ "$(results)" ] || \
 		( echo "error: no results found for strategy $(strat), cannot generate report." ;\
 			echo "run 'make benchmark strat=$(strat) version=l.m.n' first";  exit 1)
 	@echo ">> Building $(@F) from: $^"
 	cd ./results && \
 	 	$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$(strat)-apalache.csv $^ > $@
 
-# $(RES_DIR)/001indinv-report.md: $(indinv_reports)
-# 	cd ./results && \
-# 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/001indinv-apalache.csv $^ >$@
-
-# $(RES_DIR)/002bmc-report.md: \
-# 		$(RES_DIR)/002bmc-apalache-0.7.0.csv \
-# 		$(RES_DIR)/002bmc-apalache-0.6.0.csv \
-# 		$(RES_DIR)/002bmc-apalache-0.5.2.csv
-# 	cd ./results && \
-# 		$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/002bmc-apalache.csv $^ >$@
-
 .PHONY: benchmark
-benchmark: verify-vars $(RES_DIR)/$(strat)-apalache-$(version).csv
+benchmark: $(RES_DIR)/$(strat)-apalache-$(version).csv | verify-vars 
 
 result-deps := $(APALACHE_DIR)/apalache-$(version)
 dir-deps := $(APALACHE_DIR) $(RUN_DIR) $(RES_DIR)
 
-$(RES_DIR)/$(strat)-apalache-$(version).csv: verify-vars $(result-deps) | $(dir-deps)
+# Generate and then run all the experiments for the given strat and version
+$(RES_DIR)/$(strat)-apalache-$(version).csv: $(result-deps) | verify-vars $(dir-deps)
 	$(eval $@_NAME=$(strat)-apalache-$(version)) # set the temporary variable
 	$(BASEDIR)/scripts/mk-run.py $(BASEDIR)/performance/$(strat)-apalache.csv \
 		$(APALACHE_DIR)/apalache-$(version) $(BASEDIR)/performance $(RUN_DIR)/$($@_NAME)
@@ -80,36 +67,14 @@ $(RES_DIR)/$(strat)-apalache-$(version).csv: verify-vars $(result-deps) | $(dir-
 		$(BASEDIR)/scripts/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
 
-# can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-# $(RES_DIR)/001indinv-apalache-%.csv: # prepare apalache-%
-# 	echo "YEP"
-	# $(eval $@_NAME=001indinv-apalache-$*) # set the temporary variable
-	# $(BASEDIR)/scripts/mk-run.py ./performance/001indinv-apalache.csv \
-	# 	$(BUILDS_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
-	# (cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
-	# 	$(BASEDIR)/scripts/parse-logs.py . && \
-	# 	cp results.csv $(RES_DIR)/$($@_NAME).csv)
-
-# can we avoid duplication between 02bmc-apalache and 01indinv-apalache?
-# $(RES_DIR)/002bmc-apalache-%.csv: prepare apalache-%
-# 	$(eval $@_NAME=002bmc-apalache-$*) # set the temporary variable
-# 	$(BASEDIR)/scripts/mk-run.py ./performance/002bmc-apalache.csv \
-# 		$(APALCHE_DIR)/apalache-$* ./performance $(RUN_DIR)/$($@_NAME)
-# 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
-# 		$(BASEDIR)/scripts/parse-logs.py . && \
-# 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
-
-.PHONY: apalache
 # invoke as `make apalache version=0.9.0`
-apalache: $(APALACHE_DIR)/apalache-$(version) version-is-defined
+.PHONY: apalache
+apalache: $(APALACHE_DIR)/apalache-$(version) | version-is-defined
 
-$(APALACHE_DIR)/apalache-$(version):
+# Download and install (locally to this dir) the given version of apalache
+$(APALACHE_DIR)/apalache-$(version): | $(APALACHE_DIR)
 	@echo ">> Fetching $(@F)"
 	VERSION=$(version) $(BASEDIR)/scripts/get-apalache.sh
-
-.PHONY: prepare-dirs
-# See for the | see  https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types
-prepare-dirs: | $(dir-deps)
 
 $(APALACHE_DIR):
 	mkdir -p $(APALACHE_DIR)
@@ -135,7 +100,7 @@ strat-is-defined:
 			exit 1)
 
 .PHONY: verify-vars
-verify-vars: version-is-defined strat-is-defined
+verify-vars: | version-is-defined strat-is-defined
 
 .PHONY: clean
 clean:
