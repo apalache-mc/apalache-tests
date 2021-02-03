@@ -48,9 +48,9 @@ $(RES_DIR)/$(strat)-report.md: $(RES_DIR)/$(strat)-apalache-$(version).csv | ver
 	@ [ "$(results)" ] || \
 		( echo "error: no results found for strategy $(strat), cannot generate report." ;\
 			echo "run 'make benchmark strat=$(strat) version=l.m.n' first";  exit 1)
-	@echo ">> Building $(@F) from: $^"
+	@echo ">> Building $(@F) from: $(results)"
 	cd ./results && \
-	 	$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$(strat)-apalache.csv $^ > $@
+	 	$(BASEDIR)/scripts/mk-report.sh $(BASEDIR)/performance/$(strat)-apalache.csv $(results) > $@
 
 .PHONY: benchmark
 benchmark: $(RES_DIR)/$(strat)-apalache-$(version).csv | verify-vars 
