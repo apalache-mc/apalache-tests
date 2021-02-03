@@ -2,7 +2,9 @@
 #
 # Produce a markdown report for a set of performance CSVs.
 #
-# Igor Konnov, 2020
+# Igor Konnov, Shon Feder 2020-2021
+
+set -euo pipefail
 
 if [ "$#" -lt 2 ]; then
     echo "Use: $0 benchmarks.csv result_1.csv ... result_n.csv"

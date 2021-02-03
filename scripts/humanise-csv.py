@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # Read a CSV file and make some of its columns human-readable.
 #
@@ -15,6 +15,7 @@ import sys
 
 NUM_UNITS = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"]
 TIME_UNITS = ["s", "m", "h"]
+
 
 def humanise_row(fields, row):
     """make a row human-readable"""
@@ -34,19 +35,21 @@ def humanise_row(fields, row):
 
     return row
 
+
 def transform(infile):
     reader = csv.reader(infile)
-    writer = csv.writer(sys.stdout, dialect = reader.dialect, escapechar = '"')
+    writer = csv.writer(sys.stdout, dialect=reader.dialect, escapechar='"')
     fields = None
 
     for row_arr in reader:
         out_row = row_arr
         if not fields:
-            fields = row_arr # the first row is the header
+            fields = row_arr  # the first row is the header
         else:
             out_row = humanise_row(fields, out_row)
-                
+
         writer.writerow(out_row)
+
 
 def human_power(num, divider, units):
     power = 0
@@ -59,6 +62,7 @@ def human_power(num, divider, units):
 
     return (num, fraction, units[power])
 
+
 def human_bytes(num):
     val, frac, unit = human_power(int(num), 1024, NUM_UNITS)
     if val < 10:
@@ -66,8 +70,10 @@ def human_bytes(num):
     else:
         return "%d%sB" % (val, unit)
 
+
 def human_kbytes(num):
     return human_bytes(num * 1024)
+
 
 def human_num(num):
     val, frac, unit = human_power(int(num), 1000, NUM_UNITS)
@@ -75,6 +81,7 @@ def human_num(num):
         return "%d.%d%s" % (val, int(frac / 100), unit)
     else:
         return "%d%s" % (val, unit)
+
 
 def human_sec(num):
     val, frac, unit = human_power(int(num), 60, TIME_UNITS)
@@ -85,11 +92,12 @@ def human_sec(num):
     else:
         return "%d%s" % (val, unit)
 
+
 def use():
     print("Use: {} <in.csv >out.csv".format(sys.argv[0]))
     print("")
     sys.exit(1)
 
+
 if __name__ == "__main__":
     transform(sys.stdin)
-
