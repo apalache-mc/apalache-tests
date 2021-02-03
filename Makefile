@@ -12,7 +12,7 @@ RUN_DIR=$(BASEDIR)/runs
 RES_DIR=$(BASEDIR)/results
 
 # Supported strategies (used in the help)
-strategies := 001indinv 002bmd
+strategies := 001indinv 002bmc
 
 define helpmsg
 Usage:
