@@ -5,7 +5,7 @@
 # Igor Konnov, Shon Feder 2020-2021
 
 set -euo pipefail
-set -x
+# set -x
 
 if [ "$#" -lt 2 ]; then
     echo "Use: $0 benchmarks.csv result_1.csv ... result_n.csv"
