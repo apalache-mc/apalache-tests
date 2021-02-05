@@ -58,6 +58,11 @@ make help
 
 New reports are saved into [./results](./results).
 
+### NOTES
+
+- The source of truth for currently supported strategies is the file
+  [./STRATEGIES](./STRATEGIES).
+
 ## Warning
 
 **These specifications should not be used for learning TLA+**.
