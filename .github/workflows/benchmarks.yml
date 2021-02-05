@@ -25,8 +25,6 @@ on:
 
 env:
   REPORT_BRANCH: report-${{ github.run_id }}
-  APALACHE_DIR: ${{ github.workspace }}/apalache
-  BENCHMARKS_DIR: ${{ github.workspace }}/benchmarks
 
 jobs:
   run-benchmarks:
@@ -82,7 +80,6 @@ jobs:
       - name: run benchmarks
         run: |
           pip install pipenv
-          cd $BENCHMARKS_DIR
           pipenv install --deploy --dev
           while read strat; do
             make run strat=$strat version="${{ env.version }}"
