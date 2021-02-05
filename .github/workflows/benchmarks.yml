@@ -25,6 +25,7 @@ on:
 
 env:
   REPORT_BRANCH: report-${{ github.run_id }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   run-benchmarks:
