@@ -1,11 +1,11 @@
 # apalache-tests
 
 This repository contains various benchmarks for evaluating performance of the
-[Apalache model checker](https://github.com/konnov/apalache). Many of these
-benchmarks are adapted from the [TLA+
-examples](https://github.com/tlaplus/Examples) and thus are distributed under
-[their license](https://github.com/tlaplus/Examples/blob/master/LICENSE.md).
-Some benchmarks have their own licenses, which we kindly ask you to respect.
+[Apalache model checker][apalache]. Many of these benchmarks are adapted from
+the [TLA+ examples](https://github.com/tlaplus/Examples) and thus are
+distributed under [their
+license](https://github.com/tlaplus/Examples/blob/master/LICENSE.md). Some
+benchmarks have their own licenses, which we kindly ask you to respect.
 
 ## Performance benchmarks
 
@@ -31,24 +31,39 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
 
 ## Usage
 
-### Dependencies
+Benchmarks are run via GitHub actions, configured in
+[.github/workflows/benchmarks.yml](.github/workflows/benchmarks.yml).
+
+New benchmarks are run automatically from the `unstable` branch of [Apalache][]
+every Saturday.
+
+You can manually trigger the benchmarks to run for a specific released version
+(or from `unstable`) by selecting "Run workflow" from the [Run Benchmarks
+action][gh-action].
+
+[gh-action]: https://github.com/informalsystems/apalache-tests/actions?query=workflow%3A%22Run+Benchmarks%22
+
+### Running the benchmarks locally
+
+#### Dependencies
 
 - Python3, including
   - `matplotlib` via `pip install matplotlib`
   - `csvtomd` via `pip install csvtomd`
   - (if you use pipenv, then just `pipenv shell`)
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
+  - Ubuntu: `apt install parallel`
 
-#### On Mac OS
+##### On Mac OS
 
 - [gnu-time](https://formulae.brew.sh/formula/gnu-time)
 - `gtimeout` via `brew install coreutils`
 
-#### On Linux
+##### On Linux
 
 - [time](https://www.gnu.org/software/time/)
 
-### Running the benchmarks
+#### Running the benchmarks
 
 For instructions on how to run benchmarks and generate the reports, run
 
@@ -58,6 +73,11 @@ make help
 
 New reports are saved into [./results](./results).
 
+#### NOTES
+
+- The source of truth for currently supported strategies is the file
+  [./STRATEGIES](./STRATEGIES).
+
 ## Warning
 
 **These specifications should not be used for learning TLA+**.
@@ -66,3 +86,5 @@ These specifications are usually modified in a way that makes it easier
 Apalache to analyze them. So these specifications may contain bugs that were not present in the original specifications.
 
 **If you like to learn TLA+**, check [Leslie Lamport's TLA+ Home Page](http://lamport.azurewebsites.net/tla/tla.html).
+
+[apalache]: https://github.com/informalsystems/apalache
