@@ -55,7 +55,7 @@ jobs:
 
       - name: run benchmarks
         run: |
-          make run start=001indinv version="${{ env.version }}"
+          make run strat=001indinv version="${{ env.version }}"
           # while read strat; do
           #   make run strat=$strat version="${{ env.version }}"
           # done < STRATEGIES
