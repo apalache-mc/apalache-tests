@@ -1,30 +1,21 @@
 name: Run Benchmarks
 
-# For each combination of version and experiment suite (called "strat")
-# this workflow does the following in a dedicated build agent:
-#
-# - Creates a temporary branch for storing the results of the experiment run
-# - Runs the experiments
-# - Commits the results to the temprary branch
-#
-# Once all experiments have been run, a new agent is created which
-#
-# - merges in all the results from the temporary branches
-# - updates the report that summarizes the results for each experiment suite
-# - opens a PR into master with the updates results and reports
-
 on:
-  # TODO: Change to only run on master branch
-  push:
-    branches:
-      - master
-      - shon/add-ci # FIXME
-  # TODO: Enable manual dispatch once merged into master
-  # is addressed
-  # workflow_dispatch
+  workflow_dispatch:
+    # Allows manually triggering release
+    inputs:
+      release_version:
+        description: "Release Version (leave empty to benchmark unstable)"
+        required: false
+        default: "unreleased"
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # Automatically prepare a minor version release every Saturday
+    # See https://crontab.guru/#0_0_*_*_6
+    - cron: "0 0 * * 6"
 
 env:
-  REPORT_BRANCH: report-${{ github.run_id }}
+  VERSION: ${{ github.event.inputs.release_version }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -56,14 +47,12 @@ jobs:
 
       - name: run benchmarks
         run: |
-          make run strat=001indinv version="${{ env.version }}"
-          # while read strat; do
-          #   make run strat=$strat version="${{ env.version }}"
-          # done < STRATEGIES
+          while read strat; do
+            make run strat=$strat version="${{ env.version }}"
+          done < STRATEGIES
 
       - name: open PR with report
         run: |
-          set -x
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "github@actions.ci"
           git checkout -b "report/${{ env.version }}"
