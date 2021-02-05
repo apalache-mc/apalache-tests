@@ -1,0 +1,96 @@
+name: Run Benchmarks
+
+# For each combination of version and experiment suite (called "strat")
+# this workflow does the following in a dedicated build agent:
+#
+# - Creates a temporary branch for storing the results of the experiment run
+# - Runs the experiments
+# - Commits the results to the temprary branch
+#
+# Once all experiments have been run, a new agent is created which
+#
+# - merges in all the results from the temporary branches
+# - updates the report that summarizes the results for each experiment suite
+# - opens a PR into master with the updates results and reports
+
+on:
+  # TODO: Change to only run on master branch
+  push:
+    branches:
+      - master
+      - shon/add-ci # FIXME
+  # TODO: Enable manual dispatch once merged into master
+  # is addressed
+  # workflow_dispatch
+
+env:
+  REPORT_BRANCH: report-${{ github.run_id }}
+  APALACHE_DIR: ${{ github.workspace }}/apalache
+  BENCHMARKS_DIR: ${{ github.workspace }}/benchmarks
+
+jobs:
+  run-benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout benchmarks repo
+        uses: actions/checkout@v2
+        with:
+          path: benchmarks
+
+      - name: checkout apalache repo
+        uses: actions/checkout@v2
+        with:
+          repository: informalsystems/apalache
+          path: apalache
+
+      - name: set up java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: build apalache
+        run: |
+          cd $APALACHE_DIR
+
+          version=$(./script/get-version.sh)
+          # Set in github env for future steps to use
+          echo "version=${version}" >> $GITHUB_ENV
+
+          make build-quick
+
+      - name: move apalache package
+        run: |
+
+          dest_dir=${BENCHMARKS_DIR}/_apalache/apalache-${{ env.version }}
+
+          # Move package into expected location for benchmarks
+          mkdir -p ${dest_dir}/bin
+          mkdir -p ${dest_dir}/mod-distribution/target
+          mv ${APALACHE_DIR}/bin/apalache-mc ${dest_dir}/bin
+          mv ${APALACHE_DIR}/mod-distribution/target/apalache-pkg-${{ env.version }}-full.jar ${dest_dir}/mod-distribution/target
+
+      - name: set up python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: run benchmarks
+        run: |
+          pip install pipenv
+          cd $BENCHMARKS_DIR
+          pipenv install --deploy --dev
+          while read strat; do
+            make run strat=$strat version="${{ env.version }}"
+          done < STRATEGIES
+
+      - name: open PR with report
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "github@actions.ci"
+          git add results/*
+          commit_msg="Add reports from v${{ env.version }}"
+          git commit -m $commit_msg
+          hub pull-request \
+          --push \
+          --message="$commit_msg"
+          --base="master"
