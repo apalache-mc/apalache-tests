@@ -59,4 +59,4 @@ jobs:
           git add results
           commit_msg="Add reports from v${{ env.version }}"
           git commit -m "$commit_msg"
-          hub pull-request --push --message="$commit_msg" --base="master"
+          hub pull-request --push --message="$commit_msg" --base="master" --reviewer=konnov,shonfeder
