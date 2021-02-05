@@ -80,7 +80,7 @@ jobs:
       - name: run benchmarks
         run: |
           pip install pipenv
-          pipenv install --deploy --dev
+          pipenv shell --anyway
           while read strat; do
             make run strat=$strat version="${{ env.version }}"
           done < STRATEGIES
