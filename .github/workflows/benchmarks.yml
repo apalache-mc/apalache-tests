@@ -1,6 +1,9 @@
 name: Run Benchmarks
 
 on:
+  push:
+    branches:
+      - shon/add-ci
   workflow_dispatch:
     # Allows manually triggering release
     inputs:
@@ -47,9 +50,10 @@ jobs:
 
       - name: run benchmarks
         run: |
-          while read strat; do
-            make run strat=$strat version="${{ env.version }}"
-          done < STRATEGIES
+          make run strat=001indinv version="${{ env.version }}"
+          # while read strat; do
+          #   make run strat=$strat version="${{ env.version }}"
+          # done < STRATEGIES
 
       - name: open PR with report
         run: |
