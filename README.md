@@ -38,6 +38,7 @@ In these benchmarks we compare how symbolic approach of Apalache v. 0.7.0 behave
   - `csvtomd` via `pip install csvtomd`
   - (if you use pipenv, then just `pipenv shell`)
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
+  - Ubuntu: `apt install parallel`
 
 #### On Mac OS
 
