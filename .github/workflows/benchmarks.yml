@@ -62,10 +62,11 @@ jobs:
 
       - name: open PR with report
         run: |
+          set -x
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "github@actions.ci"
           git checkout -b "report/${{ env.version }}"
-          git add results/*
+          git add results
           commit_msg="Add reports from v${{ env.version }}"
           git commit -m $commit_msg
           hub pull-request \
