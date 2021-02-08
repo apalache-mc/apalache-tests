@@ -32,7 +32,7 @@ jobs:
 
       - name: install apalache
         run: |
-          VERSION=unreleased ./scripts/get-apalache.sh
+          ./scripts/get-apalache.sh
           echo "version=$(cat _VERSION)" >> $GITHUB_ENV
 
       - name: set up python 3.7

@@ -1,2 +1,5 @@
 runs
 /_apalache/
+
+# This used in CI
+_VERSION

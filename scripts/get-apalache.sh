@@ -33,6 +33,8 @@ then
     mkdir -p "${dst_dir}/mod-distribution/target"
     mv bin "${dst_dir}"
     mv "mod-distribution/target/apalache-pkg-${version}-full.jar" "${dst_dir}/mod-distribution/target"
+
+    # Save the version for use in CI
     echo "${version}" > "${ROOT}/_VERSION"
 else
     # Install the release
@@ -43,4 +45,7 @@ else
     wget "https://github.com/informalsystems/apalache/releases/download/v${VERSION}/${zip_name}"
     mkdir -p "${dst_dir}"
     unzip "${zip_name}" -d "${dst_dir}"
+
+    # Save the version for use in CI
+    echo "${VERSION}" > "${ROOT}/_VERSION"
 fi
