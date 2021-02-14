@@ -111,7 +111,28 @@ no  |  filename                            |  tool      |  timeout  |  init  |  
 15     |  apalache  |  NoError    |  1h01m        |  0         |  384MB      |  0               |  0               |  24K        |  33K          |  13
 16     |  apalache  |  NoError    |  58m          |  0         |  1.0GB      |  0               |  0               |  72K        |  111K         |  35
 
-## 6. Detailed results: 002bmc-apalache-0.6.0.csv
+## 6. Detailed results: 002bmc-apalache-0.10.1-SNAPSHOT.csv
+
+01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
+-------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
+1      |  apalache  |  NoError    |  3s           |  0         |  179MB      |  0               |  0               |  312        |  442          |  9.0
+2      |  apalache  |  NoError    |  2m02s        |  0         |  241MB      |  0               |  0               |  1.0K       |  2.0K         |  13
+3      |  apalache  |  NoError    |  9m09s        |  0         |  300MB      |  0               |  0               |  10K        |  18K          |  12
+4      |  apalache  |  NoError    |  45s          |  0         |  480MB      |  0               |  0               |  27K        |  117K         |  17
+5      |  apalache  |  NoError    |  30m          |  0         |  835MB      |  0               |  0               |  67K        |  293K         |  17
+6      |  apalache  |  NoError    |  6s           |  0         |  214MB      |  0               |  0               |  1.0K       |  2.0K         |  13
+7      |  apalache  |  NoError    |  1m01s        |  0         |  242MB      |  0               |  0               |  2.0K       |  5.0K         |  19
+8      |  apalache  |  NoError    |  9s           |  0         |  242MB      |  0               |  0               |  4.0K       |  6.0K         |  15
+9      |  apalache  |  NoError    |  16s          |  0         |  406MB      |  0               |  0               |  14K        |  23K          |  20
+10     |  apalache  |  NoError    |  1m01s        |  0         |  594MB      |  0               |  0               |  20K        |  40K          |  20
+11     |  apalache  |  NoError    |  29m          |  0         |  1.0GB      |  0               |  0               |  38K        |  74K          |  26
+12     |  apalache  |  NoError    |  39s          |  0         |  255MB      |  0               |  0               |  2.0K       |  4.0K         |  12
+13     |  apalache  |  NoError    |  35m          |  0         |  235MB      |  0               |  0               |  3.0K       |  7.0K         |  12
+14     |  apalache  |  NoError    |  15m          |  0         |  314MB      |  0               |  0               |  15K        |  20K          |  13
+15     |  apalache  |  NoError    |  1h01m        |  0         |  382MB      |  0               |  0               |  24K        |  33K          |  13
+16     |  apalache  |  NoError    |  52m          |  0         |  1.0GB      |  0               |  0               |  72K        |  111K         |  35
+
+## 7. Detailed results: 002bmc-apalache-0.6.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
