@@ -5,7 +5,7 @@ on:
     # Allows manually triggering release
     inputs:
       release_version:
-        description: "Release Version (leave empty to benchmark unstable)"
+        description: "Version to benchmark (set to 'unreleased' to benchmark the unstable branch)"
         required: false
         default: "unreleased"
   schedule:
@@ -15,7 +15,7 @@ on:
     - cron: "0 0 * * 6"
 
 env:
-  VERSION: ${{ github.event.inputs.release_version }}
+  VERSION: ${{ github.event.inputs.release_version || "unreleased" }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
