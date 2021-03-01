@@ -15,7 +15,7 @@ on:
     - cron: "0 0 * * 6"
 
 env:
-  VERSION: ${{ github.event.inputs.release_version || "unreleased" }}
+  VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
