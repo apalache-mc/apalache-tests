@@ -59,4 +59,10 @@ jobs:
           git add results
           commit_msg="Add reports from v${{ env.version }}"
           git commit -m "$commit_msg"
-          hub pull-request --push --message="$commit_msg" --base="master" --reviewer=konnov,shonfeder
+          hub pull-request --push \
+            --message="$commit_msg" \
+            --message="# Review Instructions" \
+            --message="- If this is a SNAPSHOT version, please review the reports and CLOSE WITHOUT MERGING." \
+            --message="- If this a regular release, you can merge to publish the results." \
+            --base="master" \
+            --reviewer=konnov,shonfeder
