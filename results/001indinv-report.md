@@ -66,7 +66,20 @@ no  |  filename                          |  tool      |  timeout  |  init       
 7      |  apalache  |  NoError    |  4s           |  0         |  299MB      |  0               |  0               |  364        |  2.0K         |  6.0
 8      |  apalache  |  NoError    |  7s           |  1         |  329MB      |  0               |  0               |  4.0K       |  23K          |  13
 
-## 5. Detailed results: 001indinv-apalache-0.6.0.csv
+## 5. Detailed results: 001indinv-apalache-0.11.1-SNAPSHOT.csv
+
+01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
+-------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
+1      |  apalache  |  NoError    |  5s           |  0         |  255MB      |  0               |  0               |  56         |  38           |  7.0
+2      |  apalache  |  NoError    |  32s          |  0         |  481MB      |  0               |  0               |  18K        |  47K          |  17
+3      |  apalache  |  NoError    |  7s           |  0         |  228MB      |  0               |  0               |  213        |  297          |  12
+4      |  apalache  |  NoError    |  10s          |  0         |  284MB      |  0               |  0               |  3.0K       |  13K          |  18
+5      |  apalache  |  NoError    |  6s           |  0         |  230MB      |  0               |  0               |  72         |  88           |  10
+6      |  apalache  |  NoError    |  6s           |  0         |  239MB      |  0               |  0               |  705        |  1.0K         |  16
+7      |  apalache  |  NoError    |  5s           |  0         |  220MB      |  0               |  0               |  27         |  74           |  4.0
+8      |  apalache  |  NoError    |  7s           |  0         |  295MB      |  0               |  0               |  3.0K       |  9.0K         |  18
+
+## 6. Detailed results: 001indinv-apalache-0.6.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
@@ -79,7 +92,7 @@ no  |  filename                          |  tool      |  timeout  |  init       
 7      |  apalache  |  NoError    |  4s           |  0         |  296MB      |  0               |  0               |  364        |  2.0K         |  6.0
 8      |  apalache  |  NoError    |  7s           |  1         |  327MB      |  0               |  0               |  4.0K       |  23K          |  13
 
-## 6. Detailed results: 001indinv-apalache-0.9.0.csv
+## 7. Detailed results: 001indinv-apalache-0.9.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
