@@ -7,9 +7,6 @@
 
 EXTENDS (*Naturals*) Integers, FiniteSets, Sequences, TLC
 
-\* BMCMT:
-a <: b == a
-
 \* The set of server IDs
 \*CONSTANTS Server
 \*Server == {"s1", "s2", "s3"}
@@ -60,60 +57,89 @@ MessageType == {RequestVoteRequest, RequestVoteResponse, AppendEntriesRequest, A
 \* A bag of records representing requests and responses sent from one server
 \* to another. TLAPS doesn't support the Bags module, so this is a function
 \* mapping Message to Nat.
-VARIABLE messages
+VARIABLE
+    \* @type: [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
+    messages
+
 
 \* A history variable used in the proof. This would not be present in an
 \* implementation.
 \* Keeps track of successful elections, including the initial logs of the
 \* leader and voters' logs. Set of functions containing various things about
 \* successful elections (see BecomeLeader).
-VARIABLE elections
+
+VARIABLE
+    \* @type: Set([eterm: Int, eleader: Str, elog: Seq([eterm: Int, value: Str]), evotes: Set(Str), evoterLog: Str -> Seq([term: Int, value: Str])]);
+    elections
 
 \* A history variable used in the proof. This would not be present in an
 \* implementation.
 \* Keeps track of every log ever in the system (set of logs).
-VARIABLE allLogs
 
+VARIABLE
+    \* @type: Set(Seq([eterm: Int, value: Str]));
+    allLogs
 ----
 \* The following variables are all per server (functions with domain Server).
-
 \* The server's term number.
-VARIABLE currentTerm
+VARIABLE
+    \* @type: Str -> Int;
+    currentTerm
+
 \* The server's state (Follower, Candidate, or Leader).
-VARIABLE state
+VARIABLE
+    \* @type: Str -> Str;
+    state
+
 \* The candidate the server voted for in its current term, or
 \* Nil if it hasn't voted for any.
-VARIABLE votedFor
+VARIABLE
+    \* @type: Str -> Str;
+    votedFor
 serverVars == <<currentTerm, state, votedFor>>
 
 \* A Sequence of log entries. The index into this sequence is the index of the
 \* log entry. Unfortunately, the Sequence module defines Head(s) as the entry
 \* with index 1, so be careful not to use that!
-VARIABLE log
+VARIABLE
+    \* @type: Str -> Seq([eterm: Int, value: Str]);
+    log
 \* The index of the latest entry in the log the state machine may apply.
-VARIABLE commitIndex
+VARIABLE
+    \* @type: Str -> Int;
+    commitIndex
 logVars == <<log, commitIndex>>
 
 \* The following variables are used only on candidates:
 \* The set of servers from which the candidate has received a RequestVote
 \* response in its currentTerm.
-VARIABLE votesResponded
+VARIABLE
+    \* @type: Str -> Set(Str);
+    votesResponded
 \* The set of servers from which the candidate has received a vote in its
 \* currentTerm.
-VARIABLE votesGranted
+VARIABLE
+    \* @type: Str -> Set(Str);
+    votesGranted
 \* A history variable used in the proof. This would not be present in an
 \* implementation.
 \* Function from each server that voted for this candidate in its currentTerm
 \* to that voter's log.
-VARIABLE voterLog
+VARIABLE
+    \* @type: Str -> (Str -> Seq([term: Int, value: Str]));
+    voterLog
 candidateVars == <<votesResponded, votesGranted, voterLog>>
 
 \* The following variables are used only on leaders:
 \* The next entry to send to each follower.
-VARIABLE nextIndex
+VARIABLE
+    \* @type: Str -> (Str -> Int);
+    nextIndex
 \* The latest entry that each follower has acknowledged is the same as the
 \* leader's. This is used to calculate commitIndex on the leader.
-VARIABLE matchIndex
+VARIABLE
+    \* @type: Str -> (Str -> Int);
+    matchIndex
 leaderVars == <<nextIndex, matchIndex, elections>>
 
 \* End of per server variables.
@@ -122,30 +148,6 @@ leaderVars == <<nextIndex, matchIndex, elections>>
 \* All variables; used for stuttering (asserting state hasn't changed).
 vars == <<messages, allLogs, (* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
   
-\* APALACHE: define type hints to help the type finder
-EntryT == [term |-> Int, value |-> STRING]
-currentTermT == [STRING -> {Int}]
-stateT == [STRING -> STRING]
-votedForT == [STRING -> STRING]
-votesRespondedT == [STRING -> {STRING}]
-votesGrantedT == [STRING -> {STRING}]
-nextIndexT == [STRING -> [STRING -> Int]]
-matchIndexT == [STRING -> [STRING -> Int]]
-commitIndexT == [STRING -> Int]
-logT == [STRING -> Seq(EntryT)]
-electionsT == {[eterm |-> Int, eleader |-> STRING, elog |-> Seq(EntryT),
-              evotes |-> {STRING}, evoterLog |-> [STRING -> Seq(EntryT)]]}
-allLogsT == {Seq([term |-> Int, value |-> STRING])}
-voterLogT == [ STRING -> [STRING -> Seq(EntryT) ]]
-messageT == [ mtype |-> STRING, mterm |-> Int, mlastLogTerm |-> Int, mlastLogIndex |-> Int,
-               msource |-> STRING, mdest |-> STRING, mvoteGranted |-> BOOLEAN,
-               mlog |-> Seq([term |-> Int, value |-> STRING]),
-               mprevLogIndex |-> Int, mprevLogTerm |-> Int, mentries |-> Seq(EntryT),
-               mcommitIndex |-> Int, msuccess |-> BOOLEAN, mmatchIndex |-> Int   ]
-messagesT == {messageT}
-EmptyVoterLog == (<<>> <: Seq(EntryT))
-\* APALACHE: end of type hints
-
 ----
 \* Helpers
 
@@ -155,10 +157,12 @@ EmptyVoterLog == (<<>> <: Seq(EntryT))
 \* igor: see the constant above
 
 \* The term of the last entry in a log, or 0 if the log is empty.
+\* @type: Seq([term: Int, value: Str]) => Int;
 LastTerm(xlog) == IF Len(xlog) = 0 THEN 0 ELSE xlog[Len(xlog)].term
 
 \* Helper for Send and Reply. Given a message m and bag of messages, return a
 \* new bag of messages with one more m in it.
+\* @type: ([ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ], [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int) => [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
 WithMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] + 1]
@@ -167,6 +171,9 @@ WithMessage(m, msgs) ==
 
 \* Helper for Discard and Reply. Given a message m and bag of messages, return
 \* a new bag of messages with one less m in it.
+\*
+\* A monster annotation. TODO: we need type aliases.
+\* @type: ([ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ], [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int) => [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
 WithoutMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] - 1]
@@ -178,7 +185,7 @@ Send(m) == messages' = WithMessage(m, messages)
 
 \* Remove a message from the bag of messages. Used when a server is done
 \* processing a message.
-Discard(m) == messages' = WithoutMessage(m <: messageT, messages)
+Discard(m) == messages' = WithoutMessage(m, messages)
 
 \* Combination of Send and Discard
 Reply(response, request) ==
@@ -192,22 +199,22 @@ Max(s) == CHOOSE x \in s : \A y \in s : x >= y
 ----
 \* Define initial values for all variables
 
-InitHistoryVars == /\ elections = {} <: electionsT
-                   /\ allLogs   = {} <: allLogsT
-                   /\ voterLog  = [i \in Server |-> [j \in ({} <: {STRING}) |-> EmptyVoterLog (*<<>>*)]]
+InitHistoryVars == /\ elections = {}
+                   /\ allLogs   = {}
+                   /\ voterLog  = [i \in Server |-> [j \in {} |-> << >>]]
 InitServerVars == /\ currentTerm = [i \in Server |-> 1]
                   /\ state       = [i \in Server |-> Follower]
                   /\ votedFor    = [i \in Server |-> Nil]
-InitCandidateVars == /\ votesResponded = [i \in Server |-> {} <: {STRING}]
-                     /\ votesGranted   = [i \in Server |-> {} <: {STRING}]
+InitCandidateVars == /\ votesResponded = [i \in Server |-> {}]
+                     /\ votesGranted   = [i \in Server |-> {}]
 \* The values nextIndex[i][i] and matchIndex[i][i] are never read, since the
 \* leader does not send itself messages. It's still easier to include these
 \* in the functions.
 InitLeaderVars == /\ nextIndex  = [i \in Server |-> [j \in Server |-> 1]]
                   /\ matchIndex = [i \in Server |-> [j \in Server |-> 0]]
-InitLogVars == /\ log          = [i \in Server |-> << >> <: Seq(EntryT)]
+InitLogVars == /\ log          = [i \in Server |-> << >>]
                /\ commitIndex  = [i \in Server |-> 0]
-Init == /\ messages = [m \in ({} <: {messageT}) |-> 0]
+Init == /\ messages = [m \in {} |-> 0]
         /\ InitHistoryVars
         /\ InitServerVars
         /\ InitCandidateVars
@@ -221,9 +228,9 @@ Init == /\ messages = [m \in ({} <: {messageT}) |-> 0]
 \* It loses everything but its currentTerm, votedFor, and log.
 Restart(i) ==
     /\ state'          = [state EXCEPT ![i] = Follower]
-    /\ votesResponded' = [votesResponded EXCEPT ![i] = {} <: {STRING}]
-    /\ votesGranted'   = [votesGranted EXCEPT ![i] = {} <: {STRING}]
-    /\ voterLog'       = [voterLog EXCEPT ![i] = [j \in ({} <: {STRING}) |-> EmptyVoterLog (*<<>>*)]]
+    /\ votesResponded' = [votesResponded EXCEPT ![i] = {}]
+    /\ votesGranted'   = [votesGranted EXCEPT ![i] = {}]
+    /\ voterLog'       = [voterLog EXCEPT ![i] = [j \in {} |-> <<>>]]
     /\ nextIndex'      = [nextIndex EXCEPT ![i] = [j \in Server |-> 1]]
     /\ matchIndex'     = [matchIndex EXCEPT ![i] = [j \in Server |-> 0]]
     /\ commitIndex'    = [commitIndex EXCEPT ![i] = 0]
@@ -236,9 +243,9 @@ Timeout(i) == /\ state[i] \in {Follower, Candidate}
               \* Most implementations would probably just set the local vote
               \* atomically, but messaging localhost for it is weaker.
               /\ votedFor' = [votedFor EXCEPT ![i] = Nil]
-              /\ votesResponded' = [votesResponded EXCEPT ![i] = {} <: {STRING}]
-              /\ votesGranted'   = [votesGranted EXCEPT ![i] = {} <: {STRING}]
-              /\ voterLog'       = [voterLog EXCEPT ![i] = [j \in ({} <: {STRING}) |-> EmptyVoterLog (*<<>>*)]]
+              /\ votesResponded' = [votesResponded EXCEPT ![i] = {}]
+              /\ votesGranted'   = [votesGranted EXCEPT ![i] = {}]
+              /\ voterLog'       = [voterLog EXCEPT ![i] = [j \in {} |-> <<>>]]
               /\ UNCHANGED <<messages, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Candidate i sends j a RequestVote request.
@@ -250,7 +257,7 @@ RequestVote(i, j) ==
              mlastLogTerm  |-> LastTerm(log[i]),
              mlastLogIndex |-> Len(log[i]),
              msource       |-> i,
-             mdest         |-> j] <: messageT)
+             mdest         |-> j])
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Leader i sends j an AppendEntries request containing up to 1 entry.
@@ -277,7 +284,7 @@ AppendEntries(i, j) ==
                 mlog           |-> log[i],
                 mcommitIndex   |-> Min({commitIndex[i], lastEntry}),
                 msource        |-> i,
-                mdest          |-> j] <: messageT)
+                mdest          |-> j])
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Candidate i transitions to leader.
@@ -321,7 +328,7 @@ AdvanceCommitIndex(i) ==
                                 Agree(index) \in Quorum}
            \* New value for commitIndex'[i]
            newCommitIndex ==
-              IF /\ agreeIndexes /= ({} <: {Int})
+              IF /\ agreeIndexes /= {}
                  /\ log[i][Max(agreeIndexes)].term = currentTerm[i]
               THEN
                   Max(agreeIndexes)
@@ -336,6 +343,7 @@ AdvanceCommitIndex(i) ==
 
 \* Server i receives a RequestVote request from server j with
 \* m.mterm <= currentTerm[i].
+\* @type: (Str, Str, [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ]) => Bool;
 HandleRequestVoteRequest(i, j, m) ==
     LET logOk == \/ m.mlastLogTerm > LastTerm(log[i])
                  \/ /\ m.mlastLogTerm = LastTerm(log[i])
@@ -353,7 +361,7 @@ HandleRequestVoteRequest(i, j, m) ==
                  \* the proof. It would not exist in a real implementation.
                  mlog         |-> log[i],
                  msource      |-> i,
-                 mdest        |-> j] <: messageT,
+                 mdest        |-> j],
                  m)
        /\ UNCHANGED <<state, currentTerm, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
@@ -379,6 +387,7 @@ HandleRequestVoteResponse(i, j, m) ==
 \* m.mterm <= currentTerm[i]. This just handles m.entries of length 0 or 1, but
 \* implementations could safely accept more by treating them the same as
 \* multiple independent requests of 1 entry.
+\* @type: (Str, Str, [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ]) => Bool;
 HandleAppendEntriesRequest(i, j, m) ==
     LET logOk == \/ m.mprevLogIndex = 0
                  \/ /\ m.mprevLogIndex > 0
@@ -395,7 +404,7 @@ HandleAppendEntriesRequest(i, j, m) ==
                        msuccess        |-> FALSE,
                        mmatchIndex     |-> 0,
                        msource         |-> i,
-                       mdest           |-> j] <: messageT,
+                       mdest           |-> j],
                        m)
              /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log, commitIndex>> \*logVars>>
           \/ \* return to follower state
@@ -409,7 +418,7 @@ HandleAppendEntriesRequest(i, j, m) ==
              /\ logOk
              /\ LET index == m.mprevLogIndex + 1
                 IN \/ \* already done with request
-                       /\ \/ m.mentries = (<< >> <: Seq(EntryT))
+                       /\ \/ m.mentries = << >>
                           \/ /\ Len(log[i]) >= index
                              /\ log[i][index].term = m.mentries[1].term
                           \* This could make our commitIndex decrease (for
@@ -423,11 +432,11 @@ HandleAppendEntriesRequest(i, j, m) ==
                                  mmatchIndex     |-> m.mprevLogIndex +
                                                      Len(m.mentries),
                                  msource         |-> i,
-                                 mdest           |-> j] <: messageT,
+                                 mdest           |-> j],
                                  m)
                        /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log, commitIndex>> \*logVars>>
                    \/ \* conflict: remove 1 entry
-                       /\ m.mentries /= (<< >> <: Seq(EntryT))
+                       /\ m.mentries /= << >>
                        /\ Len(log[i]) >= index
                        /\ log[i][index].term /= m.mentries[1].term
                        (*/\ LET new == [index2 \in 1..(Len(log[i]) - 1)} |->
@@ -437,7 +446,7 @@ HandleAppendEntriesRequest(i, j, m) ==
                           IN log' = [log EXCEPT ![i] = new]
                        /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, commitIndex, messages>>
                    \/ \* no conflict: append entry
-                       /\ m.mentries /= (<< >> <: Seq(EntryT))
+                       /\ m.mentries /= << >>
                        /\ Len(log[i]) = m.mprevLogIndex
                        /\ log' = [log EXCEPT ![i] =
                                       Append(log[i], m.mentries[1])]
@@ -459,6 +468,7 @@ HandleAppendEntriesResponse(i, j, m) ==
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, elections, log, commitIndex>> \* logVars
 
 \* Any RPC with a newer term causes the recipient to advance its term first.
+\* @type: (Str, Str, [mterm: Int]) => Bool;
 UpdateTerm(i, j, m) ==
     /\ m.mterm > currentTerm[i]
     /\ currentTerm'    = [currentTerm EXCEPT ![i] = m.mterm]
@@ -474,6 +484,7 @@ DropStaleResponse(i, j, m) ==
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Receive a message.
+\* @type: [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] => Bool;
 Receive(m) ==
     LET i == m.mdest
         j == m.msource
@@ -552,18 +563,6 @@ TwoLogs ==
 \* APALACHE: to use finite sets, we need bounds on the maximum index and term
 MaxIndex == 4
 MaxTerm == 4
-
-committed(t) ==
- { e \in allLogs :
-    \A election \in elections: election.eterm > t => e \in election.elog
- }
-
-\* Servers only apply entries that are committed in their current term
-AppendCommitted ==
-  \A i \in Server:
-    /\ commitIndex[i] <= Len(log[i])
-    /\ \A index \in DOMAIN log[i]:
-       index <= commitIndex[i] => log[i][index] \in committed(currentTerm[i])
 
 ===============================================================================
 

@@ -1,4 +1,4 @@
------------- MODULE APABakery ----------------------------
+------------ MODULE Bakery3 ----------------------------
 (***************************************************************************)
 (* The bakery algorithm originally appeared in:                            *)
 (*                                                                         *)
@@ -48,8 +48,6 @@ N == 5
 (*MaxN == 10
 ConstInit == N \in 2..5 *)
 
-a <: b == a
-
 (***************************************************************************)
 (* We define Procs to be the set {1, 2, ...  , N} of processes.            *)
 (***************************************************************************)
@@ -59,6 +57,7 @@ Procs == (*{i \in 1..MaxN : i <= N}*) 1..N
 (* \prec is defined to be the lexicographical less-than relation on pairs  *)
 (* of numbers.                                                             *)
 (***************************************************************************)
+\* @type: (<<Int, Int>>, <<Int, Int>>) => Bool;
 a \prec b == \/ a[1] < b[1]
              \/ (a[1] = b[1]) /\ (a[2] < b[2])
 
@@ -109,7 +108,19 @@ a \prec b == \/ a[1] < b[1]
 ***     this ends the comment containg the pluscal code      **********)
 
 \* BEGIN TRANSLATION  (this begins the translation of the PlusCal code)
-VARIABLES num, flag, pc, unchecked, max, nxt
+VARIABLES
+    \* @type: Int -> Int;
+    num,
+    \* @type: Int -> Bool;
+    flag,
+    \* @type: Int -> Str;
+    pc,
+    \* @type: Int -> Set(Int);
+    unchecked,
+    \* @type: Int -> Int;
+    max,
+    \* @type: Int -> Int;
+    nxt
 
 vars == << num, flag, pc, unchecked, max, nxt >>
 
@@ -119,7 +130,7 @@ Init == (* Global variables *)
         /\ num = [i \in Procs |-> 0]
         /\ flag = [i \in Procs |-> FALSE]
         (* Process p *)
-        /\ unchecked = [self \in Procs |-> {} <: {Int}]
+        /\ unchecked = [self \in Procs |-> {}]
         /\ max = [self \in Procs |-> 0]
         /\ nxt = [self \in Procs |-> 1]
         /\ pc = [self \in ProcSet |-> "ncs"]
@@ -136,10 +147,10 @@ e1(self) == /\ pc[self] = "e1"
                   /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
                   /\ max' = [max EXCEPT ![self] = 0]
                   /\ pc' = [pc EXCEPT ![self] = "e2"]
-            /\ UNCHANGED << num, nxt >>
+            /\ UNCHANGED << num, nxt, "" >>
 
 e2(self) == /\ pc[self] = "e2"
-            /\ IF unchecked[self] # ({} <: {Int})
+            /\ IF unchecked[self] # {}
                   THEN /\ \E i \in unchecked[self]:
                             /\ unchecked' = [unchecked EXCEPT ![self] = unchecked[self] \ {i}]
                             /\ IF num[i] > max[self]
@@ -169,13 +180,13 @@ e4(self) == /\ pc[self] = "e4"
                \/ /\ flag' = [flag EXCEPT ![self] = FALSE]
                   /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
                   /\ pc' = [pc EXCEPT ![self] = "w1"]
-            /\ UNCHANGED << num, max, nxt >>
+            /\ UNCHANGED << num, max, nxt, "" >>
 
 w1(self) == /\ pc[self] = "w1"
-            /\ IF unchecked[self] # ({} <: {Int})
+            /\ IF unchecked[self] # {}
                   THEN /\ \E i \in unchecked[self]:
-                            /\ nxt' = [nxt EXCEPT ![self] = i]
-                            /\ ~ flag[nxt'[self]]
+                            nxt' = [nxt EXCEPT ![self] = i]
+                       /\ ~ flag[nxt'[self]]
                        /\ pc' = [pc EXCEPT ![self] = "w2"]
                   ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
                        /\ nxt' = nxt
@@ -270,6 +281,73 @@ Inv == /\ TypeOK
                    \/ pc[nxt[i]] = "e3"
                 => max[nxt[i]] >= num[i]
              /\ (pc[i] = "cs") => \A j \in Procs \ {i} : Before(i, j)
+             
+FIndInv == 
+      /\ TypeOK 
+      /\ \A i \in Procs : 
+(*\**)       /\ (pc[i] \in {"ncs", "e1", "e2"}) => (num[i] = 0)
+             /\ (pc[i] \in {"e4", "w1", "w2", "cs"}) => (num[i] # 0)
+             /\ (pc[i] \in {"e2", "e3"}) => flag[i] 
+             /\ (pc[i] = "w2") => (nxt[i] # i)
+             /\ pc[i] \in {(*"e2",*) "w1", "w2"} => i \notin unchecked[i]
+             /\ (pc[i] \in {"w1", "w2"}) =>
+                   \A j \in (Procs \ unchecked[i]) \ {i} : Before(i, j)
+             /\ /\ (pc[i] = "w2")
+                /\ \/ (pc[nxt[i]] = "e2") /\ (i \notin unchecked[nxt[i]])
+                   \/ pc[nxt[i]] = "e3"
+                => max[nxt[i]] >= num[i]
+
+              
+                
+Cw1(self) == /\ pc[self] = "w1"
+            /\ IF unchecked[self] # {}
+                  THEN /\ \E i \in unchecked[self]:
+                            nxt' = [nxt EXCEPT ![self] = i]
+                       /\ ~ flag[nxt'[self]]
+                       /\ pc' = [pc EXCEPT ![self] = "cs"]
+                  ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
+                       /\ nxt' = nxt
+            /\ UNCHANGED << num, flag, unchecked, max >>
+
+(*
+w1(self) == /\ pc[self] = "w1"
+            /\ IF unchecked[self] # {}
+                  THEN /\ \E i \in unchecked[self]:
+                            nxt' = [nxt EXCEPT ![self] = i]
+                       /\ ~ flag[nxt'[self]]
+                       /\ pc' = [pc EXCEPT ![self] = "w2"]
+                  ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
+                       /\ nxt' = nxt
+            /\ UNCHANGED << num, flag, unchecked, max >>            
+*)
+
+Fw1(self) == /\ pc[self] = "w1"
+             /\ IF unchecked[self] # {}
+                  THEN /\ \E i \in unchecked[self]:
+                            nxt' = [nxt EXCEPT ![self] = i]
+                       /\ ~ flag[nxt'[self]]
+                       /\ pc' = [pc EXCEPT ![self] = "cs"]
+                  ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
+                       /\ nxt' = nxt
+             /\ UNCHANGED << num, flag, unchecked, max >> 
+
+Fp(self) == ncs(self) \/ e1(self) \/ e2(self) \/ e3(self) \/ e4(self)
+             (*  \/ Fw1(self) *) \/ w2(self) \/ cs(self) \/ exit(self)
+
+FNext == (\E self \in Procs: Fp(self))
+
+Fp2(self) == ncs(self) \/ e1(self) \/ e2(self) \/ e3(self) \/ e4(self)
+              \/ w1(self) \/ w2(self) \/ cs(self) \/ exit(self)
+
+FNext2 == (\E self \in Procs: Fp2(self))
+
+(*
+p(self) == ncs(self) \/ e1(self) \/ e2(self) \/ e3(self) \/ e4(self)
+              \/ w1(self) \/ w2(self) \/ cs(self) \/ exit(self)
+
+
+Next == (\E self \in Procs: p(self))
+*)
 
 -----------------------------------------------------------------------------
 (***************************************************************************)
@@ -470,6 +548,7 @@ ISpec == IInit /\ [][Next]_vars
              
 =============================================================================
 \* Modification History
+\* Last modified Wed Aug 14 13:37:20 CEST 2019 by tthai
 \* Last modified Sun Mar 31 12:25:25 CEST 2019 by igor
 \* Last modified Fri May 25 11:18:47 CEST 2018 by merz
 \* Last modified Sat May 19 16:40:23 CEST 2018 by merz

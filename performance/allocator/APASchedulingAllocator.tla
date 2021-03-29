@@ -20,7 +20,9 @@ a <: b == a
 
 
 CONSTANTS
+  \* @type: Set(Str);
   Clients,     \* set of all clients
+  \* @type: Set(Str);
   Resources    \* set of all resources
 
 ConstInit22 ==
@@ -35,8 +37,11 @@ ASSUME
   IsFiniteSet(Resources)
 
 VARIABLES
+  \* @type: Str -> Set(Str);
   unsat,       \* set of all outstanding requests per process
+  \* @type: Str -> Set(Str);
   alloc,       \* set of resources allocated to given process
+  \* @type: Seq(Str);
   sched        \* schedule represented as a sequence of clients
 
 
@@ -64,6 +69,7 @@ Drop(seq,i) == SubSeq(seq, 1, i-1) \circ SubSeq(seq, i+1, Len(seq))
 available == Resources \ (UNION {alloc[c] : c \in Clients})
 
 (* Range of a function, e.g. elements of a sequence *)
+\* @type: Seq(a) => Set(a);
 Range(f) == { f[x] : x \in DOMAIN f }
 
 (* Clients with pending requests that have not yet been scheduled *)

@@ -8,9 +8,15 @@ EXTENDS Integers
 (***************************************************************************)
 (* The constant parameters and the set Ballots are the same as in Voting.  *)
 (***************************************************************************)
-CONSTANT Value, Acceptor, Quorum, Ballot
-a <: b == a (* this is a dummy operator that is interpreted
-               by the model checker as a type annotation*)
+CONSTANT
+    \* @type: Set(Int);
+    Value,
+    \* @type: Set(Str);
+    Acceptor,
+    \* @type: Set(Set(Str));
+    Quorum,
+    \* @type: Int;
+    Ballot
 
 None == -1
 
@@ -43,11 +49,6 @@ ConstInit5 ==
        }}
 *)
 
-(* added by Igor: *)
-MT == [type |-> STRING, bal |-> Int,
-       mbal |-> Int, acc |-> STRING,
-       val |-> Int, mval |-> Int]
-
 (*
 ASSUME QuorumAssumption == /\ \A Q \in Quorum : Q \subseteq Acceptor
                            /\ \A Q1, Q2 \in Quorum : Q1 \cap Q2 # {} 
@@ -66,17 +67,22 @@ None == CHOOSE v : v \notin Ballot
 (* Message of all possible messages.  The messages are explained below     *)
 (* with the actions that send them.                                        *)
 (***************************************************************************)
-Message ==      ([type : {"1a"}, bal : Ballot] <: {MT})
-           \cup ([type : {"1b"}, acc : Acceptor, bal : Ballot, 
-                 mbal : Ballot \cup {-1}, mval : Value \cup {None}] <: {MT})
-           \cup ([type : {"2a"}, bal : Ballot, val : Value] <: {MT})
-           \cup ([type : {"2b"}, acc : Acceptor, bal : Ballot, val : Value] <: {MT})
+Message ==      [type : {"1a"}, bal : Ballot]
+           \cup [type : {"1b"}, acc : Acceptor, bal : Ballot, 
+                 mbal : Ballot \cup {-1}, mval : Value \cup {None}]
+           \cup [type : {"2a"}, bal : Ballot, val : Value]
+           \cup [type : {"2b"}, acc : Acceptor, bal : Ballot, val : Value]
 -----------------------------------------------------------------------------
-VARIABLE maxBal, 
-         maxVBal, \* <<maxVBal[a], maxVal[a]>> is the vote with the largest
-         maxVal,    \* ballot number cast by a; it equals <<-1, None>> if
+VARIABLE
+    \* @type: Str -> Int;
+    maxBal, 
+    \* @type: Str -> Int;
+    maxVBal, \* <<maxVBal[a], maxVal[a]>> is the vote with the largest
+    \* @type: Str -> Int;
+    maxVal,    \* ballot number cast by a; it equals <<-1, None>> if
                     \* a has not cast any vote.
-         msgs     \* The set of all messages that have been sent.
+    \* @type: Set([type: Str, bal: Int, mbal: Int, acc: Str, val: Int, mval: Int]);
+    msgs     \* The set of all messages that have been sent.
 
 (***************************************************************************)
 (* NOTE:                                                                   *)
@@ -115,13 +121,13 @@ TypeOK == /\ maxBal \in [Acceptor -> Ballot \cup {-1}]
 Init == /\ maxBal = [a \in Acceptor |-> -1]
         /\ maxVBal = [a \in Acceptor |-> -1]
         /\ maxVal = [a \in Acceptor |-> None]
-        /\ msgs = ({} <: {MT})
+        /\ msgs = {}
 
 (***************************************************************************)
 (* The actions.  We begin with the subaction (an action that will be used  *)
 (* to define the actions that make up the next-state action.               *)
 (***************************************************************************)
-Send(m) == msgs' = msgs \cup {m <: MT}
+Send(m) == msgs' = msgs \cup {m}
 
 
 (***************************************************************************)
@@ -175,7 +181,7 @@ Phase2a(b, v) ==
                                  /\ m.bal = b}
             Q1bv == {m \in Q1b : m.mbal \geq 0}
         IN  /\ \A a \in Q : \E m \in Q1b : m.acc = a 
-            /\ \/ Q1bv = ({} <: {MT})
+            /\ \/ Q1bv = {}
                \/ \E m \in Q1bv : 
                     /\ m.mval = v
                     /\ \A mm \in Q1bv : m.mbal \geq mm.mbal 
@@ -224,8 +230,11 @@ Spec == Init /\ [][Next]_vars
 (* the array `votes' describing the votes cast by the acceptors is defined *)
 (* as follows.                                                             *)
 (***************************************************************************)
+\* @type: (Int, Int) => <<i, j>>;
+Pair(i, j) == <<i, j>>
+
 votes == [a \in Acceptor |->  
-           {<<m.bal, m.val>> : m \in {mm \in msgs: /\ mm.type = "2b"
+           {Pair(m.bal, m.val) : m \in {mm \in msgs: /\ mm.type = "2b"
                                                    /\ mm.acc = a }}]
 
 SafeVote == \A m1, m2 \in msgs: m1.type = "2b" /\ m2.type = "2b" => m1.val = m2.val

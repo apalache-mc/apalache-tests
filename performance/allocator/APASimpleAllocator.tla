@@ -11,12 +11,10 @@
 
 EXTENDS FiniteSets, TLC
 
-\* APALACHE-BEGIN
-a <: b == a
-\* APALACHE-END
-
 CONSTANTS
+  \* @type: Set(Str);
   Clients,     \* set of all clients
+  \* @type: Set(Str);
   Resources    \* set of all resources
 
 ConstInit22 ==
@@ -31,7 +29,9 @@ ConstInit53 ==
 \*  IsFiniteSet(Resources)
 
 VARIABLES
+  \* @type: Str -> Set(Str);
   unsat,       \* set of all outstanding requests per process
+  \* @type: Str -> Set(Str);
   alloc        \* set of resources allocated to given process
 
 TypeInvariant ==
@@ -45,28 +45,28 @@ available == Resources \ (UNION {alloc[c] : c \in Clients})
 
 (* Initially, no resources have been requested or allocated. *)
 Init == 
-  /\ unsat = [c \in Clients |-> {} <: {STRING}]
-  /\ alloc = [c \in Clients |-> {} <: {STRING}]
+  /\ unsat = [c \in Clients |-> {}]
+  /\ alloc = [c \in Clients |-> {}]
 
 (* A client c may request a set of resources provided that all of its  *)
 (* previous requests have been satisfied and that it doesn't hold any  *)
 (* resources.                                                          *)
 Request(c,S) ==
-  /\ unsat[c] = ({} <: {STRING}) /\ alloc[c] = ({} <: {STRING})
-  /\ S # ({} <: {STRING}) /\ unsat' = [unsat EXCEPT ![c] = S]
+  /\ unsat[c] = {} /\ alloc[c] = {}
+  /\ S # {} /\ unsat' = [unsat EXCEPT ![c] = S]
   /\ UNCHANGED alloc
 
 (* Allocation of a set of available resources to a client that         *)
 (* requested them (the entire request does not have to be filled).     *)
 Allocate(c,S) ==
-  /\ S # ({} <: {STRING}) /\ S \subseteq available \cap unsat[c]
+  /\ S # {} /\ S \subseteq available \cap unsat[c]
   /\ alloc' = [alloc EXCEPT ![c] = @ \cup S]
   /\ unsat' = [unsat EXCEPT ![c] = @ \ S]
 
 (* Client c returns a set of resources that it holds. It may do so     *)
 (* even before its full request has been honored.                      *)
 Return(c,S) ==
-  /\ S # ({} <: {STRING}) /\ S \subseteq alloc[c]
+  /\ S # {} /\ S \subseteq alloc[c]
   /\ alloc' = [alloc EXCEPT ![c] = @ \ S]
   /\ UNCHANGED unsat
 
@@ -75,6 +75,7 @@ Next ==
   \E c \in Clients, S \in SUBSET Resources :
      Request(c,S) \/ Allocate(c,S) \/ Return(c,S)
 
+\* @type: <<Str -> Set(Str), Str -> Set(Str)>>;
 vars == <<unsat,alloc>>
 
 -------------------------------------------------------------------------
@@ -88,16 +89,16 @@ SimpleAllocator ==
 -------------------------------------------------------------------------
 
 ResourceMutex ==
-  \A c1,c2 \in Clients : c1 # c2 => alloc[c1] \cap alloc[c2] = ({} <: {STRING})
+  \A c1,c2 \in Clients : c1 # c2 => alloc[c1] \cap alloc[c2] = {}
 
 ClientsWillReturn ==
-  \A c \in Clients : unsat[c]={} ~> alloc[c]=({} <: {STRING})
+  \A c \in Clients : unsat[c]={} ~> alloc[c]={}
 
 ClientsWillObtain ==
   \A c \in Clients, r \in Resources : r \in unsat[c] ~> r \in alloc[c]
 
 InfOftenSatisfied == 
-  \A c \in Clients : []<>(unsat[c] = ({} <: {STRING}))
+  \A c \in Clients : []<>(unsat[c] = {})
 
 -------------------------------------------------------------------------
 
