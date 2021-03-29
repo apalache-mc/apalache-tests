@@ -185,8 +185,13 @@ e4(self) == /\ pc[self] = "e4"
 w1(self) == /\ pc[self] = "w1"
             /\ IF unchecked[self] # {}
                   THEN /\ \E i \in unchecked[self]:
+                            /\ nxt' = [nxt EXCEPT ![self] = i]
+                            /\ ~ flag[nxt'[self]]
+            (* open issue: https://github.com/informalsystems/apalache/issues/672  *) 
+                       (*     
                             nxt' = [nxt EXCEPT ![self] = i]
                        /\ ~ flag[nxt'[self]]
+                        *)
                        /\ pc' = [pc EXCEPT ![self] = "w2"]
                   ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
                        /\ nxt' = nxt
