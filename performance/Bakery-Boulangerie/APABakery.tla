@@ -147,7 +147,7 @@ e1(self) == /\ pc[self] = "e1"
                   /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
                   /\ max' = [max EXCEPT ![self] = 0]
                   /\ pc' = [pc EXCEPT ![self] = "e2"]
-            /\ UNCHANGED << num, nxt, "" >>
+            /\ UNCHANGED << num, nxt >>
 
 e2(self) == /\ pc[self] = "e2"
             /\ IF unchecked[self] # {}
@@ -180,7 +180,7 @@ e4(self) == /\ pc[self] = "e4"
                \/ /\ flag' = [flag EXCEPT ![self] = FALSE]
                   /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
                   /\ pc' = [pc EXCEPT ![self] = "w1"]
-            /\ UNCHANGED << num, max, nxt, "" >>
+            /\ UNCHANGED << num, max, nxt >>
 
 w1(self) == /\ pc[self] = "w1"
             /\ IF unchecked[self] # {}
