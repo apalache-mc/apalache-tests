@@ -28,11 +28,13 @@
 EXTENDS Naturals, FiniteSets
 
 CONSTANTS 
+  \* @type: Set(Int);
   Prisoner,
     (***********************************************************************)
     (* The set of all prisoners.                                           *)
     (***********************************************************************)
 
+  \* @type: Int;
   Counter  
     (***********************************************************************)
     (* This is an arbitrarily chosen prisoner, who will do the necessary   *)
@@ -61,12 +63,16 @@ OtherPrisoner == Prisoner \ {Counter}
   (*************************************************************************)
   
 VARIABLES 
-  switchAUp, switchBUp,    
+  \* @type: Bool;
+  switchAUp,
+  \* @type: Bool;
+  switchBUp,    
     (***********************************************************************)
     (* The states of the two switches, represented by boolean-valued       *)
     (* variables.                                                          *)
     (***********************************************************************)
     
+  \* @type: Int -> Int;
   timesSwitched,
     (***********************************************************************)
     (* For ever prisoner except the counter, timesSwitched[p] is the       *)
@@ -74,6 +80,7 @@ VARIABLES
     (* 0 and will equal at most 2.                                         *)
     (***********************************************************************)
 
+  \* @type: Int;
   count
     (***********************************************************************)
     (* The number of times the Counter has switched switch A down.         *)

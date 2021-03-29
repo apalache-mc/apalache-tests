@@ -20,23 +20,31 @@
 
 EXTENDS Integers \*Naturals, FiniteSets
 
-\* APALACHE-BEGIN
-a <: b == a
-MT == <<Int, STRING>> \* message type
-\* APALACHE-END
-
-CONSTANTS N, T, F,
-          Proc \* a set of processes
+CONSTANTS
+    \* @type: Int;
+    N,
+    \* @type: Int;
+    T,
+    \* @type: Int;
+    F,
+    \* @type: Set(Int);
+    Proc \* a set of processes
 
 ConstInit4 == N \in {4} /\ T \in {1} /\ F \in {1} /\ Proc \in {1..4}
  
 ConstInit20 == N \in {20} /\ T \in {4} /\ F \in {4} /\ Proc \in {1..10} 
 
-VARIABLES Crashed,        (* the crashed processes *)  
-          nCrashed,       (* the number of crashed processes *)
-          pc,             (* program counters *)
-          rcvd,           (* the messages received by each process *)
-          sent            (* the messages sent by all correct processes *)
+VARIABLES
+    \* @type: Set(Int);
+    Crashed,        (* the crashed processes *)  
+    \* @type: Int;
+    nCrashed,       (* the number of crashed processes *)
+    \* @type: Int -> Str;
+    pc,             (* program counters *)
+    \* @type: Int -> Set(<<Int, Str>>);
+    rcvd,           (* the messages received by each process *)
+    \* @type: Set(<<Int, Str>>);
+    sent            (* the messages sent by all correct processes *)
 
 \*ASSUME N \in Nat /\ T \in Nat /\ F \in Nat
 \*ASSUME (N > 2 * T) /\ (T >= F) /\ (F >= 0)
@@ -48,24 +56,24 @@ M == { "ECHO" }                 (* only ECHO messages are sent in this encoding 
 vars == << pc, rcvd, sent, Crashed, nCrashed >>      
 
 Init == 
-  /\ Crashed = {} <: {Int}
+  /\ Crashed = {}
   /\ nCrashed = 0                       (* Initially, there is no crashed process  
                                            or all processes are correct. *)
-  /\ sent = {} <: {MT}                  (* No messages are sent. *)
+  /\ sent = {}                          (* No messages are sent. *)
   /\ pc \in [ Proc -> {"V0", "V1"} ]    (* If process p received an INIT message,
                                            process p is initialized with V1. Otherwise,
                                            it is initialized with V0. *)
-  /\ rcvd = [ i \in Proc |-> {} <: {MT} ]       (* No messages are received. *)        
+  /\ rcvd = [ i \in Proc |-> {} ]       (* No messages are received. *)        
   
 
 InitNoBcast ==
-  /\ Crashed = {} <: {Int} 
+  /\ Crashed = {}
   /\ nCrashed = 0                       (* Initially, there is no crashed process  
                                            or all processes are correct. *)
-  /\ sent = {} <: {MT}              (* No messages are sent. *)
+  /\ sent = {}                          (* No messages are sent. *)
   /\ pc = [ p \in Proc |-> "V0" ]       (* Nothing is broadcasted and 
                                            no process receives an INIT message. *)
-  /\ rcvd = [ i \in Proc |-> {} <: {MT} ]       (* No messages are received. *)  
+  /\ rcvd = [ i \in Proc |-> {} ]       (* No messages are received. *)  
 
 Receive(self) ==                        (* a correct process self receives new messages *)
   /\ pc[self] # "CR"
@@ -88,7 +96,7 @@ UponV1(self) ==
    broadcasts ECHO to all.  *)
 UponAccept(self) ==                                 
   /\ (pc[self] = "V0" \/ pc[self] = "V1")     
-  /\ rcvd'[self] # {} <: {MT}
+  /\ rcvd'[self] # {}
   /\ pc' = [pc EXCEPT ![self] = "AC"]
   /\ sent' = sent \cup { <<self, "ECHO">> }
   /\ nCrashed' = nCrashed

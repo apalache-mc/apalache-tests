@@ -1,6 +1,15 @@
 ------------------------ MODULE Apa5Paxos -------------------------------
 EXTENDS Integers
-VARIABLE maxBal, maxVBal, maxVal, msgs
+VARIABLE
+    \* @type: Str -> Int;
+    maxBal, 
+    \* @type: Str -> Int;
+    maxVBal, \* <<maxVBal[a], maxVal[a]>> is the vote with the largest
+    \* @type: Str -> Int;
+    maxVal,    \* ballot number cast by a; it equals <<-1, None>> if
+                    \* a has not cast any vote.
+    \* @type: Set([type: Str, bal: Int, mbal: Int, acc: Str, val: Int, mval: Int]);
+    msgs     \* The set of all messages that have been sent.
 
 Value == {0, 1}
 Ballot == 0..4

@@ -7,7 +7,9 @@
 (***************************************************************************)
 EXTENDS Naturals
 
-CONSTANT N
+CONSTANT
+    \* @type: Int;
+    N
 
 MaxN == 20
 ConstInit4 == N \in {4}
@@ -16,7 +18,15 @@ ConstInitAll20 == N \in 2..50
 
 (*ASSUME NAssumption == N \in Nat \ {0}*)
 
-VARIABLES active, color, tpos, tcolor
+VARIABLES
+    \* @type: Int -> Bool;
+    active,
+    \* @type: Int -> Str;
+    color,
+    \* @type: Int;
+    tpos,
+    \* @type: Str;
+    tcolor
 
 Nodes == {i \in 0..MaxN : i < N } \* 0 .. N-1
 Color == {"white", "black"}

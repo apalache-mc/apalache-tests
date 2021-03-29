@@ -48,8 +48,6 @@ N == 5
 (*MaxN == 10
 ConstInit == N \in 2..5 *)
 
-a <: b == a
-
 (***************************************************************************)
 (* We define Procs to be the set {1, 2, ...  , N} of processes.            *)
 (***************************************************************************)
@@ -59,6 +57,7 @@ Procs == (*{i \in 1..MaxN : i <= N}*) 1..N
 (* \prec is defined to be the lexicographical less-than relation on pairs  *)
 (* of numbers.                                                             *)
 (***************************************************************************)
+\* @type: (<<Int, Int>>, <<Int, Int>>) => Bool;
 a \prec b == \/ a[1] < b[1]
              \/ (a[1] = b[1]) /\ (a[2] < b[2])
 
@@ -109,7 +108,19 @@ a \prec b == \/ a[1] < b[1]
 ***     this ends the comment containg the pluscal code      **********)
 
 \* BEGIN TRANSLATION  (this begins the translation of the PlusCal code)
-VARIABLES num, flag, pc, unchecked, max, nxt
+VARIABLES
+    \* @type: Int -> Int;
+    num,
+    \* @type: Int -> Bool;
+    flag,
+    \* @type: Int -> Str;
+    pc,
+    \* @type: Int -> Set(Int);
+    unchecked,
+    \* @type: Int -> Int;
+    max,
+    \* @type: Int -> Int;
+    nxt
 
 vars == << num, flag, pc, unchecked, max, nxt >>
 
@@ -119,7 +130,7 @@ Init == (* Global variables *)
         /\ num = [i \in Procs |-> 0]
         /\ flag = [i \in Procs |-> FALSE]
         (* Process p *)
-        /\ unchecked = [self \in Procs |-> {} <: {Int}]
+        /\ unchecked = [self \in Procs |-> {}]
         /\ max = [self \in Procs |-> 0]
         /\ nxt = [self \in Procs |-> 1]
         /\ pc = [self \in ProcSet |-> "ncs"]
@@ -139,7 +150,7 @@ e1(self) == /\ pc[self] = "e1"
             /\ UNCHANGED << num, nxt >>
 
 e2(self) == /\ pc[self] = "e2"
-            /\ IF unchecked[self] # ({} <: {Int})
+            /\ IF unchecked[self] # {}
                   THEN /\ \E i \in unchecked[self]:
                             /\ unchecked' = [unchecked EXCEPT ![self] = unchecked[self] \ {i}]
                             /\ IF num[i] > max[self]
@@ -172,10 +183,15 @@ e4(self) == /\ pc[self] = "e4"
             /\ UNCHANGED << num, max, nxt >>
 
 w1(self) == /\ pc[self] = "w1"
-            /\ IF unchecked[self] # ({} <: {Int})
+            /\ IF unchecked[self] # {}
                   THEN /\ \E i \in unchecked[self]:
                             /\ nxt' = [nxt EXCEPT ![self] = i]
                             /\ ~ flag[nxt'[self]]
+            (* open issue: https://github.com/informalsystems/apalache/issues/672  *) 
+                       (*     
+                            nxt' = [nxt EXCEPT ![self] = i]
+                       /\ ~ flag[nxt'[self]]
+                        *)
                        /\ pc' = [pc EXCEPT ![self] = "w2"]
                   ELSE /\ pc' = [pc EXCEPT ![self] = "cs"]
                        /\ nxt' = nxt
@@ -270,172 +286,8 @@ Inv == /\ TypeOK
                    \/ pc[nxt[i]] = "e3"
                 => max[nxt[i]] >= num[i]
              /\ (pc[i] = "cs") => \A j \in Procs \ {i} : Before(i, j)
+             
 
------------------------------------------------------------------------------
-(***************************************************************************)
-(* Proof of Mutual Exclusion                                               *)
-(*                                                                         *)
-(* This is a standard invariance proof, where <1>2 asserts that any step   *)
-(* of the algorithm (including a stuttering step) starting in a state in   *)
-(* which Inv is true leaves Inv true.  Step <1>4 follows easily from       *)
-(* <1>1-<1>3 by simple temporal reasoning, but TLAPS does not yet do any   *)
-(* temporal reasoning.                                                     *)
-(***************************************************************************)
-(*
-THEOREM Spec => []MutualExclusion
-<1> USE N \in Nat DEFS Procs, TypeOK, Before, \prec, ProcSet 
-<1>1. Init => Inv
-  BY DEF Init, Inv
-<1>2. Inv /\ [Next]_vars => Inv'
-  <2> SUFFICES ASSUME Inv,
-                      [Next]_vars
-               PROVE  Inv'
-    OBVIOUS
-  <2>1. ASSUME NEW self \in Procs,
-               ncs(self)
-        PROVE  Inv'
-    BY <2>1 DEF ncs, Inv
-  <2>2. ASSUME NEW self \in Procs,
-               e1(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "e1"
-         /\ UNCHANGED <<num,nxt>>
-      BY <2>2 DEF e1
-    <3>1. CASE /\ flag' = [flag EXCEPT ![self] = ~ flag[self]]
-               /\ pc' = [pc EXCEPT ![self] = "e1"]
-               /\ UNCHANGED <<unchecked, max>>
-      BY <3>1 DEF Inv
-    <3>2. CASE /\ flag' = [flag EXCEPT ![self] = TRUE]
-               /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
-               /\ max' = [max EXCEPT ![self] = 0]
-               /\ pc' = [pc EXCEPT ![self] = "e2"]
-      BY <3>2 DEF Inv
-    <3>. QED  BY <3>1, <3>2, <2>2 DEF e1
-  <2>3. ASSUME NEW self \in Procs,
-               e2(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "e2"
-         /\ UNCHANGED << num, flag, nxt >>
-      BY <2>3 DEF e2
-    <3>1. ASSUME NEW i \in unchecked[self],
-                 unchecked' = [unchecked EXCEPT ![self] = unchecked[self] \ {i}],
-                 num[i] > max[self],
-                 max' = [max EXCEPT ![self] = num[i]],
-                 pc' = [pc EXCEPT ![self] = "e2"]
-          PROVE  Inv'
-       BY <3>1, Z3T(10) DEF Inv
-    <3>2. ASSUME NEW i \in unchecked[self],
-                 unchecked' = [unchecked EXCEPT ![self] = unchecked[self] \ {i}],
-                 ~(num[i] > max[self]),
-                 max' = max,
-                 pc' = [pc EXCEPT ![self] = "e2"]
-          PROVE  Inv'
-       <4>. TypeOK'  BY <3>2 DEF Inv
-\*       <4>0. \A ii \in Procs : (pc'[ii] \in {"ncs", "e1", "e2"}) => (num'[ii] = 0)
-\*         BY <3>2 DEF Inv
-       <4>1. \A ii \in Procs : (pc'[ii] \in {"e4", "w1", "w2", "cs"}) => (num'[ii] # 0)
-         BY <3>2 DEF Inv
-       <4>2. \A ii \in Procs : (pc'[ii] \in {"e2", "e3"}) => flag'[ii]
-         BY <3>2 DEF Inv
-       <4>3. \A ii \in Procs : (pc'[ii] = "w2") => (nxt'[ii] # ii)
-         BY <3>2 DEF Inv
-       <4>4. \A ii \in Procs : pc'[ii] \in {(*"e2",*) "w1", "w2"} => ii \notin unchecked'[ii]
-         BY <3>2 DEF Inv
-       <4>5. \A ii \in Procs : (pc'[ii] \in {"w1", "w2"}) =>
-                   \A j \in (Procs \ unchecked'[ii]) \ {ii} : Before(ii, j)'
-         BY <3>2 DEF Inv
-       <4>6. \A ii \in Procs : 
-                /\ (pc'[ii] = "w2")
-                /\ \/ (pc'[nxt'[ii]] = "e2") /\ (ii \notin unchecked'[nxt'[ii]])
-                   \/ pc'[nxt'[ii]] = "e3"
-                => max'[nxt'[ii]] >= num'[ii]
-         BY <3>2 DEF Inv
-       <4>7. \A ii \in Procs : (pc'[ii] = "cs") => \A j \in Procs \ {ii} : Before(ii, j)'
-         BY <3>2 DEF Inv
-       <4>. QED  BY (*<4>0,*) <4>1, <4>2, <4>3, <4>4, <4>5, <4>6, <4>7 DEF Inv
-    <3>3. CASE /\ unchecked[self] = {}
-               /\ pc' = [pc EXCEPT ![self] = "e3"]
-               /\ UNCHANGED << unchecked, max >>
-       BY <3>3 DEF Inv
-    <3>. QED  BY <3>1, <3>2, <3>3, <2>3 DEF e2
-  <2>4. ASSUME NEW self \in Procs,
-               e3(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "e3"
-         /\ UNCHANGED << flag, unchecked, max, nxt >>
-      BY <2>4 DEF e3
-    <3>1. CASE /\ \E k \in Nat:
-                       num' = [num EXCEPT ![self] = k]
-               /\ pc' = [pc EXCEPT ![self] = "e3"]
-      BY <3>1 DEF Inv
-    <3>2. CASE /\ \E i \in {j \in Nat : j > max[self]}:
-                       num' = [num EXCEPT ![self] = i]
-               /\ pc' = [pc EXCEPT ![self] = "e4"]
-      BY <3>2, Z3 DEF Inv
-    <3>3. QED  BY <3>1, <3>2, <2>4 DEF e3
-  <2>5. ASSUME NEW self \in Procs,
-               e4(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "e4"
-         /\ UNCHANGED << num, max, nxt >>
-      BY <2>5 DEF e4
-    <3>1. CASE /\ flag' = [flag EXCEPT ![self] = ~ flag[self]]
-               /\ pc' = [pc EXCEPT ![self] = "e4"]
-               /\ UNCHANGED unchecked
-      BY <3>1 DEF Inv
-    <3>2. CASE /\ flag' = [flag EXCEPT ![self] = FALSE]
-               /\ unchecked' = [unchecked EXCEPT ![self] = Procs \ {self}]
-               /\ pc' = [pc EXCEPT ![self] = "w1"]
-      BY <3>2 DEF Inv
-    <3>. QED  BY <3>1, <3>2, <2>5 DEF e4
-  <2>6. ASSUME NEW self \in Procs,
-               w1(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "w1"
-         /\ UNCHANGED << num, flag, unchecked, max >>
-      BY <2>6 DEF w1
-    <3>1. CASE /\ unchecked[self] # {}
-               /\ \E i \in unchecked[self]:
-                            nxt' = [nxt EXCEPT ![self] = i]
-               /\ ~ flag[nxt'[self]]
-               /\ pc' = [pc EXCEPT ![self] = "w2"]
-      BY <3>1, Z3 DEF Inv
-    <3>2. CASE /\ unchecked[self] = {}
-               /\ pc' = [pc EXCEPT ![self] = "cs"]
-               /\ nxt' = nxt
-      BY <3>2, Z3 DEF Inv
-    <3>. QED  BY <3>1, <3>2, <2>6 DEF w1
-  <2>7. ASSUME NEW self \in Procs,
-               w2(self)
-        PROVE  Inv'
-    BY <2>7, Z3 DEF w2, Inv
-  <2>8. ASSUME NEW self \in Procs,
-               cs(self)
-        PROVE  Inv'
-    BY <2>8, Z3 DEF cs, Inv
-  <2>9. ASSUME NEW self \in Procs,
-               exit(self)
-        PROVE  Inv'
-    <3>. /\ pc[self] = "exit"
-         /\ UNCHANGED << flag, unchecked, max, nxt >>
-      BY <2>9 DEF exit
-    <3>1. CASE /\ \E k \in Nat:
-                         num' = [num EXCEPT ![self] = k]
-               /\ pc' = [pc EXCEPT ![self] = "exit"]
-      BY <3>1 DEF Inv
-    <3>2. CASE /\ num' = [num EXCEPT ![self] = 0]
-               /\ pc' = [pc EXCEPT ![self] = "ncs"]
-      BY <3>2 DEF Inv
-    <3>. QED  BY <3>1, <3>2, <2>9 DEF exit
-  <2>10. CASE UNCHANGED vars
-    BY <2>10 DEF vars, Inv
-  <2>11. QED
-    BY <2>1, <2>10, <2>2, <2>3, <2>4, <2>5, <2>6, <2>7, <2>8, <2>9 DEF Next, p
-<1>3. Inv => MutualExclusion
-  BY SMT DEF MutualExclusion, Inv
-<1>4. QED
-  BY <1>1, <1>2, <1>3, PTL DEF Spec
-  *)
 ------------------------------------------------------------------------------ 
 Trying(i) == pc[i] = "e1"
 InCS(i)   == pc[i] = "cs"
@@ -470,6 +322,7 @@ ISpec == IInit /\ [][Next]_vars
              
 =============================================================================
 \* Modification History
+\* Last modified Wed Aug 14 13:37:20 CEST 2019 by tthai
 \* Last modified Sun Mar 31 12:25:25 CEST 2019 by igor
 \* Last modified Fri May 25 11:18:47 CEST 2018 by merz
 \* Last modified Sat May 19 16:40:23 CEST 2018 by merz

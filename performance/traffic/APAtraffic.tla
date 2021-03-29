@@ -29,7 +29,13 @@ end process;
 end algorithm;*)
 \* BEGIN TRANSLATION
 \* Process light at line 14 col 1 changed to light_
-VARIABLES at_light, light, pc
+VARIABLES
+    \* @type: Bool;
+    at_light,
+    \* @type: Str;
+    light,
+    \* @type: Str -> Str;
+    pc
 
 vars == << at_light, light, pc >>
 

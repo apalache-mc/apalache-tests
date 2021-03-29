@@ -39,14 +39,17 @@ EXTENDS Integers, \*Naturals,
         FiniteSetTheorems,
         NaturalsInduction,
         SequenceTheorems*)
-
-\* APALACHE-BEGIN
-a <: b == a
-MT == <<Int, STRING>>
-\* APALACHE-END
         
-CONSTANTS N, T, F,
+CONSTANTS
+    \* @type: Int;
+    N,
+    \* @type: Int;
+    T,
+    \* @type: Int;
+    F,
+    \* @type: Set(Int);
     Corr,  \* the correct processes, their identities are not used
+    \* @type: Set(Int);
     Faulty \* the Byzantine processes, their identities are not used
     
 ConstInit4 ==
@@ -55,9 +58,18 @@ ConstInit4 ==
 ConstInit6 ==
     /\ N \in {6} /\ T \in {1} /\ F \in {1} /\ Corr \in {1..5} /\ Faulty \in {{6}}     
 
-VARIABLE pc             (* the control state of each process *)
-VARIABLE rcvd           (* the messages received by each process *)
-VARIABLE sent           (* the messages sent by all correct processes *)
+VARIABLE
+    \* @type: Int -> Str;
+    pc             (* the control state of each process *)
+
+VARIABLE
+    \* @type: Int -> Set(<<Int, Str>>);
+    rcvd           (* the messages received by each process *)
+
+VARIABLE
+    \* @type: Set(<<Int, Str>>);
+    sent           (* the messages sent by all correct processes *)
+
 ASSUME NTF == N \in Nat /\ T \in Nat /\ F \in Nat /\ (N > 3 * T) /\ (T >= F) /\ (F >= 0)
 
 Proc == Corr \cup Faulty         (* all processess, including the faulty ones    *)
@@ -76,9 +88,9 @@ vars == << pc, rcvd, sent >>
    that all correct processes initially have value V0.
  *)
 Init == 
-  /\ sent = {} <: {MT}                          (* No messages sent initially *)
+  /\ sent = {}                          (* No messages sent initially *)
   /\ pc \in [ Corr -> {"V0", "V1"} ]    (* Some processes received INIT messages, some didn't *)
-  /\ rcvd = [ i \in Corr |-> {} <: {MT} ]       (* No messages received initially *)
+  /\ rcvd = [ i \in Corr |-> {} ]       (* No messages received initially *)
         
 (* This formula specifies restricted initial states: all correct processes initially have value V0.
    (This corresponds to the case when no correct process received an INIT message from a broadcaster.)
@@ -232,14 +244,14 @@ Unforg == (\A i \in Corr: (pc[i] /= "AC"))
 IndInv_Unforg_NoBcast ==  
   /\ TypeOK
   \*/\ FCConstraints
-  /\ sent = {} <: {MT}
+  /\ sent = {}
   /\ pc = [ i \in Corr |-> "V0" ]
 
 IndInv_Unforg_NoBcast4 ==  
   /\ ConstInit4
   /\ TypeOK
   \*/\ FCConstraints
-  /\ sent = {} <: {MT}
+  /\ sent = {}
   /\ pc = [ i \in Corr |-> "V0" ]  
 
 
@@ -267,8 +279,8 @@ IndInv_Unforg_NoBcast_TLC ==
   /\ Cardinality( Corr ) >= N - T
   /\ Faulty = Proc \ Corr
   /\ \A i \in Proc : pc[i] /= "AC"
-  /\ sent = {} <: {MT} 
-  /\ rcvd \in [ Proc -> sent \cup SUBSET ByzMsgs ]   
+  /\ sent = {}
+  /\ rcvd \in [ Proc -> SUBSET (sent \cup ByzMsgs) ]   
 
 (* NOT IMPORTANT FOR MODEL CHECKING
 

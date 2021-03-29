@@ -18,7 +18,9 @@
 (***************************************************************************)
 EXTENDS Integers, FiniteSets
 
-CONSTANT RM \* The set of resource managers
+CONSTANT
+    \* @type: Set(Str);
+    RM \* The set of resource managers
 
 (* BMCMT extensions *)
 
@@ -29,17 +31,15 @@ ConstInit7 == RM \in {{"r1", "r2", "r3", "r4", "r5", "r6", "r7"}}
 \*    /\ \E N \in 1..20: RM \in {{ i \in 1..20: i <= N }}
 \*    /\ \E r1, r2 \in RM: r1 /= r2 \* there are at least two elements
 
-a <: b == a \* a type annotation
-
-\* new: a message type
-MT == [type |-> STRING, rm |-> STRING]
-(* END OF BMCMT extensions *)
-
 VARIABLES
+  \* @type: Str -> Str;
   rmState,       \* $rmState[rm]$ is the state of resource manager RM.
+  \* @type: Str;
   tmState,       \* The state of the transaction manager.
+  \* @type: Set(Str);
   tmPrepared,    \* The set of RMs from which the TM has received $"Prepared"$
                  \* messages.
+  \* @type: Set([type: Str, rm: Str]);
   msgs           
     (***********************************************************************)
     (* In the protocol, processes communicate with one another by sending  *)
@@ -69,7 +69,7 @@ Message ==
 
   {[type |-> t, rm |-> r]: t \in {"Prepared"}, r \in RM }
     \cup
-  {([type |-> t] <: MT) : t \in {"Commit", "Abort"} }
+  {[type |-> t] : t \in {"Commit", "Abort"} }
   \*[type : {"Prepared"}, rm : RM]  \cup  [type : {"Commit", "Abort"}]
 
 InitInv ==  
@@ -85,25 +85,25 @@ InitInv ==
   /\ (\E rm \in RM: rmState[rm] = "committed") => tmState = "committed"
   /\ tmState = "committed" => /\ tmPrepared = RM
                             /\ \A rm \in RM: rmState[rm] \notin {"working", "aborted"}
-                            /\ ([type |-> "Commit"] <: MT) \in msgs
-  /\ tmState = "aborted" => ([type |-> "Abort"] <: MT) \in msgs
+                            /\ [type |-> "Commit"] \in msgs
+  /\ tmState = "aborted" => [type |-> "Abort"] \in msgs
   /\ \A rm \in RM:
     /\ rm \in tmPrepared =>
       /\ rmState[rm] /= "working"
-      /\ ([type |-> "Prepared", rm |-> rm] <: MT) \in msgs
+      /\ [type |-> "Prepared", rm |-> rm] \in msgs
     /\ rmState[rm] = "working" => [type |-> "Prepared", rm |-> rm] \notin msgs
     /\ [type |-> "Prepared", rm |-> rm] \in msgs => rmState[rm] /= "working" 
     /\ rmState[rm] = "aborted" =>
-      \/ ([type |-> "Abort"] <: MT) \in msgs
-      \/ ([type |-> "Prepared", rm |-> rm] <: MT) \notin msgs
-  /\ ([type |-> "Abort"] <: MT) \in msgs =>
+      \/ [type |-> "Abort"] \in msgs
+      \/ [type |-> "Prepared", rm |-> rm] \notin msgs
+  /\ [type |-> "Abort"] \in msgs =>
     \* it is either the TM or an RM who was in the "working" state
     \/ tmState = "aborted"
     \/ \E rm \in RM:
       /\rmState[rm] = "aborted"
       /\ rm \notin tmPrepared
-      /\ ([type |-> "Prepared", rm |-> rm] <: MT) \notin msgs                 
-  /\ ([type |-> "Commit"] <: MT) \in msgs =>
+      /\ [type |-> "Prepared", rm |-> rm] \notin msgs                 
+  /\ [type |-> "Commit"] \in msgs =>
     /\ tmPrepared = RM
     /\ \/ tmState = "committed"
        \/ \E rm \in RM: rmState[rm] = "committed"                     
@@ -126,8 +126,8 @@ Init ==
   (*************************************************************************)
   /\ rmState = [rm \in RM |-> "working"]
   /\ tmState = "init"
-  /\ tmPrepared   = {} <: {STRING}
-  /\ msgs = ({} <: {MT})
+  /\ tmPrepared   = {}
+  /\ msgs = {}
 -----------------------------------------------------------------------------
 (***************************************************************************)
 (* We now define the actions that may be performed by the processes, first *)
@@ -150,7 +150,7 @@ TMCommit ==
   /\ tmState = "init"
   /\ tmPrepared = RM
   /\ tmState' = "committed"
-  /\ msgs' = msgs \cup {[type |-> "Commit"] <: MT}
+  /\ msgs' = msgs \cup {[type |-> "Commit"]}
   /\ UNCHANGED <<rmState, tmPrepared>>
 
 TMAbort ==
@@ -159,7 +159,7 @@ TMAbort ==
   (*************************************************************************)
   /\ tmState = "init"
   /\ tmState' = "aborted"
-  /\ msgs' = msgs \cup {[type |-> "Abort"] <: MT}
+  /\ msgs' = msgs \cup {[type |-> "Abort"]}
   /\ UNCHANGED <<rmState, tmPrepared>>
 
 RMPrepare(rm) == 
@@ -184,7 +184,7 @@ RMRcvCommitMsg(rm) ==
   (*************************************************************************)
   (* Resource manager $rm$ is told by the TM to commit.                    *)
   (*************************************************************************)
-  /\ ([type |-> "Commit"] <: MT) \in msgs
+  /\ [type |-> "Commit"] \in msgs
   /\ rmState' = [rmState EXCEPT ![rm] = "committed"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
@@ -192,7 +192,7 @@ RMRcvAbortMsg(rm) ==
   (*************************************************************************)
   (* Resource manager $rm$ is told by the TM to abort.                     *)
   (*************************************************************************)
-  /\ ([type |-> "Abort"] <: MT) \in msgs
+  /\ [type |-> "Abort"] \in msgs
   /\ rmState' = [rmState EXCEPT ![rm] = "aborted"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
@@ -228,25 +228,25 @@ Inv ==
     /\ (\E rm \in RM: rmState[rm] = "committed") => tmState = "committed"
     /\ tmState = "committed" => /\ tmPrepared = RM
                                 /\ \A rm \in RM: rmState[rm] \notin {"working", "aborted"}
-                                /\ ([type |-> "Commit"] <: MT) \in msgs
-    /\ tmState = "aborted" => ([type |-> "Abort"] <: MT) \in msgs
+                                /\ [type |-> "Commit"] \in msgs
+    /\ tmState = "aborted" => [type |-> "Abort"] \in msgs
     /\ \A rm \in RM:
       /\ rm \in tmPrepared =>
         /\ rmState[rm] /= "working"
-        /\ ([type |-> "Prepared", rm |-> rm] <: MT) \in msgs
+        /\ [type |-> "Prepared", rm |-> rm] \in msgs
       /\ rmState[rm] = "working" => [type |-> "Prepared", rm |-> rm] \notin msgs
       /\ [type |-> "Prepared", rm |-> rm] \in msgs => rmState[rm] /= "working" 
       /\ rmState[rm] = "aborted" =>
-        \/ ([type |-> "Abort"] <: MT) \in msgs
-        \/ ([type |-> "Prepared", rm |-> rm] <: MT) \notin msgs
-    /\ ([type |-> "Abort"] <: MT) \in msgs =>
+        \/ [type |-> "Abort"] \in msgs
+        \/ [type |-> "Prepared", rm |-> rm] \notin msgs
+    /\ [type |-> "Abort"] \in msgs =>
         \* it is either the TM or an RM who was in the "working" state
         \/ tmState = "aborted"
         \/ \E rm \in RM:
           /\rmState[rm] = "aborted"
           /\ rm \notin tmPrepared
-          /\ ([type |-> "Prepared", rm |-> rm] <: MT) \notin msgs                 
-    /\ ([type |-> "Commit"] <: MT) \in msgs =>
+          /\ [type |-> "Prepared", rm |-> rm] \notin msgs                 
+    /\ [type |-> "Commit"] \in msgs =>
         /\ tmPrepared = RM
         /\ \/ tmState = "committed"
            \/ \E rm \in RM: rmState[rm] = "committed"                     
