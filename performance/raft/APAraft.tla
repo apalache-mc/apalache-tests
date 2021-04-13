@@ -58,7 +58,16 @@ MessageType == {RequestVoteRequest, RequestVoteResponse, AppendEntriesRequest, A
 \* to another. TLAPS doesn't support the Bags module, so this is a function
 \* mapping Message to Nat.
 VARIABLE
-    \* @type: [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
+    (*
+       @typeAlias: ENTRY = [term: Int, value: Str];
+       @typeAlias: MESSAGE = [
+         mtype: Str, mterm: Int, mlastLogTerm: Int,
+         mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool,
+         mlog: Seq(ENTRY), mprevLogIndex: Int, mprevLogTerm: Int,
+         mentries: Seq(ENTRY), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int
+       ];
+       @type: MESSAGE -> Int;
+     *)
     messages
 
 
@@ -69,7 +78,15 @@ VARIABLE
 \* successful elections (see BecomeLeader).
 
 VARIABLE
-    \* @type: Set([eterm: Int, eleader: Str, elog: Seq([eterm: Int, value: Str]), evotes: Set(Str), evoterLog: Str -> Seq([term: Int, value: Str])]);
+    (*
+       @typeAlias: EENTRY = [eterm: Int, value: Str];
+       @typeAlias: ELECTION = [
+         eterm: Int, eleader: Str, elog: Seq(EENTRY),
+         evotes: Set(Str),
+         evoterLog: (Str -> Seq(ENTRY))
+       ];
+       @type: Set(ELECTION);
+     *)
     elections
 
 \* A history variable used in the proof. This would not be present in an
@@ -77,7 +94,7 @@ VARIABLE
 \* Keeps track of every log ever in the system (set of logs).
 
 VARIABLE
-    \* @type: Set(Seq([eterm: Int, value: Str]));
+    \* @type: Set(Seq(EENTRY));
     allLogs
 ----
 \* The following variables are all per server (functions with domain Server).
@@ -102,7 +119,7 @@ serverVars == <<currentTerm, state, votedFor>>
 \* log entry. Unfortunately, the Sequence module defines Head(s) as the entry
 \* with index 1, so be careful not to use that!
 VARIABLE
-    \* @type: Str -> Seq([eterm: Int, value: Str]);
+    \* @type: Str -> Seq(EENTRY);
     log
 \* The index of the latest entry in the log the state machine may apply.
 VARIABLE
@@ -126,7 +143,7 @@ VARIABLE
 \* Function from each server that voted for this candidate in its currentTerm
 \* to that voter's log.
 VARIABLE
-    \* @type: Str -> (Str -> Seq([term: Int, value: Str]));
+    \* @type: Str -> (Str -> Seq(ENTRY));
     voterLog
 candidateVars == <<votesResponded, votesGranted, voterLog>>
 
@@ -162,7 +179,7 @@ LastTerm(xlog) == IF Len(xlog) = 0 THEN 0 ELSE xlog[Len(xlog)].term
 
 \* Helper for Send and Reply. Given a message m and bag of messages, return a
 \* new bag of messages with one more m in it.
-\* @type: ([ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ], [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int) => [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
+\* @type: (MESSAGE, MESSAGE -> Int) => MESSAGE -> Int ;
 WithMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] + 1]
@@ -173,7 +190,7 @@ WithMessage(m, msgs) ==
 \* a new bag of messages with one less m in it.
 \*
 \* A monster annotation. TODO: we need type aliases.
-\* @type: ([ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ], [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int) => [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] -> Int ;
+\* @type: (MESSAGE, MESSAGE -> Int) => MESSAGE -> Int ;
 WithoutMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] - 1]
@@ -343,7 +360,7 @@ AdvanceCommitIndex(i) ==
 
 \* Server i receives a RequestVote request from server j with
 \* m.mterm <= currentTerm[i].
-\* @type: (Str, Str, [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ]) => Bool;
+\* @type: (Str, Str, MESSAGE) => Bool;
 HandleRequestVoteRequest(i, j, m) ==
     LET logOk == \/ m.mlastLogTerm > LastTerm(log[i])
                  \/ /\ m.mlastLogTerm = LastTerm(log[i])
@@ -387,7 +404,7 @@ HandleRequestVoteResponse(i, j, m) ==
 \* m.mterm <= currentTerm[i]. This just handles m.entries of length 0 or 1, but
 \* implementations could safely accept more by treating them the same as
 \* multiple independent requests of 1 entry.
-\* @type: (Str, Str, [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ]) => Bool;
+\* @type: (Str, Str, MESSAGE) => Bool;
 HandleAppendEntriesRequest(i, j, m) ==
     LET logOk == \/ m.mprevLogIndex = 0
                  \/ /\ m.mprevLogIndex > 0
@@ -484,7 +501,7 @@ DropStaleResponse(i, j, m) ==
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Receive a message.
-\* @type: [ mtype: Str, mterm: Int, mlastLogTerm: Int, mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool, mlog: Seq([term: Int, value: Str]), mprevLogIndex: Int, mprevLogTerm: Int, mentries: Seq([term: Int, value: Str]), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int ] => Bool;
+\* @type: MESSAGE => Bool;
 Receive(m) ==
     LET i == m.mdest
         j == m.msource
