@@ -53,7 +53,20 @@ no  |  filename                          |  tool      |  timeout  |  init       
 7      |  apalache  |  NoError    |  3s           |  0         |  224MB      |  1               |  7               |  260        |  1.0K         |  5.0
 8      |  apalache  |  NoError    |  6s           |  1         |  311MB      |  1               |  7               |  4.0K       |  23K          |  13
 
-## 4. Detailed results: 001indinv-apalache-0.7.0.csv
+## 4. Detailed results: 001indinv-apalache-0.15.13-SNAPSHOT.csv
+
+01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
+-------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
+1      |  apalache  |  NoError    |  10s          |  0         |  344MB      |  0               |  0               |  61         |  43           |  8.0
+2      |  apalache  |  NoError    |  35s          |  0         |  625MB      |  0               |  0               |  14K        |  36K          |  17
+3      |  apalache  |  NoError    |  8s           |  0         |  256MB      |  0               |  0               |  214        |  298          |  12
+4      |  apalache  |  NoError    |  11s          |  0         |  307MB      |  0               |  0               |  3.0K       |  13K          |  18
+5      |  apalache  |  NoError    |  8s           |  0         |  238MB      |  0               |  0               |  74         |  90           |  10
+6      |  apalache  |  NoError    |  8s           |  0         |  246MB      |  0               |  0               |  614        |  1.0K         |  16
+7      |  apalache  |  NoError    |  9s           |  0         |  267MB      |  0               |  0               |  27         |  74           |  4.0
+8      |  apalache  |  NoError    |  10s          |  0         |  364MB      |  0               |  0               |  3.0K       |  9.0K         |  18
+
+## 5. Detailed results: 001indinv-apalache-0.7.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
@@ -66,7 +79,7 @@ no  |  filename                          |  tool      |  timeout  |  init       
 7      |  apalache  |  NoError    |  4s           |  0         |  299MB      |  0               |  0               |  364        |  2.0K         |  6.0
 8      |  apalache  |  NoError    |  7s           |  1         |  329MB      |  0               |  0               |  4.0K       |  23K          |  13
 
-## 5. Detailed results: 001indinv-apalache-0.6.0.csv
+## 6. Detailed results: 001indinv-apalache-0.6.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
@@ -79,7 +92,7 @@ no  |  filename                          |  tool      |  timeout  |  init       
 7      |  apalache  |  NoError    |  4s           |  0         |  296MB      |  0               |  0               |  364        |  2.0K         |  6.0
 8      |  apalache  |  NoError    |  7s           |  1         |  327MB      |  0               |  0               |  4.0K       |  23K          |  13
 
-## 6. Detailed results: 001indinv-apalache-0.9.0.csv
+## 7. Detailed results: 001indinv-apalache-0.9.0.csv
 
 01:no  |  02:tool   |  03:status  |  04:time_sec  |  05:depth  |  05:mem_kb  |  10:ninit_trans  |  11:ninit_trans  |  12:ncells  |  13:nclauses  |  14:navg_clause_len
 -------|------------|-------------|---------------|------------|-------------|------------------|------------------|-------------|---------------|--------------------
