@@ -17,6 +17,8 @@ import os
 import re
 import sys
 
+from pathlib import Path
+
 time_re = re.compile(r"elapsed_sec: (\d+)(|\.\d+) maxresident_kb: (\d+)")
 timeout_re = re.compile(r"Command exited with non-zero status 124")
 apalache_outcome_re = re.compile(r"The outcome is:\s*(.*)")
@@ -103,9 +105,20 @@ def parse_time(ed):
     return entry
 
 
+def get_experiment_log(ed: dict, fname: str) -> Path:
+    glob_pattern = "*/" + fname
+    out_dir = Path(ed["path"]) / "_apalache-out"
+    try:
+        return next(out_dir.glob(glob_pattern))
+    except StopIteration:
+        raise RuntimeError(
+            f"Failed to find log file {fname} in experiment directory {out_dir}"
+        )
+
+
 def parse_apalache(ed):
     entry = {"05:depth": 0, "10:ninit_trans": 0, "11:ninit_trans": 0}
-    with open(os.path.join(ed["path"], "detailed.log"), "r") as lf:
+    with get_experiment_log(ed, "detailed.log").open("r") as lf:
         line = lf.readline()
         while line:
             m = apalache_outcome_re.search(line)
@@ -123,7 +136,7 @@ def parse_apalache(ed):
 
     prof_rule_re = re.compile(r"^(\w+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)")
     ncells, nclauses, nclause_prod = 0, 0, 0
-    with open(os.path.join(ed["path"], "profile-rules.txt"), "r") as pf:
+    with get_experiment_log(ed, "profile-rules.txt").open("r") as pf:
         line = pf.readline()
         while line:
             m = prof_rule_re.match(line)
