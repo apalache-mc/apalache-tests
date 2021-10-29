@@ -13,6 +13,7 @@ on:
     # Automatically prepare a minor version release every Saturday
     # See https://crontab.guru/#0_0_*_*_6
     - cron: "0 0 * * 6"
+  pull_request:
 
 env:
   VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
