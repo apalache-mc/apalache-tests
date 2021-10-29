@@ -79,7 +79,7 @@ def tool_cmd(args, ini_params, exp_dir, tla_filename, csv_row):
     ctime = "%s -f 'elapsed_sec: %%e maxresident_kb: %%M' -o time.out" % os_cmds["time"]
     ctimeout = "%s --foreground %s" % (os_cmds["timeout"], csv_row["timeout"])
     if tool == "apalache":
-        return "%s %s %s/bin/apalache-mc check %s %s %s %s %s %s | tee apalache.out" % (
+        return "%s %s %s/bin/apalache-mc check --profiling=true %s %s %s %s %s %s | tee apalache.out" % (
             ctime,
             ctimeout,
             args.apalacheDir,
