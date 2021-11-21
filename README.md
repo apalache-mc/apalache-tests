@@ -38,8 +38,8 @@ New benchmarks are run automatically from the `unstable` branch of [Apalache][]
 every Saturday.
 
 You can manually trigger the benchmarks to run for a specific released version
-(or from `unstable`) by selecting "Run workflow" from the [Run Benchmarks
-action][gh-action].
+(or from `unstable` by specifying the version as `unreleased`) by selecting "Run
+workflow" from the [Run Benchmarks action][gh-action].
 
 [gh-action]: https://github.com/informalsystems/apalache-tests/actions?query=workflow%3A%22Run+Benchmarks%22
 

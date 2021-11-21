@@ -26,7 +26,7 @@ make report strat=s ................: generate the report from all results of ru
 where
 
 	s is one of $(strategies)
-	v is >= 0.7.3
+	v is >= 0.7.3 or "unreleased" (to run against the head of the unstable branch)
 endef
 export helpmsg
 
