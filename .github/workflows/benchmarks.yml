@@ -58,13 +58,13 @@ jobs:
 
       - name: run benchmarks
         run: |
-          if [[ "${{ env.strategy }}" == "all" ]]
+          if [[ "${{ env.STRATEGY }}" == "all" ]]
           then
             while read strat; do
               make run strat=$strat version="${{ env.version }}"
             done < STRATEGIES
           else
-            make run strat="${{ env.strategy }}" version="${{ env.version }}"
+            make run strat="010encoding" version="${{ env.version }}"
           fi
       - name: open PR with report
         run: |
