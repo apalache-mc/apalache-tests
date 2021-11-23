@@ -8,6 +8,10 @@ on:
         description: "Version to benchmark (set to 'unreleased' to benchmark the unstable branch)"
         required: false
         default: "unreleased"
+      exp_strategy:
+        description: "Limit the benchmark runs to just the given strategy (see the STRATEGIES file for supported strategies)"
+        required: false
+        default: "all"
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Automatically prepare a minor version release every Saturday
@@ -17,6 +21,7 @@ on:
 
 env:
   VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
+  STRATEGY: ${{ github.event.inputs.exp_strategy || 'all' }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -53,10 +58,14 @@ jobs:
 
       - name: run benchmarks
         run: |
-          while read strat; do
-            make run strat=$strat version="${{ env.version }}"
-          done < STRATEGIES
-
+          if [[ "${{ env.strategy }}" == "all" ]]
+          then
+            while read strat; do
+              make run strat=$strat version="${{ env.version }}"
+            done < STRATEGIES
+          else
+            make run strat="${{ env.strategy }}" version="${{ env.version }}"
+          fi
       - name: open PR with report
         run: |
           git config --global user.name "$GITHUB_ACTOR"
