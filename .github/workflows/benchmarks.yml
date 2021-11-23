@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: checkout benchmarks repo
         uses: actions/checkout@v2
+        with:
+          # Fetch a non-shallow copy of repo to prevent "shallow update not
+          # allowed" errors
+          # See https://stackoverflow.com/a/62293647/1187277
+          fetch-depth: 0
 
       - name: set up java
         uses: actions/setup-java@v1

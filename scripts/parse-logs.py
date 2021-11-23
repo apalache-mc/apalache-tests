@@ -106,10 +106,9 @@ def parse_time(ed):
 
 
 def get_experiment_log(ed: dict, fname: str) -> Path:
-    glob_pattern = "*/" + fname
-    out_dir = Path(ed["path"]) / "_apalache-out"
+    out_dir = Path(ed["path"]) / "out"
     try:
-        return next(out_dir.glob(glob_pattern))
+        return Path(out_dir) / fname
     except StopIteration:
         raise RuntimeError(
             f"Failed to find log file {fname} in experiment directory {out_dir}"
