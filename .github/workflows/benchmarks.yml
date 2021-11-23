@@ -9,9 +9,9 @@ on:
         required: false
         default: "unreleased"
       exp_strategy:
-        description: "Limit the benchmark runs to just the given strategy (see the STRATEGIES file for supported strategies)"
+        description: "Limit the benchmark runs to just the given strategy -- leave blank to run all strategies (see the STRATEGIES file for supported strategies)"
         required: false
-        default: "all"
+        default: ""
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Automatically prepare a minor version release every Saturday
@@ -21,7 +21,7 @@ on:
 
 env:
   VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
-  STRATEGY: ${{ github.event.inputs.exp_strategy || 'all' }}
+  STRATEGY: ${{ github.event.inputs.exp_strategy }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -58,13 +58,13 @@ jobs:
 
       - name: run benchmarks
         run: |
-          if [[ "${{ env.STRATEGY }}" == "all" ]]
+          if [[ -n "${{ env.STRATEGY }}" ]]
           then
+            make run strat="${{ env.STRATEGY }}" version="${{ env.version }}"
+          else
             while read strat; do
               make run strat=$strat version="${{ env.version }}"
             done < STRATEGIES
-          else
-            make run strat="010encoding" version="${{ env.version }}"
           fi
       - name: open PR with report
         run: |
