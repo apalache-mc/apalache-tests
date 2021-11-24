@@ -1,0 +1,21 @@
+no,filename,tool,timeout,init,inv,next,args
+1,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=1 --cinit=CInit1
+2,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=2 --cinit=CInit2
+3,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=3 --cinit=CInit3
+4,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=4 --cinit=CInit4
+5,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=5 --cinit=CInit5
+6,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=6 --cinit=CInit6
+7,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=7 --cinit=CInit7
+8,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=8 --cinit=CInit8
+9,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=9 --cinit=CInit9
+10,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=oopsla19 --length=10 --cinit=CInit10
+11,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=1 --cinit=CInit1
+12,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=2 --cinit=CInit2
+13,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=3 --cinit=CInit3
+14,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=4 --cinit=CInit4
+15,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=5 --cinit=CInit5
+16,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=6 --cinit=CInit6
+17,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=7 --cinit=CInit7
+18,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=8 --cinit=CInit8
+19,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=9 --cinit=CInit9
+20,array-encoding/SetAdd.tla,apalache,5m,Init,Inv,Next,--smt-encoding=arrays --length=10 --cinit=CInit10
