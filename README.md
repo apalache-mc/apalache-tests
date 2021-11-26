@@ -41,6 +41,11 @@ You can manually trigger the benchmarks to run for a specific released version
 (or from `unstable` by specifying the version as `unreleased`) by selecting "Run
 workflow" from the [Run Benchmarks action][gh-action].
 
+You can also specify a strategy to run. Valid strategies are listed in the
+[./STRATEGIES](./STRATEGIES) and [./ENCODING_STRATEGIES](./ENCODING_STRATEGIES)
+files. Additionally, you can supply the string `arrays-encoding` to run all
+strategies focused on benchmarking the experimental array-based SMT encoding.
+
 [gh-action]: https://github.com/informalsystems/apalache-tests/actions?query=workflow%3A%22Run+Benchmarks%22
 
 ### Running the benchmarks locally
@@ -63,7 +68,7 @@ workflow" from the [Run Benchmarks action][gh-action].
 
 - [time](https://www.gnu.org/software/time/)
 
-#### Running the benchmarks
+#### Running the benchmarks locally
 
 For instructions on how to run benchmarks and generate the reports, run
 
