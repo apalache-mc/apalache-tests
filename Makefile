@@ -11,6 +11,14 @@ RUN_DIR=$(BASEDIR)/runs
 # Where we save results
 RES_DIR=$(BASEDIR)/results
 
+# Files generated for arrays encoding experiments
+ARRAYS_ENCODING_FILES :=  \
+	$(BASEDIR)/performance/array-encoding/Constants.tla \
+	$(BASEDIR)/performance/010encoding+SetAdd-apalache.csv \
+	$(BASEDIR)/performance/011encoding+SetAddDel-apalache.csv \
+	$(BASEDIR)/performance/012encoding+SetSndRcv-apalache.csv \
+	$(BASEDIR)/performance/013encoding+SetSndRcv_NoFullDrop-apalache.csv
+
 # Supported strategies (used in the help)
 strategies != cat ./STRATEGIES
 
@@ -55,7 +63,7 @@ $(RES_DIR)/$(strat)-report.md: $(RES_DIR)/$(strat)-apalache-$(version).csv | ver
 .PHONY: benchmark
 benchmark: $(RES_DIR)/$(strat)-apalache-$(version).csv | verify-vars 
 
-result-deps := $(APALACHE_DIR)/apalache-$(version)
+result-deps := $(APALACHE_DIR)/apalache-$(version) $(ARRAYS_ENCODING_FILES)
 dir-deps := $(APALACHE_DIR) $(RUN_DIR) $(RES_DIR)
 
 # Generate and then run all the experiments for the given strat and version
@@ -66,6 +74,12 @@ $(RES_DIR)/$(strat)-apalache-$(version).csv: $(result-deps) | verify-vars $(dir-
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
+
+.PHONY: arrays-encoding
+arrays-encoding: $(ARRAYS_ENCODING_FILES)
+
+$(ARRAYS_ENCODING_FILES): scripts/mk-encoding.py
+	scripts/mk-encoding.py $@ > $@
 
 # invoke as `make apalache version=0.9.0`
 .PHONY: apalache

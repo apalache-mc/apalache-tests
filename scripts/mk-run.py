@@ -209,6 +209,7 @@ if __name__ == "__main__":
         reader = csv.DictReader(csvfile, dialect=dialect)
         scripts = []
         for (row_num, row) in enumerate(reader):
+            print(">>>", row)
             single_script = setup_experiment(args, ini_params, row_num + 1, row)
             scripts.append(single_script)
 
