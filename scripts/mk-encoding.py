@@ -19,7 +19,7 @@ def generate_params(args: Namespace) -> None:
 
 # Mazimize size of experiments to measure
 # reflected in set cardinality
-MAX_EXPERIMENT_SIZE = 30
+MAX_EXPERIMENT_SIZE = 15
 EXPERIMENT_CARDINALITIES = list(range(0, MAX_EXPERIMENT_SIZE + 1, 2))
 
 CONSTANT_MODULE_FMT = """
