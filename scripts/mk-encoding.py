@@ -12,11 +12,6 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 
-# TODO:
-# - [x] Generate params file
-# - [x] Generate const file
-# - [ ] Multitarget make rule
-
 
 def generate_params(args: Namespace) -> None:
     print("params", args.strategy)
