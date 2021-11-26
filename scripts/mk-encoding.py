@@ -55,7 +55,7 @@ def csv_row(index: int, size: int, path: Path, encoding: str):
         str(index),
         str(path),
         "apalache",
-        "20m",
+        "2h",
         "Init",
         "Inv",
         "Next",
