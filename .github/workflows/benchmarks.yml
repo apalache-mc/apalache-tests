@@ -9,7 +9,7 @@ on:
         required: false
         default: "unreleased"
       exp_strategy:
-        description: "Limit the benchmark runs to just the given strategy -- leave blank to run all strategies (see the STRATEGIES file for supported strategies)"
+        description: "Limit the benchmark runs to just the given strategy -- leave blank to run all default strategies (run with `arrays-encoding` or see the *STRATEGIES file for supported strategies)"
         required: false
         default: ""
   schedule:
@@ -60,7 +60,12 @@ jobs:
         run: |
           if [[ -n "${{ env.STRATEGY }}" ]]
           then
-            make run strat="${{ env.STRATEGY }}" version="${{ env.version }}"
+            if [[ "${{ env.STRATEGY }}" == "arrays-encoding" ]]
+            then
+              make arrays-encoding version="${{ env.version }}"
+            else
+              make run strat="${{ env.STRATEGY }}" version="${{ env.version }}"
+            fi
           else
             while read strat; do
               make run strat=$strat version="${{ env.version }}"
