@@ -198,7 +198,7 @@ if __name__ == "__main__":
                 ini_params = ini[section_name]
 
     with open(args.config, "r") as csvfile:
-        sample = csvfile.read(1024)
+        sample = csvfile.readline()
         sniffer = csv.Sniffer()
         if not sniffer.has_header(sample):
             print("The input CSV file does not have a header")

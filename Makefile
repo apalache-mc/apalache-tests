@@ -11,8 +11,7 @@ RUN_DIR=$(BASEDIR)/runs
 # Where we save results
 RES_DIR=$(BASEDIR)/results
 
-# Supported strategies (used in the help)
-strategies != cat ./STRATEGIES
+ENCODING_STRATEGIES != cat ./ENCODING_STRATEGIES
 
 define helpmsg
 Usage:
@@ -25,7 +24,7 @@ make report strat=s ................: generate the report from all results of ru
 
 where
 
-	s is one of $(strategies)
+	s is one of $(shell cat ./STRATEGIES ./ENCODING_STRATEGIES)
 	v is >= 0.7.3 or "unreleased" (to run against the head of the unstable branch)
 endef
 export helpmsg
@@ -35,7 +34,7 @@ help:
 	@echo "$$helpmsg"
 
 .PHONY: run
-run: | verify-vars benchmark report
+run: | verify-vars arrays-encoding-files benchmark report
 
 .PHONY: report
 report: $(RES_DIR)/$(strat)-report.md | strat-is-defined
@@ -66,6 +65,25 @@ $(RES_DIR)/$(strat)-apalache-$(version).csv: $(result-deps) | verify-vars $(dir-
 	(cd $(RUN_DIR)/$($@_NAME) && ./run-parallel.sh && \
 		$(BASEDIR)/scripts/parse-logs.py . && \
 		cp results.csv $(RES_DIR)/$($@_NAME).csv)
+
+# Files generated for arrays encoding experiments
+ARRAYS_ENCODING_FILES :=  \
+	$(BASEDIR)/performance/array-encoding/Constants.tla \
+	$(BASEDIR)/performance/010encoding+SetAdd-apalache.csv \
+	$(BASEDIR)/performance/011encoding+SetAddDel-apalache.csv \
+	$(BASEDIR)/performance/012encoding+SetSndRcv-apalache.csv \
+	$(BASEDIR)/performance/013encoding+SetSndRcv_NoFullDrop-apalache.csv
+
+.PHONY: arrays-encoding
+arrays-encoding: $(ARRAYS_ENCODING_FILES)
+	$(foreach s,$(ENCODING_STRATEGIES), make --jobs=1 run strat=$(s) version=$(version);)
+
+
+.PHONY: arrays-encoding-files
+arrays-encoding-files: $(ARRAYS_ENCODING_FILES)
+
+$(ARRAYS_ENCODING_FILES): scripts/mk-encoding.py
+	scripts/mk-encoding.py $@ > $@
 
 # invoke as `make apalache version=0.9.0`
 .PHONY: apalache
