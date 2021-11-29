@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 matplotlib = "*"
 csvtomd = "*"
+pillow = ">=8.3.2"
 
 [dev-packages]
 
