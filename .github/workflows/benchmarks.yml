@@ -75,7 +75,7 @@ jobs:
         run: |
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email "github@actions.ci"
-          git checkout -b "report/${{ env.version }}"
+          git checkout -b "report/${{ env.STRATEGY }}${{ env.version }}"
           git add results
           commit_msg="Add reports from v${{ env.version }}"
           git commit -m "$commit_msg"
