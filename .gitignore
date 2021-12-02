@@ -3,10 +3,3 @@ runs
 
 # This used in CI
 _VERSION
-
-# Generated files
-performance/010encoding+SetAdd-apalache.csv
-performance/011encoding+SetAddDel-apalache.csv
-performance/012encoding+SetSndRcv-apalache.csv
-performance/013encoding+SetSndRcv_NoFullDrop-apalache.csv
-performance/array-encoding/Constants.tla
