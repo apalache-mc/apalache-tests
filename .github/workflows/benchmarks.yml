@@ -21,7 +21,9 @@ on:
 
 env:
   VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
-  STRATEGY: ${{ github.event.inputs.exp_strategy }}
+  # FIXME: TMP
+  # STRATEGY: ${{ github.event.inputs.exp_strategy }}
+  STRATEGY: "012encoding+SetSndRcv"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
