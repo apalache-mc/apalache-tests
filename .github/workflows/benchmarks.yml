@@ -21,7 +21,9 @@ on:
 
 env:
   VERSION: ${{ github.event.inputs.release_version || 'unreleased' }}
-  STRATEGY: ${{ github.event.inputs.exp_strategy }}
+  # FIXME: TMP
+  # STRATEGY: ${{ github.event.inputs.exp_strategy }}
+  STRATEGY: "012encoding+SetSndRcv"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -77,6 +79,8 @@ jobs:
           git config --global user.email "github@actions.ci"
           git checkout -b "report/${{ env.STRATEGY }}${{ env.version }}"
           git add results
+          # FIXME: TMP
+          git add runs
           commit_msg="Add reports from v${{ env.version }}"
           git commit -m "$commit_msg"
           hub pull-request --push \
