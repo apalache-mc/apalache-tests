@@ -1,0 +1,41 @@
+@!@!@STARTMSG 2262:0 @!@!@
+Created by Apalache on Thu Dec 02 20:06:24 UTC 2021
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2110:1 @!@!@
+Invariant is violated.
+@!@!@ENDMSG 2110 @!@!@
+@!@!@STARTMSG 2121:1 @!@!@
+The behavior up to this point is:
+@!@!@ENDMSG 2121 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ Values = { 0, 1, 2, 3, 4, 5, 6 }
+/\ medium = {}
+/\ receiver = {}
+/\ sender = { 0, 1, 2, 3, 4, 5, 6 }
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Next>
+/\ Values = { 0, 1, 2, 3, 4, 5, 6 }
+/\ medium = {1}
+/\ receiver = {}
+/\ sender = { 0, 2, 3, 4, 5, 6 }
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Next>
+/\ Values = { 0, 1, 2, 3, 4, 5, 6 }
+/\ medium = {5}
+/\ receiver = {}
+/\ sender = {}
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Next>
+/\ Values = { 0, 1, 2, 3, 4, 5, 6 }
+/\ medium = {}
+/\ receiver = {}
+/\ sender = {}
+
+@!@!@ENDMSG 2217 @!@!@

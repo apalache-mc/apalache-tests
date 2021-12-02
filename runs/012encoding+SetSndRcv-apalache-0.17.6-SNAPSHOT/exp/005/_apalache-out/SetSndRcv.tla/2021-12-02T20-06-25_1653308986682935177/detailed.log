@@ -1,0 +1,139 @@
+20:06:25.305 [main] INFO  a.f.a.t.Tool$ - Checker options: filename=SetSndRcv.tla, init=Init, next=Next, inv=Inv
+20:06:25.308 [main] INFO  a.f.a.t.Tool$ - Tuning: 
+20:06:25.311 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+20:06:25.903 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+20:06:25.903 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+20:06:25.904 [main] INFO  a.f.a.t.t.p.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+20:06:26.239 [main] INFO  a.f.a.t.t.p.EtcTypeCheckerPassImpl -  > Your types are great!
+20:06:26.240 [main] INFO  a.f.a.t.t.p.EtcTypeCheckerPassImpl -  > All expressions are typed
+20:06:26.242 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat [OK]
+20:06:26.243 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #2: ConfigurationPass
+20:06:26.249 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > SetSndRcv.cfg: Loading TLC configuration
+20:06:26.260 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > No TLC configuration found. Skipping.
+20:06:26.260 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the initialization predicate to Init
+20:06:26.263 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the constant initialization predicate to CInit8
+20:06:26.263 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the transition predicate to Next
+20:06:26.264 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set an invariant to Inv
+20:06:26.271 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #2: ConfigurationPass [OK]
+20:06:26.272 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #3: DesugarerPass
+20:06:26.272 [main] INFO  a.f.a.t.p.p.DesugarerPassImpl -   > Desugaring...
+20:06:26.298 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #3: DesugarerPass [OK]
+20:06:26.299 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #4: UnrollPass
+20:06:26.332 [main] INFO  a.f.a.t.p.p.UnrollPassImpl -   > Unroller
+20:06:26.347 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #4: UnrollPass [OK]
+20:06:26.347 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #5: InlinePass
+20:06:26.356 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > InlinerOfUserOper
+20:06:26.363 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > Wrap
+20:06:26.365 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > CallByNameOperatorEmbedder
+20:06:26.367 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > LetInExpander
+20:06:26.370 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > Unwrap
+20:06:26.371 [main] INFO  a.f.a.t.p.p.InlinePassImpl -   > InlinerOfUserOper
+20:06:26.379 [main] INFO  a.f.a.t.p.p.InlinePassImpl - Leaving only relevant operators: CInit8, CInit8Primed, Init, InitPrimed, Inv, Next
+20:06:26.382 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #5: InlinePass [OK]
+20:06:26.383 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #6: PrimingPass
+20:06:26.385 [main] INFO  a.f.a.t.a.p.PrimingPassImpl -   > Introducing CInit8Primed for CInit8'
+20:06:26.385 [main] INFO  a.f.a.t.a.p.PrimingPassImpl -   > Introducing InitPrimed for Init'
+20:06:26.386 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #6: PrimingPass [OK]
+20:06:26.387 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #7: VCGen
+20:06:26.388 [main] INFO  a.f.a.t.b.p.VCGenPassImpl -   > Producing verification conditions from the invariant Inv
+20:06:26.396 [main] INFO  a.f.a.t.b.VCGenerator -   > VCGen produced 1 verification condition(s)
+20:06:26.398 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #7: VCGen [OK]
+20:06:26.398 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #8: PreprocessingPass
+20:06:26.398 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Before preprocessing: unique renaming
+20:06:26.406 [main] INFO  a.f.a.t.p.p.PreproPassImpl -  > Applying standard transformations:
+20:06:26.407 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > PrimePropagation
+20:06:26.409 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Desugarer
+20:06:26.410 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > UniqueRenamer
+20:06:26.418 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Normalizer
+20:06:26.423 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Keramelizer
+20:06:26.430 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > After preprocessing: UniqueRenamer
+20:06:26.441 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #8: PreprocessingPass [OK]
+20:06:26.442 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #9: TransitionFinderPass
+20:06:26.470 [main] INFO  a.f.a.t.a.p.TransitionPassImpl -   > Found 1 initializing transitions
+20:06:26.483 [main] INFO  a.f.a.t.a.p.TransitionPassImpl -   > Found 3 transitions
+20:06:26.483 [main] INFO  a.f.a.t.a.p.TransitionPassImpl -   > Found constant initializer CInit8
+20:06:26.484 [main] INFO  a.f.a.t.a.p.TransitionPassImpl -   > Applying unique renaming
+20:06:26.490 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #9: TransitionFinderPass [OK]
+20:06:26.491 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #10: OptimizationPass
+20:06:26.497 [main] INFO  a.f.a.t.p.p.OptPassImpl -  > Applying optimizations:
+20:06:26.497 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ConstSimplifier
+20:06:26.502 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ExprOptimizer
+20:06:26.505 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ConstSimplifier
+20:06:26.507 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #10: OptimizationPass [OK]
+20:06:26.507 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #11: AnalysisPass
+20:06:26.511 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -  > Marking skolemizable existentials and sets to be expanded...
+20:06:26.512 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Skolemization
+20:06:26.513 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Expansion
+20:06:26.516 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Remove unused let-in defs
+20:06:26.520 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -  > Running analyzers...
+20:06:26.525 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Introduced expression grades
+20:06:26.525 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Introduced 2 formula hints
+20:06:26.525 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #11: AnalysisPass [OK]
+20:06:26.526 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #12: PostTypeCheckerSnowcat
+20:06:26.526 [main] INFO  a.f.a.t.b.p.PostTypeCheckerPassImpl -  > Running Snowcat .::.
+20:06:26.697 [main] INFO  a.f.a.t.b.p.PostTypeCheckerPassImpl -  > Your types are great!
+20:06:26.697 [main] INFO  a.f.a.t.b.p.PostTypeCheckerPassImpl -  > All expressions are typed
+20:06:26.697 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #12: PostTypeCheckerSnowcat [OK]
+20:06:26.697 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #13: BoundedChecker
+20:06:27.126 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Initializing CONSTANTS
+20:06:27.177 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #0, transition #0
+20:06:27.181 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.254 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 0: Transition #0. Is it enabled?
+20:06:27.257 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 0: Transition #0 is enabled
+20:06:27.258 [main] INFO  a.f.a.t.b.SeqModelChecker - State 0: Checking 1 state invariants
+20:06:27.266 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 0: Checking state invariant 0
+20:06:27.287 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 0: picking a transition out of 1 transition(s)
+20:06:27.299 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #0
+20:06:27.299 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.408 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #0. Is it enabled?
+20:06:27.410 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #0 is enabled
+20:06:27.411 [main] INFO  a.f.a.t.b.SeqModelChecker - State 1: Checking 1 state invariants
+20:06:27.411 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 1: Checking state invariant 0
+20:06:27.415 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #1
+20:06:27.415 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.419 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 1 produces partial assignment. Disabled.
+20:06:27.419 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #2
+20:06:27.419 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.432 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 2 produces partial assignment. Disabled.
+20:06:27.432 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 1: picking a transition out of 1 transition(s)
+20:06:27.441 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #0
+20:06:27.441 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.497 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #0. Is it enabled?
+20:06:27.498 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #0 is enabled
+20:06:27.499 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: Checking 1 state invariants
+20:06:27.499 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 2: Checking state invariant 0
+20:06:27.510 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #1
+20:06:27.510 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.527 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #1. Is it enabled?
+20:06:27.528 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #1 is enabled
+20:06:27.528 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: Checking 1 state invariants
+20:06:27.536 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 2: Checking state invariant 0
+20:06:27.540 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #2
+20:06:27.540 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.550 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #2. Is it enabled?
+20:06:27.558 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #2 is enabled
+20:06:27.558 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: Checking 1 state invariants
+20:06:27.558 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 2: Checking state invariant 0
+20:06:27.561 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 2: picking a transition out of 3 transition(s)
+20:06:27.596 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #0
+20:06:27.596 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.632 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #0. Is it enabled?
+20:06:27.639 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #0 is enabled
+20:06:27.645 [main] INFO  a.f.a.t.b.SeqModelChecker - State 3: Checking 1 state invariants
+20:06:27.645 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 3: Checking state invariant 0
+20:06:27.648 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #1
+20:06:27.649 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT...
+20:06:27.675 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #1. Is it enabled?
+20:06:27.680 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #1 is enabled
+20:06:27.681 [main] INFO  a.f.a.t.b.SeqModelChecker - State 3: Checking 1 state invariants
+20:06:27.684 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 3: Checking state invariant 0
+20:06:28.402 [main] ERROR a.f.a.t.b.SeqModelChecker - State 3: state invariant 0 violated. Check the counterexample in: 
+  /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/005/_apalache-out/SetSndRcv.tla/2021-12-02T20-06-25_1653308986682935177/counterexample1.tla
+  /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/005/_apalache-out/SetSndRcv.tla/2021-12-02T20-06-25_1653308986682935177/MC1.out
+  /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/005/_apalache-out/SetSndRcv.tla/2021-12-02T20-06-25_1653308986682935177/counterexample1.json
+20:06:28.419 [main] INFO  a.f.a.t.b.SeqModelChecker - Found 1 error(s)
+20:06:28.431 [main] INFO  a.f.a.t.b.p.BoundedCheckerPassImpl - The outcome is: Error
+20:06:28.432 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #13: BoundedChecker [FAIL]
+20:06:28.433 [main] INFO  a.f.a.t.Tool$ - Checker has found an error
+20:06:28.437 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  3 sec
+20:06:28.439 [main] INFO  a.f.a.t.Tool$ - Total time: 3.778 sec

@@ -1,0 +1,145 @@
+# Tool home: /home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT
+# Package:   /home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT/mod-distribution/target/apalache-pkg-0.17.6-SNAPSHOT-full.jar
+# JVM args:  -Xmx4096m -DTLA-Library=/home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT/src/tla
+#
+# APALACHE version 0.17.6-SNAPSHOT build v0.17.5-48-g94720b6
+#
+# WARNING: This tool is in the experimental stage.
+#          Please report bugs at: [https://github.com/informalsystems/apalache/issues]
+# 
+# Usage statistics is OFF. We care about your privacy.
+# If you want to help our project, consider enabling statistics with config --enable-stats=true.
+
+Output directory: /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/016/_apalache-out/SetSndRcv.tla/2021-12-02T20-07-06_992725349801562065
+Checker options: filename=SetSndRcv.tla, init=Init, next=Next, inv=Inv I@20:07:06.284
+Tuning:                                                           I@20:07:06.288
+PASS #0: SanyParser                                               I@20:07:06.292
+Parsing file /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/016/SetSndRcv.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/016/Constants.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/Sequences.tla
+PASS #1: TypeCheckerSnowcat                                       I@20:07:07.420
+ > Running Snowcat .::.                                           I@20:07:07.421
+ > Your types are great!                                          I@20:07:08.042
+ > All expressions are typed                                      I@20:07:08.043
+PASS #2: ConfigurationPass                                        I@20:07:08.054
+  > SetSndRcv.cfg: Loading TLC configuration                      I@20:07:08.057
+  > No TLC configuration found. Skipping.                         I@20:07:08.068
+  > Set the initialization predicate to Init                      I@20:07:08.076
+  > Set the constant initialization predicate to CInit14          I@20:07:08.077
+  > Set the transition predicate to Next                          I@20:07:08.077
+  > Set an invariant to Inv                                       I@20:07:08.078
+PASS #3: DesugarerPass                                            I@20:07:08.088
+  > Desugaring...                                                 I@20:07:08.092
+PASS #4: UnrollPass                                               I@20:07:08.125
+  > Unroller                                                      I@20:07:08.181
+PASS #5: InlinePass                                               I@20:07:08.205
+  > InlinerOfUserOper                                             I@20:07:08.216
+  > Wrap                                                          I@20:07:08.229
+  > CallByNameOperatorEmbedder                                    I@20:07:08.233
+  > LetInExpander                                                 I@20:07:08.236
+  > Unwrap                                                        I@20:07:08.242
+  > InlinerOfUserOper                                             I@20:07:08.244
+Leaving only relevant operators: CInit14, CInit14Primed, Init, InitPrimed, Inv, Next I@20:07:08.262
+PASS #6: PrimingPass                                              I@20:07:08.267
+  > Introducing CInit14Primed for CInit14'                        I@20:07:08.270
+  > Introducing InitPrimed for Init'                              I@20:07:08.271
+PASS #7: VCGen                                                    I@20:07:08.279
+  > Producing verification conditions from the invariant Inv      I@20:07:08.282
+  > VCGen produced 1 verification condition(s)                    I@20:07:08.292
+PASS #8: PreprocessingPass                                        I@20:07:08.299
+  > Before preprocessing: unique renaming                         I@20:07:08.299
+ > Applying standard transformations:                             I@20:07:08.310
+  > PrimePropagation                                              I@20:07:08.316
+  > Desugarer                                                     I@20:07:08.318
+  > UniqueRenamer                                                 I@20:07:08.320
+  > Normalizer                                                    I@20:07:08.336
+  > Keramelizer                                                   I@20:07:08.343
+  > After preprocessing: UniqueRenamer                            I@20:07:08.360
+PASS #9: TransitionFinderPass                                     I@20:07:08.391
+  > Found 1 initializing transitions                              I@20:07:08.445
+  > Found 3 transitions                                           I@20:07:08.488
+  > Found constant initializer CInit14                            I@20:07:08.488
+  > Applying unique renaming                                      I@20:07:08.498
+PASS #10: OptimizationPass                                        I@20:07:08.513
+ > Applying optimizations:                                        I@20:07:08.528
+  > ConstSimplifier                                               I@20:07:08.531
+  > ExprOptimizer                                                 I@20:07:08.548
+  > ConstSimplifier                                               I@20:07:08.552
+PASS #11: AnalysisPass                                            I@20:07:08.556
+ > Marking skolemizable existentials and sets to be expanded...   I@20:07:08.561
+  > Skolemization                                                 I@20:07:08.564
+  > Expansion                                                     I@20:07:08.565
+  > Remove unused let-in defs                                     I@20:07:08.576
+ > Running analyzers...                                           I@20:07:08.582
+  > Introduced expression grades                                  I@20:07:08.590
+  > Introduced 2 formula hints                                    I@20:07:08.590
+PASS #12: PostTypeCheckerSnowcat                                  I@20:07:08.591
+ > Running Snowcat .::.                                           I@20:07:08.592
+ > Your types are great!                                          I@20:07:08.949
+ > All expressions are typed                                      I@20:07:08.950
+PASS #13: BoundedChecker                                          I@20:07:08.951
+State 0: Checking 1 state invariants                              I@20:07:09.514
+Step 0: picking a transition out of 1 transition(s)               I@20:07:09.542
+State 1: Checking 1 state invariants                              I@20:07:09.750
+Step 1: picking a transition out of 1 transition(s)               I@20:07:09.794
+State 2: Checking 1 state invariants                              I@20:07:09.855
+State 2: Checking 1 state invariants                              I@20:07:09.901
+State 2: Checking 1 state invariants                              I@20:07:09.928
+Step 2: picking a transition out of 3 transition(s)               I@20:07:09.934
+State 3: Checking 1 state invariants                              I@20:07:10.069
+State 3: Checking 1 state invariants                              I@20:07:10.090
+State 3: Checking 1 state invariants                              I@20:07:10.105
+Step 3: picking a transition out of 3 transition(s)               I@20:07:10.114
+State 4: Checking 1 state invariants                              I@20:07:10.177
+State 4: Checking 1 state invariants                              I@20:07:10.210
+State 4: Checking 1 state invariants                              I@20:07:10.235
+Step 4: picking a transition out of 3 transition(s)               I@20:07:10.240
+State 5: Checking 1 state invariants                              I@20:07:10.301
+State 5: Checking 1 state invariants                              I@20:07:10.324
+State 5: Checking 1 state invariants                              I@20:07:10.356
+Step 5: picking a transition out of 3 transition(s)               I@20:07:10.379
+State 6: Checking 1 state invariants                              I@20:07:10.464
+State 6: Checking 1 state invariants                              I@20:07:10.494
+State 6: Checking 1 state invariants                              I@20:07:10.566
+Step 6: picking a transition out of 3 transition(s)               I@20:07:10.569
+State 7: Checking 1 state invariants                              I@20:07:10.602
+State 7: Checking 1 state invariants                              I@20:07:10.614
+State 7: Checking 1 state invariants                              I@20:07:10.809
+Step 7: picking a transition out of 3 transition(s)               I@20:07:10.814
+State 8: Checking 1 state invariants                              I@20:07:10.876
+State 8: Checking 1 state invariants                              I@20:07:10.902
+State 8: Checking 1 state invariants                              I@20:07:11.480
+Step 8: picking a transition out of 3 transition(s)               I@20:07:11.499
+State 9: Checking 1 state invariants                              I@20:07:11.572
+State 9: Checking 1 state invariants                              I@20:07:11.587
+State 9: Checking 1 state invariants                              I@20:07:14.508
+Step 9: picking a transition out of 3 transition(s)               I@20:07:14.513
+State 10: Checking 1 state invariants                             I@20:07:14.581
+State 10: Checking 1 state invariants                             I@20:07:14.591
+State 10: Checking 1 state invariants                             I@20:07:19.524
+Step 10: picking a transition out of 3 transition(s)              I@20:07:19.528
+State 11: Checking 1 state invariants                             I@20:07:19.596
+State 11: Checking 1 state invariants                             I@20:07:19.625
+State 11: Checking 1 state invariants                             I@20:07:25.120
+Step 11: picking a transition out of 3 transition(s)              I@20:07:25.123
+State 12: Checking 1 state invariants                             I@20:07:25.155
+State 12: Checking 1 state invariants                             I@20:07:25.167
+State 12: Checking 1 state invariants                             I@20:08:33.657
+Step 12: picking a transition out of 3 transition(s)              I@20:08:33.660
+State 13: Checking 1 state invariants                             I@20:08:33.689
+State 13: Checking 1 state invariants                             I@20:08:33.719
+State 13: Checking 1 state invariants                             I@20:09:03.742
+Step 13: picking a transition out of 3 transition(s)              I@20:09:03.745
+State 14: Checking 1 state invariants                             I@20:09:03.772
+State 14: Checking 1 state invariants                             I@20:09:03.784
+State 14: Checking 1 state invariants                             I@20:10:37.656
+Step 14: picking a transition out of 3 transition(s)              I@20:10:37.660
+The outcome is: NoError                                           I@20:10:37.693
+PASS #14: Terminal                                                I@20:10:37.694
+Checker reports no error up to computation length 14              I@20:10:37.694
+It took me 0 days  0 hours  3 min 32 sec                          I@20:10:37.696
+Total time: 212.53 sec                                            I@20:10:37.696
+EXITCODE: OK
+EXITCODE=0

@@ -1,0 +1,1 @@
+ check --profiling=true --run-dir=./out --init=Init --next=Next --inv=Inv --smt-encoding=oopsla19 --length=2 --cinit=CInit2 SetSndRcv.tla

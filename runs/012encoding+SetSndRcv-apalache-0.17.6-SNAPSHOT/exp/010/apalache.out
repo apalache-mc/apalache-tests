@@ -1,0 +1,96 @@
+# Tool home: /home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT
+# Package:   /home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT/mod-distribution/target/apalache-pkg-0.17.6-SNAPSHOT-full.jar
+# JVM args:  -Xmx4096m -DTLA-Library=/home/runner/work/apalache-tests/apalache-tests/_apalache/apalache-0.17.6-SNAPSHOT/src/tla
+#
+# APALACHE version 0.17.6-SNAPSHOT build v0.17.5-48-g94720b6
+#
+# WARNING: This tool is in the experimental stage.
+#          Please report bugs at: [https://github.com/informalsystems/apalache/issues]
+# 
+# Usage statistics is OFF. We care about your privacy.
+# If you want to help our project, consider enabling statistics with config --enable-stats=true.
+
+Output directory: /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/010/_apalache-out/SetSndRcv.tla/2021-12-02T20-06-41_8212535445596112509
+Checker options: filename=SetSndRcv.tla, init=Init, next=Next, inv=Inv I@20:06:41.391
+Tuning:                                                           I@20:06:41.396
+PASS #0: SanyParser                                               I@20:06:41.401
+Parsing file /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/010/SetSndRcv.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /home/runner/work/apalache-tests/apalache-tests/runs/012encoding+SetSndRcv-apalache-0.17.6-SNAPSHOT/exp/010/Constants.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/Sequences.tla
+PASS #1: TypeCheckerSnowcat                                       I@20:06:42.124
+ > Running Snowcat .::.                                           I@20:06:42.124
+ > Your types are great!                                          I@20:06:42.552
+ > All expressions are typed                                      I@20:06:42.552
+PASS #2: ConfigurationPass                                        I@20:06:42.557
+  > SetSndRcv.cfg: Loading TLC configuration                      I@20:06:42.560
+  > No TLC configuration found. Skipping.                         I@20:06:42.567
+  > Set the initialization predicate to Init                      I@20:06:42.568
+  > Set the constant initialization predicate to CInit2           I@20:06:42.569
+  > Set the transition predicate to Next                          I@20:06:42.569
+  > Set an invariant to Inv                                       I@20:06:42.570
+PASS #3: DesugarerPass                                            I@20:06:42.585
+  > Desugaring...                                                 I@20:06:42.585
+PASS #4: UnrollPass                                               I@20:06:42.618
+  > Unroller                                                      I@20:06:42.676
+PASS #5: InlinePass                                               I@20:06:42.699
+  > InlinerOfUserOper                                             I@20:06:42.703
+  > Wrap                                                          I@20:06:42.713
+  > CallByNameOperatorEmbedder                                    I@20:06:42.717
+  > LetInExpander                                                 I@20:06:42.727
+  > Unwrap                                                        I@20:06:42.729
+  > InlinerOfUserOper                                             I@20:06:42.731
+Leaving only relevant operators: CInit2, CInit2Primed, Init, InitPrimed, Inv, Next I@20:06:42.741
+PASS #6: PrimingPass                                              I@20:06:42.745
+  > Introducing CInit2Primed for CInit2'                          I@20:06:42.756
+  > Introducing InitPrimed for Init'                              I@20:06:42.757
+PASS #7: VCGen                                                    I@20:06:42.759
+  > Producing verification conditions from the invariant Inv      I@20:06:42.762
+  > VCGen produced 1 verification condition(s)                    I@20:06:42.779
+PASS #8: PreprocessingPass                                        I@20:06:42.780
+  > Before preprocessing: unique renaming                         I@20:06:42.781
+ > Applying standard transformations:                             I@20:06:42.797
+  > PrimePropagation                                              I@20:06:42.798
+  > Desugarer                                                     I@20:06:42.809
+  > UniqueRenamer                                                 I@20:06:42.811
+  > Normalizer                                                    I@20:06:42.818
+  > Keramelizer                                                   I@20:06:42.832
+  > After preprocessing: UniqueRenamer                            I@20:06:42.863
+PASS #9: TransitionFinderPass                                     I@20:06:42.887
+  > Found 1 initializing transitions                              I@20:06:42.924
+  > Found 3 transitions                                           I@20:06:42.944
+  > Found constant initializer CInit2                             I@20:06:42.944
+  > Applying unique renaming                                      I@20:06:42.947
+PASS #10: OptimizationPass                                        I@20:06:42.957
+ > Applying optimizations:                                        I@20:06:42.963
+  > ConstSimplifier                                               I@20:06:42.966
+  > ExprOptimizer                                                 I@20:06:42.979
+  > ConstSimplifier                                               I@20:06:42.984
+PASS #11: AnalysisPass                                            I@20:06:42.989
+ > Marking skolemizable existentials and sets to be expanded...   I@20:06:42.993
+  > Skolemization                                                 I@20:06:42.994
+  > Expansion                                                     I@20:06:43.004
+  > Remove unused let-in defs                                     I@20:06:43.007
+ > Running analyzers...                                           I@20:06:43.010
+  > Introduced expression grades                                  I@20:06:43.022
+  > Introduced 2 formula hints                                    I@20:06:43.023
+PASS #12: PostTypeCheckerSnowcat                                  I@20:06:43.024
+ > Running Snowcat .::.                                           I@20:06:43.024
+ > Your types are great!                                          I@20:06:43.298
+ > All expressions are typed                                      I@20:06:43.299
+PASS #13: BoundedChecker                                          I@20:06:43.300
+State 0: Checking 1 state invariants                              I@20:06:43.839
+Step 0: picking a transition out of 1 transition(s)               I@20:06:43.854
+State 1: Checking 1 state invariants                              I@20:06:43.946
+Step 1: picking a transition out of 1 transition(s)               I@20:06:43.994
+State 2: Checking 1 state invariants                              I@20:06:44.008
+State 2: Checking 1 state invariants                              I@20:06:44.021
+State 2: Checking 1 state invariants                              I@20:06:44.054
+Step 2: picking a transition out of 3 transition(s)               I@20:06:44.063
+The outcome is: NoError                                           I@20:06:44.147
+PASS #14: Terminal                                                I@20:06:44.149
+Checker reports no error up to computation length 2               I@20:06:44.149
+It took me 0 days  0 hours  0 min  3 sec                          I@20:06:44.159
+Total time: 3.490 sec                                             I@20:06:44.159
+EXITCODE: OK

@@ -1,0 +1,788 @@
+{
+  "name": "ApalacheIR",
+  "version": "1.0",
+  "description": "https://apalache.informal.systems/docs/adr/005adr-json.html",
+  "modules": [
+    {
+      "kind": "TlaModule",
+      "name": "counterexample",
+      "declarations": [
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "ConstInit",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Untyped",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "Values"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "State0",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Untyped",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "Values"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "medium"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "receiver"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "sender"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "State1",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Untyped",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "Values"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "medium"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "receiver"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "sender"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "State2",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Untyped",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "Values"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "medium"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "receiver"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "sender"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "State3",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Untyped",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "Values"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 2
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 3
+                        }
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 4
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "medium"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "receiver"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Untyped",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Untyped",
+                    "kind": "NameEx",
+                    "name": "sender"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Untyped",
+          "kind": "TlaOperDecl",
+          "name": "InvariantViolation",
+          "formalParams": [
+            
+          ],
+          "isRecursive": false,
+          "body": {
+            "type": "Bool",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Bool",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Set(Int)",
+                    "kind": "NameEx",
+                    "name": "sender"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Bool",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Set(Int)",
+                    "kind": "NameEx",
+                    "name": "medium"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Bool",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Set(Int)",
+                    "kind": "NameEx",
+                    "name": "receiver"
+                  },
+                  {
+                    "type": "Set(Int)",
+                    "kind": "OperEx",
+                    "oper": "SET_ENUM",
+                    "args": [
+                      
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

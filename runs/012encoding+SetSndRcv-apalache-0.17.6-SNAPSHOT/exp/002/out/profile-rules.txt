@@ -1,0 +1,16 @@
+Rule profiling statistics
+--------------------------------------------------------------------------------
+                name     calls     cells smt-consts smt-asserts smt-avg-size
+--------------------------------------------------------------------------------
+SubstRule                   44         0         0         0         0
+EqRuleWithArrays            21        21         0        21         5
+SetCtorRule                 20        20         0         3         3
+AssignmentRule              16         0         0         0         0
+AndRule                     12        12         0        12         5
+SetInRuleWithArrays          7         0         0         0         0
+NegRule                      7         7         0         7         4
+QuantRule                    6        13         0        20        13
+SetCupRule                   3         3         0         4         7
+SetFilterRule                3         3         0         7        12
+BuiltinConstRule             1         0         0         0         0
+IntDotDotRule                1         4         0         4         4
