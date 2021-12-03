@@ -1,0 +1,17 @@
+no,filename,tool,timeout,init,inv,next,args
+1,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=0 --cinit=CInit0
+2,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=2 --cinit=CInit2
+3,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=4 --cinit=CInit4
+4,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=6 --cinit=CInit6
+5,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=8 --cinit=CInit8
+6,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=10 --cinit=CInit10
+7,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=12 --cinit=CInit12
+8,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=arrays --length=14 --cinit=CInit14
+9,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=0 --cinit=CInit0
+10,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=2 --cinit=CInit2
+11,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=4 --cinit=CInit4
+12,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=6 --cinit=CInit6
+13,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=8 --cinit=CInit8
+14,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=10 --cinit=CInit10
+15,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=12 --cinit=CInit12
+16,array-encoding/SetAdd.tla,apalache,2h,Init,Inv,Next,--smt-encoding=oopsla19 --length=14 --cinit=CInit14

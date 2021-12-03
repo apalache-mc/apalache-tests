@@ -86,7 +86,7 @@ def generate_csv(path: Path) -> None:
         csv_row(idx, size, exp_path, encoding)
         for idx, size, encoding in idx_size_encoding
     ]
-    csv.writer(sys.stdout).writerows(exps)
+    csv.writer(sys.stdout, lineterminator="\n").writerows(exps)
 
 
 def generate_file_content(path: Path) -> None:
