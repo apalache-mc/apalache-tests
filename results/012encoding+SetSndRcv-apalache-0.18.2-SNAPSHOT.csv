@@ -1,0 +1,17 @@
+01:no,02:tool,03:status,04:time_sec,05:depth,05:mem_kb,10:ninit_trans,11:ninit_trans,12:ncells,13:nclauses,14:navg_clause_len
+1,apalache,NoError,4,0,200660,0,0,12,7,5
+2,apalache,NoError,4,0,203132,0,0,83,78,8
+3,apalache,NoError,5,0,201044,0,0,207,220,10
+4,apalache,NoError,8,0,206256,0,0,355,410,11
+5,apalache,NoError,31,0,263016,0,0,527,648,11
+6,apalache,NoError,287,0,257852,0,0,723,934,12
+7,apalache,NoError,4511,0,343508,0,0,943,1268,12
+8,apalache,Timeout,7200,0,3756,0,0,1166,1622,12
+9,apalache,NoError,5,0,199772,0,0,13,11,6
+10,apalache,NoError,6,0,196624,0,0,93,103,8
+11,apalache,NoError,6,0,201252,0,0,235,281,10
+12,apalache,NoError,6,0,200416,0,0,401,507,11
+13,apalache,NoError,7,0,237280,0,0,591,781,12
+14,apalache,NoError,15,0,244460,0,0,805,1103,13
+15,apalache,NoError,53,0,239388,0,0,1043,1473,13
+16,apalache,NoError,267,0,262552,0,0,1305,1891,14
