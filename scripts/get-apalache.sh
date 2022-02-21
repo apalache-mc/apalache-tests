@@ -28,6 +28,7 @@ then
     git clone https://github.com/informalsystems/apalache.git
     cd apalache
     make package
+    mkdir -p "${ROOT}/_apalache"
     version=$(./script/get-version.sh)
     mv "target/universal/apalache-${version}" "${ROOT}/_apalache/apalache-${version}"
 
