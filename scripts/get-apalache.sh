@@ -29,7 +29,7 @@ then
     cd apalache
     make package
     version=$(./script/get-version.sh)
-    mv "target/universal/apalache-${version}" "${ROOT}/_apalache/"
+    mv "target/universal/apalache-${version}" "${ROOT}/_apalache/apalache-${version}"
 
     # Save the version for use in CI
     echo "${version}" > "${ROOT}/_VERSION"
