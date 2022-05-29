@@ -12,11 +12,11 @@ on:
         description: "Limit the benchmark runs to just the given strategy -- leave blank to run all default strategies (run with `arrays-encoding` or see the *STRATEGIES file for supported strategies)"
         required: false
         default: ""
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    # Automatically prepare a minor version release every Saturday
-    # See https://crontab.guru/#0_0_*_*_6
-    - cron: "0 0 * * 6"
+  # schedule:
+  # * is a special character in YAML so you have to quote this string
+  # Automatically prepare a minor version release every Saturday
+  # See https://crontab.guru/#0_0_*_*_6
+  # - cron: "0 0 * * 6"
   pull_request:
 
 env:
