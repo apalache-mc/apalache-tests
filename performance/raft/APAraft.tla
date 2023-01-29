@@ -398,7 +398,7 @@ HandleRequestVoteResponse(i, j, m) ==
        \/ /\ ~m.mvoteGranted
           /\ UNCHANGED <<votesGranted, voterLog>>
     /\ Discard(m)
-    /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, votedFor, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
+    /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Server i receives an AppendEntries request from server j with
 \* m.mterm <= currentTerm[i]. This just handles m.entries of length 0 or 1, but
@@ -451,7 +451,7 @@ HandleAppendEntriesRequest(i, j, m) ==
                                  msource         |-> i,
                                  mdest           |-> j],
                                  m)
-                       /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log, commitIndex>> \*logVars>>
+                       /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log>> \*logVars>>
                    \/ \* conflict: remove 1 entry
                        /\ m.mentries /= << >>
                        /\ Len(log[i]) >= index
