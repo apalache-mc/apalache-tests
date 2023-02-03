@@ -5,7 +5,7 @@
 \* This work is licensed under the Creative Commons Attribution-4.0
 \* International License https://creativecommons.org/licenses/by/4.0/
 
-EXTENDS (*Naturals*) Integers, FiniteSets, Sequences, TLC
+EXTENDS (*Naturals*) Integers, FiniteSets, Sequences, TLC, Variants
 
 \* The set of server IDs
 \*CONSTANTS Server
@@ -41,16 +41,6 @@ Leader == "Leader"
 \*CONSTANTS Nil
 Nil == "Nil"
 
-\* Message types:
-\*CONSTANTS RequestVoteRequest, RequestVoteResponse,
-\*          AppendEntriesRequest, AppendEntriesResponse
-RequestVoteRequest == "RVReq"
-RequestVoteResponse == "RVRes"
-AppendEntriesRequest == "AEReq"
-AppendEntriesResponse == "AERes"
-
-MessageType == {RequestVoteRequest, RequestVoteResponse, AppendEntriesRequest, AppendEntriesResponse}
-
 ----
 \* Global variables
 
@@ -58,17 +48,46 @@ MessageType == {RequestVoteRequest, RequestVoteResponse, AppendEntriesRequest, A
 \* to another. TLAPS doesn't support the Bags module, so this is a function
 \* mapping Message to Nat.
 VARIABLE
+    \* @typeAlias: entry = { term: Int, value: Str };
+    \* Message types:
+    \* CONSTANTS RequestVoteRequest, RequestVoteResponse,
+    \*           AppendEntriesRequest, AppendEntriesResponse
     (*
-       @typeAlias: ENTRY = [term: Int, value: Str];
-       @typeAlias: MESSAGE = [
-         mtype: Str, mterm: Int, mlastLogTerm: Int,
-         mlastLogIndex: Int, msource: Str, mdest: Str, mvoteGranted: Bool,
-         mlog: Seq(ENTRY), mprevLogIndex: Int, mprevLogTerm: Int,
-         mentries: Seq(ENTRY), mcommitIndex: Int, msuccess: Bool, mmatchIndex: Int
-       ];
-       @type: MESSAGE -> Int;
+       @typeAlias: requestVoteRequest = {
+         mterm: Int, mlastLogTerm: Int,
+         mlastLogIndex: Int, msource: Str, mdest: Str
+       };
+       @typeAlias: requestVoteResponse = {
+         mterm: Int, msource: Str, mdest: Str,
+         mvoteGranted: Bool, mlog: Seq($entry)
+       };
+       @typeAlias: appendEntriesRequest = {
+         mterm: Int, msource: Str, mdest: Str,
+         mlog: Seq($entry), mprevLogIndex: Int, mprevLogTerm: Int,
+         mentries: Seq($entry), mcommitIndex: Int
+       };
+       @typeAlias: appendEntriesResponse = {
+         mterm: Int, msource: Str, mdest: Str, msuccess: Bool, mmatchIndex: Int
+       };
+       @typeAlias: message = RequestVoteRequest($requestVoteRequest) |
+                             RequestVoteResponse($requestVoteResponse) |
+                             AppendEntriesRequest($appendEntriesRequest) |
+                             AppendEntriesResponse($appendEntriesResponse);
+       @type: $message -> Int;
      *)
     messages
+
+\* @type: $requestVoteRequest => $message;
+RequestVoteRequest(m) == Variant("RequestVoteRequest", m)
+
+\* @type: $requestVoteResponse => $message;
+RequestVoteResponse(m) == Variant("RequestVoteResponse", m)
+
+\* @type: $appendEntriesRequest => $message;
+AppendEntriesRequest(m) == Variant("AppendEntriesRequest", m)
+
+\* @type: $appendEntriesResponse => $message;
+AppendEntriesResponse(m) == Variant("AppendEntriesResponse", m)
 
 
 \* A history variable used in the proof. This would not be present in an
@@ -79,13 +98,12 @@ VARIABLE
 
 VARIABLE
     (*
-       @typeAlias: EENTRY = [eterm: Int, value: Str];
-       @typeAlias: ELECTION = [
-         eterm: Int, eleader: Str, elog: Seq(EENTRY),
+       @typeAlias: election = {
+         eterm: Int, eleader: Str, elog: Seq($entry),
          evotes: Set(Str),
-         evoterLog: (Str -> Seq(ENTRY))
-       ];
-       @type: Set(ELECTION);
+         evoterLog: (Str -> Seq($entry))
+       };
+       @type: Set($election);
      *)
     elections
 
@@ -94,7 +112,7 @@ VARIABLE
 \* Keeps track of every log ever in the system (set of logs).
 
 VARIABLE
-    \* @type: Set(Seq(EENTRY));
+    \* @type: Set(Seq($entry));
     allLogs
 ----
 \* The following variables are all per server (functions with domain Server).
@@ -119,7 +137,7 @@ serverVars == <<currentTerm, state, votedFor>>
 \* log entry. Unfortunately, the Sequence module defines Head(s) as the entry
 \* with index 1, so be careful not to use that!
 VARIABLE
-    \* @type: Str -> Seq(EENTRY);
+    \* @type: Str -> Seq($entry);
     log
 \* The index of the latest entry in the log the state machine may apply.
 VARIABLE
@@ -143,7 +161,7 @@ VARIABLE
 \* Function from each server that voted for this candidate in its currentTerm
 \* to that voter's log.
 VARIABLE
-    \* @type: Str -> (Str -> Seq(ENTRY));
+    \* @type: Str -> (Str -> Seq($entry));
     voterLog
 candidateVars == <<votesResponded, votesGranted, voterLog>>
 
@@ -174,12 +192,12 @@ vars == <<messages, allLogs, (* serverVars *) currentTerm, state, votedFor, (*ca
 \* igor: see the constant above
 
 \* The term of the last entry in a log, or 0 if the log is empty.
-\* @type: Seq([term: Int, value: Str]) => Int;
+\* @type: Seq($entry) => Int;
 LastTerm(xlog) == IF Len(xlog) = 0 THEN 0 ELSE xlog[Len(xlog)].term
 
 \* Helper for Send and Reply. Given a message m and bag of messages, return a
 \* new bag of messages with one more m in it.
-\* @type: (MESSAGE, MESSAGE -> Int) => MESSAGE -> Int ;
+\* @type: ($message, $message -> Int) => $message -> Int ;
 WithMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] + 1]
@@ -190,7 +208,7 @@ WithMessage(m, msgs) ==
 \* a new bag of messages with one less m in it.
 \*
 \* A monster annotation. TODO: we need type aliases.
-\* @type: (MESSAGE, MESSAGE -> Int) => MESSAGE -> Int ;
+\* @type: ($message, $message -> Int) => $message -> Int ;
 WithoutMessage(m, msgs) ==
     IF m \in DOMAIN msgs THEN
         [msgs EXCEPT ![m] = msgs[m] - 1]
@@ -202,9 +220,11 @@ Send(m) == messages' = WithMessage(m, messages)
 
 \* Remove a message from the bag of messages. Used when a server is done
 \* processing a message.
+\* @type: $message => Bool;
 Discard(m) == messages' = WithoutMessage(m, messages)
 
 \* Combination of Send and Discard
+\* @type: ($message, $message) => Bool;
 Reply(response, request) ==
     messages' = WithoutMessage(request, WithMessage(response, messages))
 
@@ -269,12 +289,12 @@ Timeout(i) == /\ state[i] \in {Follower, Candidate}
 RequestVote(i, j) ==
     /\ state[i] = Candidate
     /\ j \notin votesResponded[i]
-    /\ Send([mtype         |-> RequestVoteRequest,
+    /\ Send(RequestVoteRequest([
              mterm         |-> currentTerm[i],
              mlastLogTerm  |-> LastTerm(log[i]),
              mlastLogIndex |-> Len(log[i]),
              msource       |-> i,
-             mdest         |-> j])
+             mdest         |-> j]))
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Leader i sends j an AppendEntries request containing up to 1 entry.
@@ -291,7 +311,7 @@ AppendEntries(i, j) ==
            \* Send up to 1 entry, constrained by the end of the log.
            lastEntry == Min({Len(log[i]), nextIndex[i][j]})
            entries == SubSeq(log[i], nextIndex[i][j], lastEntry)
-       IN Send([mtype          |-> AppendEntriesRequest,
+       IN Send(AppendEntriesRequest([
                 mterm          |-> currentTerm[i],
                 mprevLogIndex  |-> prevLogIndex,
                 mprevLogTerm   |-> prevLogTerm,
@@ -301,7 +321,7 @@ AppendEntries(i, j) ==
                 mlog           |-> log[i],
                 mcommitIndex   |-> Min({commitIndex[i], lastEntry}),
                 msource        |-> i,
-                mdest          |-> j])
+                mdest          |-> j]))
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Candidate i transitions to leader.
@@ -360,7 +380,7 @@ AdvanceCommitIndex(i) ==
 
 \* Server i receives a RequestVote request from server j with
 \* m.mterm <= currentTerm[i].
-\* @type: (Str, Str, MESSAGE) => Bool;
+\* @type: (Str, Str, $requestVoteRequest) => Bool;
 HandleRequestVoteRequest(i, j, m) ==
     LET logOk == \/ m.mlastLogTerm > LastTerm(log[i])
                  \/ /\ m.mlastLogTerm = LastTerm(log[i])
@@ -371,19 +391,20 @@ HandleRequestVoteRequest(i, j, m) ==
     IN /\ m.mterm <= currentTerm[i]
        /\ \/ grant  /\ votedFor' = [votedFor EXCEPT ![i] = j]
           \/ ~grant /\ UNCHANGED votedFor
-       /\ Reply([mtype        |-> RequestVoteResponse,
+       /\ Reply(RequestVoteResponse([
                  mterm        |-> currentTerm[i],
                  mvoteGranted |-> grant,
                  \* mlog is used just for the `elections' history variable for
                  \* the proof. It would not exist in a real implementation.
                  mlog         |-> log[i],
                  msource      |-> i,
-                 mdest        |-> j],
-                 m)
+                 mdest        |-> j]),
+                 RequestVoteRequest(m))
        /\ UNCHANGED <<state, currentTerm, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Server i receives a RequestVote response from server j with
 \* m.mterm = currentTerm[i].
+\* @type: (Str, Str, $requestVoteResponse) => Bool;
 HandleRequestVoteResponse(i, j, m) ==
     \* This tallies votes even when the current state is not Candidate, but
     \* they won't be looked at, so it doesn't matter.
@@ -397,14 +418,14 @@ HandleRequestVoteResponse(i, j, m) ==
                               voterLog[i] @@ (j :> m.mlog)]
        \/ /\ ~m.mvoteGranted
           /\ UNCHANGED <<votesGranted, voterLog>>
-    /\ Discard(m)
+    /\ Discard(RequestVoteResponse(m))
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Server i receives an AppendEntries request from server j with
 \* m.mterm <= currentTerm[i]. This just handles m.entries of length 0 or 1, but
 \* implementations could safely accept more by treating them the same as
 \* multiple independent requests of 1 entry.
-\* @type: (Str, Str, MESSAGE) => Bool;
+\* @type: (Str, Str, $appendEntriesRequest) => Bool;
 HandleAppendEntriesRequest(i, j, m) ==
     LET logOk == \/ m.mprevLogIndex = 0
                  \/ /\ m.mprevLogIndex > 0
@@ -416,13 +437,13 @@ HandleAppendEntriesRequest(i, j, m) ==
                 \/ /\ m.mterm = currentTerm[i]
                    /\ state[i] = Follower
                    /\ \lnot logOk
-             /\ Reply([mtype           |-> AppendEntriesResponse,
+             /\ Reply(AppendEntriesResponse([
                        mterm           |-> currentTerm[i],
                        msuccess        |-> FALSE,
                        mmatchIndex     |-> 0,
                        msource         |-> i,
-                       mdest           |-> j],
-                       m)
+                       mdest           |-> j]),
+                       AppendEntriesRequest(m))
              /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log, commitIndex>> \*logVars>>
           \/ \* return to follower state
              /\ m.mterm = currentTerm[i]
@@ -443,14 +464,14 @@ HandleAppendEntriesRequest(i, j, m) ==
                           \* but that doesn't really affect anything.
                        /\ commitIndex' = [commitIndex EXCEPT ![i] =
                                               m.mcommitIndex]
-                       /\ Reply([mtype           |-> AppendEntriesResponse,
+                       /\ Reply(AppendEntriesResponse([
                                  mterm           |-> currentTerm[i],
                                  msuccess        |-> TRUE,
                                  mmatchIndex     |-> m.mprevLogIndex +
                                                      Len(m.mentries),
                                  msource         |-> i,
-                                 mdest           |-> j],
-                                 m)
+                                 mdest           |-> j]),
+                                 AppendEntriesRequest(m))
                        /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, log>> \*logVars>>
                    \/ \* conflict: remove 1 entry
                        /\ m.mentries /= << >>
@@ -472,6 +493,7 @@ HandleAppendEntriesRequest(i, j, m) ==
 
 \* Server i receives an AppendEntries response from server j with
 \* m.mterm = currentTerm[i].
+\* @type: (Str, Str, $appendEntriesResponse) => Bool;
 HandleAppendEntriesResponse(i, j, m) ==
     /\ m.mterm = currentTerm[i]
     /\ \/ /\ m.msuccess \* successful
@@ -481,43 +503,77 @@ HandleAppendEntriesResponse(i, j, m) ==
           /\ nextIndex' = [nextIndex EXCEPT ![i][j] =
                                Max({nextIndex[i][j] - 1, 1})]
           /\ UNCHANGED <<matchIndex>>
-    /\ Discard(m)
+    /\ Discard(AppendEntriesResponse(m))
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, elections, log, commitIndex>> \* logVars
 
 \* Any RPC with a newer term causes the recipient to advance its term first.
-\* @type: (Str, Str, [mterm: Int]) => Bool;
-UpdateTerm(i, j, m) ==
-    /\ m.mterm > currentTerm[i]
-    /\ currentTerm'    = [currentTerm EXCEPT ![i] = m.mterm]
+\* @type: (Str, Str, Int) => Bool;
+UpdateTerm(i, j, mterm) ==
+    /\ mterm > currentTerm[i]
+    /\ currentTerm'    = [currentTerm EXCEPT ![i] = mterm]
     /\ state'          = [state       EXCEPT ![i] = Follower]
     /\ votedFor'       = [votedFor    EXCEPT ![i] = Nil]
        \* messages is unchanged so m can be processed further.
     /\ UNCHANGED <<messages, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Responses with stale terms are ignored.
+\* @type: (Str, Str, $message) => Bool;
 DropStaleResponse(i, j, m) ==
-    /\ m.mterm < currentTerm[i]
+    LET mterm ==
+      IF VariantTag(m) = "RequestVoteResponse"
+      THEN VariantGetUnsafe("RequestVoteResponse", m).mterm
+      ELSE VariantGetUnsafe("AppendEntriesResponse", m).mterm
+    IN
+    /\ mterm < currentTerm[i]
     /\ Discard(m)
     /\ UNCHANGED <<(* serverVars *) currentTerm, state, votedFor, (*candidateVars*) votesResponded, votesGranted, voterLog, (*leaderVars*) nextIndex, matchIndex, elections, log, commitIndex>> \*logVars>>
 
 \* Receive a message.
-\* @type: MESSAGE => Bool;
+\* @type: $message => Bool;
 Receive(m) ==
-    LET i == m.mdest
-        j == m.msource
+    LET i == IF VariantTag(m) = "RequestVoteResponse"
+             THEN VariantGetUnsafe("RequestVoteResponse", m).mdest
+             ELSE
+                IF VariantTag(m) = "RequestVoteResponse"
+                THEN VariantGetUnsafe("RequestVoteResponse", m).mdest
+                ELSE
+                    IF VariantTag(m) = "AppendEntriesRequest"
+                    THEN VariantGetUnsafe("AppendEntriesRequest", m).mdest
+                    ELSE
+                        VariantGetUnsafe("AppendEntriesResponse", m).mdest
+        j == IF VariantTag(m) = "RequestVoteResponse"
+             THEN VariantGetUnsafe("RequestVoteResponse", m).msource
+             ELSE
+                IF VariantTag(m) = "RequestVoteResponse"
+                THEN VariantGetUnsafe("RequestVoteResponse", m).msource
+                ELSE
+                    IF VariantTag(m) = "AppendEntriesRequest"
+                    THEN VariantGetUnsafe("AppendEntriesRequest", m).msource
+                    ELSE
+                        VariantGetUnsafe("AppendEntriesResponse", m).msource
+        mterm == IF VariantTag(m) = "RequestVoteResponse"
+             THEN VariantGetUnsafe("RequestVoteResponse", m).mterm
+             ELSE
+                IF VariantTag(m) = "RequestVoteResponse"
+                THEN VariantGetUnsafe("RequestVoteResponse", m).mterm
+                ELSE
+                    IF VariantTag(m) = "AppendEntriesRequest"
+                    THEN VariantGetUnsafe("AppendEntriesRequest", m).mterm
+                    ELSE
+                        VariantGetUnsafe("AppendEntriesResponse", m).mterm
     IN \* Any RPC with a newer term causes the recipient to advance
        \* its term first. Responses with stale terms are ignored.
-       \/ UpdateTerm(i, j, m)
-       \/ /\ m.mtype = RequestVoteRequest
-          /\ HandleRequestVoteRequest(i, j, m)
-       \/ /\ m.mtype = RequestVoteResponse
+       \/ UpdateTerm(i, j, mterm)
+       \/ /\ VariantTag(m) = "RequestVoteRequest"
+          /\ HandleRequestVoteRequest(i, j, VariantGetUnsafe("RequestVoteRequest", m))
+       \/ /\ VariantTag(m) = "RequestVoteResponse"
           /\ \/ DropStaleResponse(i, j, m)
-             \/ HandleRequestVoteResponse(i, j, m)
-       \/ /\ m.mtype = AppendEntriesRequest
-          /\ HandleAppendEntriesRequest(i, j, m)
-       \/ /\ m.mtype = AppendEntriesResponse
+             \/ HandleRequestVoteResponse(i, j, VariantGetUnsafe("RequestVoteResponse", m))
+       \/ /\ VariantTag(m) = "AppendEntriesRequest"
+          /\ HandleAppendEntriesRequest(i, j, VariantGetUnsafe("AppendEntriesRequest", m))
+       \/ /\ VariantTag(m) = "AppendEntriesResponse"
           /\ \/ DropStaleResponse(i, j, m)
-             \/ HandleAppendEntriesResponse(i, j, m)
+             \/ HandleAppendEntriesResponse(i, j, VariantGetUnsafe("AppendEntriesResponse", m))
         
 \* End of message handlers.
 ----
